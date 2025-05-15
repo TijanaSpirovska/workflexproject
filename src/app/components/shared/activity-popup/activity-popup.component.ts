@@ -7,7 +7,7 @@ import { ActivityDto } from '../../../models/activity.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './activity-popup.component.html',
-  styleUrl: './activity-popup.component.scss'
+  styleUrl: './activity-popup.component.scss',
 })
 export class ActivityPopupComponent implements OnInit {
   @Input() activity!: ActivityDto;
@@ -15,17 +15,17 @@ export class ActivityPopupComponent implements OnInit {
   @Input() multipleActivities: ActivityDto[] = [];
   @Input() isMultiActivity: boolean = false;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void { }
-  
+  ngOnInit(): void {}
+
   /**
    * Format date to a localized string
    */
   formatDate(date: string): string {
     return new Date(date).toLocaleString();
   }
-  
+
   /**
    * Format date to a short date format
    */

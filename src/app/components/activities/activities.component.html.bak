@@ -1,0 +1,309 @@
+<app-menu (onExpanded)="onExpanded($event)" [isVisible]="true"></app-menu>
+<div class="activities-container" [class.expanded]="isExpanded">
+  <section class="hero-section">
+    <h1>Discover Exciting Activities</h1>
+    <p>From hiking trails to museum visits — plan your adventure here</p>
+  </section>
+  <div class="action-button-container">
+    <button
+      class="button add-activity-btn prominent-btn"
+      (click)="openModal()"
+      aria-label="Add new activity"
+    >
+      <i class="fas fa-plus"></i>
+      Add New Activity
+    </button>
+  </div>
+  
+  <app-activity-modal
+    [formGroup]="formGroup"
+    [isOpen]="isNewActivity"
+    [isEdit]="isEditActivity"
+    [activity]="activityDto"
+    [isFormValid]="isFormGroupValid"
+    [imagePreviewUrl]="imagePreviewUrl"
+    (close)="closeModal()"
+    (save)="saveActivity()"
+    (fileChange)="onFileChange($event)">
+  </app-activity-modal>
+          <div class="field has-support-text">
+            <label class="field-name" for="activityName">Activity Name</label>
+            <input
+              id="activityName"
+              type="text"
+              formControlName="activityName"
+              placeholder="Enter activity name"
+              [class.invalid]="
+                formGroup.get('activityName')?.invalid && isFormGroupValid
+              "
+            />
+            <div
+              class="error-text"
+              *ngIf="formGroup.get('activityName')?.invalid && isFormGroupValid"
+            >
+              Activity name is required
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="field has-support-text">
+            <label class="field-name" for="description">Description</label>
+            <input
+              id="description"
+              type="text"
+              formControlName="description"
+              placeholder="Enter description"
+              [class.invalid]="
+                formGroup.get('description')?.invalid && isFormGroupValid
+              "
+            />
+            <div
+              class="error-text"
+              *ngIf="formGroup.get('description')?.invalid && isFormGroupValid"
+            >
+              Description is required
+            </div>
+          </div>
+        </div>
+
+        <div class="group-container">
+          <!-- Activity Type -->
+          <div class="field has-support-text">
+            <label class="field-name" for="activityType">Activity Type</label>
+            <input
+              id="activityType"
+              type="text"
+              formControlName="activityType"
+              placeholder="e.g. Hiking, Culture"
+              [class.invalid]="
+                formGroup.get('activityType')?.invalid && isFormGroupValid
+              "
+            />
+            <div
+              class="error-text"
+              *ngIf="formGroup.get('activityType')?.invalid && isFormGroupValid"
+            >
+              Activity type is required
+            </div>
+          </div>
+
+          <!-- Transportation -->
+          <div class="field has-support-text">
+            <label class="field-name" for="transportation"
+              >Transportation</label
+            >
+            <input
+              id="transportation"
+              type="text"
+              formControlName="transportation"
+              placeholder="e.g. On foot, Bus"
+              [class.invalid]="
+                formGroup.get('transportation')?.invalid && isFormGroupValid
+              "
+            />
+            <div
+              class="error-text"
+              *ngIf="
+                formGroup.get('transportation')?.invalid && isFormGroupValid
+              "
+            >
+              Transportation is required
+            </div>
+          </div>
+        </div>
+
+        <div class="group-container">
+          <!-- Duration -->
+          <div class="field has-support-text">
+            <label class="field-name" for="durationHours"
+              >Duration (hours)</label
+            >
+            <input
+              id="durationHours"
+              type="number"
+              min="0"
+              formControlName="durationHours"
+              placeholder="e.g. 2.5"
+              [class.invalid]="
+                formGroup.get('durationHours')?.invalid && isFormGroupValid
+              "
+            />
+            <div
+              class="error-text"
+              *ngIf="
+                formGroup.get('durationHours')?.invalid && isFormGroupValid
+              "
+            >
+              Duration is required
+            </div>
+          </div>
+
+          <!-- Number of People -->
+          <div class="field has-support-text">
+            <label class="field-name" for="numberOfPeople"
+              >Number of People</label
+            >
+            <input
+              id="numberOfPeople"
+              type="number"
+              min="1"
+              formControlName="numberOfPeople"
+              placeholder="Number of people"
+              [class.invalid]="
+                formGroup.get('numberOfPeople')?.invalid && isFormGroupValid
+              "
+            />
+            <div
+              class="error-text"
+              *ngIf="
+                formGroup.get('numberOfPeople')?.invalid && isFormGroupValid
+              "
+            >
+              Number of people is required
+            </div>
+          </div>
+        </div>
+
+        <!-- Start Time -->
+        <div class="group-container">
+          <div class="field has-support-text">
+            <label class="field-name" for="startTime">Start Time</label>
+            <div class="form-group date-icon">
+              <div class="input-wrapper">
+                <input
+                  id="startTime"
+                  type="text"
+                  [matDatepicker]="startDatePicker"
+                  formControlName="startTime"
+                  [class.invalid]="
+                    formGroup.get('startTime')?.invalid && isFormGroupValid
+                  "
+                  readonly
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="startDatePicker"
+                  class="calendar-toggle"
+                >
+                  <i class="calendar-icon"></i>
+                </mat-datepicker-toggle>
+              </div>
+              <mat-datepicker #startDatePicker></mat-datepicker>
+            </div>
+            <div
+              class="error-text"
+              *ngIf="formGroup.get('startTime')?.invalid && isFormGroupValid"
+            >
+              Start time is required
+            </div>
+          </div>          <!-- Address -->
+          <div class="field has-support-text">
+            <label class="field-name" for="address">Address</label>
+            <input
+              id="address"
+              type="text"
+              formControlName="address"
+              placeholder="Enter Address"
+              [class.invalid]="
+                formGroup.get('address')?.invalid && isFormGroupValid
+              "
+            />
+            <div
+              class="error-text"
+              *ngIf="formGroup.get('address')?.invalid && isFormGroupValid"
+            >
+              Address is required
+            </div>
+          </div>
+            </div>
+        <!-- Submit -->
+        <div class="button-container">
+          <button (click)="saveActivity()" class="button">
+            {{ isEditActivity ? "Edit" : "Add New" }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <section class="activities-map-wrapper">
+    <div class="scroll-wrapper">
+      <button class="scroll-btn left" (click)="scrollLeft()">‹</button>
+
+      <div class="featured-activities">
+        <h2>Featured Activities</h2>
+        <div class="activity-cards-scroll" #scrollContainer>
+          <div
+            class="activity-card"
+            *ngFor="let activity of featuredActivities"
+          >
+            <img [src]="activity.image" [alt]="activity.title" />
+            <h3>{{ activity.title }}</h3>
+            <p>{{ activity.duration }}</p>
+            <button>{{ activity.buttonText }}</button>
+          </div>
+        </div>
+      </div>
+      <button class="scroll-btn right" (click)="scrollRight()">›</button>      <div class="map-section">
+        <h2>Explore on Map</h2>
+        <app-activity-map 
+          [activities]="upcomingActivities" 
+          [filteredActivities]="filteredActivities"
+          [selectedLocation]="selectedLocation"
+          (locationSelected)="toggleLocationFilter($event)">
+        </app-activity-map>
+      </div>
+    </div>  </section>  <section class="events">
+    <h2>Upcoming Events/Seasonal Activities</h2>
+    
+    <div class="location-filters" *ngIf="uniqueLocations.length">
+      <span class="filter-label">Filter by location:</span>
+      <div class="location-pills">
+        <button 
+          *ngFor="let location of uniqueLocations" 
+          class="location-pill"
+          [class.active]="selectedLocation === location"
+          (click)="toggleLocationFilter(location)">
+          <i class="fas fa-map-marker-alt"></i> {{ location }}
+          <span *ngIf="selectedLocation === location" class="active-indicator">✓</span>
+        </button>
+        <button 
+          *ngIf="selectedLocation"
+          class="location-pill clear-filter"
+          (click)="filterActivitiesByLocation(null)">
+          <i class="fas fa-times"></i> Clear filter
+        </button>
+      </div>
+      <div *ngIf="selectedLocation" class="selected-filter-message">
+        Showing activities in: <strong>{{ selectedLocation }}</strong>
+      </div>    </div>
+    
+    <div *ngFor="let activity of filteredActivities; trackBy: trackById">
+      <app-activity-card
+        [activity]="activity"
+        (edit)="editActivity($event)"
+        (delete)="confirmDelete($event)"
+        (focusOnMap)="focusActivityOnMap($event)">
+      </app-activity-card>
+    </div>
+  </section>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div *ngIf="showDeleteConfirmation" class="modal-backdrop">
+  <div class="confirm-modal">
+    <h3>Confirm Delete</h3>
+    <p>
+      Are you sure you want to delete the activity "{{
+        activityToDelete?.activityName
+      }}"?
+    </p>
+    <p>This action cannot be undone.</p>
+    <div class="button-container">
+      <button class="cancel-btn" (click)="cancelDelete()">Cancel</button>
+      <button class="delete-confirm-btn" (click)="deleteActivity()">
+        Yes, Delete
+      </button>
+    </div>
+  </div>
+</div>
