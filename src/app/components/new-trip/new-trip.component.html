@@ -1,0 +1,211 @@
+<app-menu [isVisible]="true"></app-menu>
+
+<div class="auth-container">
+  <div class="auth-header">
+    <p>Create New Trip</p>
+  </div>
+
+  <form *ngIf="formGroup" [formGroup]="formGroup">
+    <div class="group-container">
+      <!-- Trip Name -->
+      <div class="field has-support-text">
+        <label class="field-name" for="tripName">Trip Name</label>
+        <input
+          id="tripName"
+          type="text"
+          formControlName="tripName"
+          placeholder="Enter trip name"
+          [class.invalid]="
+            formGroup.get('tripName')?.invalid && isFormGroupValid
+          "
+        />
+        <div
+          class="error-text"
+          *ngIf="formGroup.get('tripName')?.invalid && isFormGroupValid"
+        >
+          Trip name is required
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="field has-support-text">
+        <label class="field-name" for="description">Description</label>
+        <input
+          id="description"
+          type="text"
+          formControlName="description"
+          placeholder="Enter description"
+          [class.invalid]="
+            formGroup.get('description')?.invalid && isFormGroupValid
+          "
+        />
+        <div
+          class="error-text"
+          *ngIf="formGroup.get('description')?.invalid && isFormGroupValid"
+        >
+         Description is required
+        </div>
+      </div>
+    </div>
+
+    <div formGroupName="location">
+      <div class="group-container">
+        <!-- Location -->
+        <div class="field has-support-text">
+          <label class="field-name" for="country">Country</label>
+          <input
+            id="country"
+            type="text"
+            formControlName="country"
+            placeholder="Enter location"
+            [class.invalid]="
+              formGroup.get('location.country')?.invalid && isFormGroupValid
+            "
+          />
+          <div
+            class="error-text"
+            *ngIf="
+              formGroup.get('location.country')?.invalid && isFormGroupValid
+            "
+          >
+            Country is required
+          </div>
+        </div>
+
+        <div class="field has-support-text">
+          <label class="field-name" for="city">City</label>
+          <input
+            id="city"
+            type="text"
+            formControlName="city"
+            placeholder="Enter location"
+            [class.invalid]="
+              formGroup.get('location.city')?.invalid && isFormGroupValid
+            "
+          />
+          <div
+            class="error-text"
+            *ngIf="formGroup.get('location.city')?.invalid && isFormGroupValid"
+          >
+            City is required
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Start Date -->
+    <div class="group-container">
+      <div class="field has-support-text">
+        <label class="field-name" for="startDate">Start Date</label>
+        <div class="form-group date-icon">
+          <div class="input-wrapper">
+            <input
+              id="startDate"
+              type="text"
+              [matDatepicker]="startDatePicker"
+              formControlName="startDate"
+              [class.invalid]="
+                formGroup.get('startDate')?.invalid && isFormGroupValid
+              "
+              readonly
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="startDatePicker"
+              class="calendar-toggle"
+            >
+              <i class="calendar-icon"></i>
+            </mat-datepicker-toggle>
+          </div>
+          <mat-datepicker #startDatePicker></mat-datepicker>
+        </div>
+        <div
+          class="error-text"
+          *ngIf="formGroup.get('startDate')?.invalid && isFormGroupValid"
+        >
+          Start date is required
+        </div>
+      </div>
+
+      <!-- End Date -->
+      <div class="field has-support-text">
+        <label class="field-name" for="endDate">End Date</label>
+        <div class="form-group date-icon">
+          <div class="input-wrapper">
+            <input
+              id="endDate"
+              type="text"
+              [matDatepicker]="endDatePicker"
+              formControlName="endDate"
+              [min]="this.formGroup.get('startDate')?.value"
+              [class.invalid]="
+                formGroup.get('endDate')?.invalid && isFormGroupValid
+              "
+              readonly
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="endDatePicker"
+              class="calendar-toggle"
+            >
+              <i class="calendar-icon"></i>
+            </mat-datepicker-toggle>
+          </div>
+          <mat-datepicker #endDatePicker></mat-datepicker>
+        </div>
+        <div
+          class="error-text"
+          *ngIf="formGroup.get('endDate')?.invalid && isFormGroupValid"
+        >
+          End date is required
+        </div>
+      </div>
+    </div>
+    <div class="group-container">
+      <!-- Number of People -->
+      <div class="field has-support-text">
+        <label class="field-name" for="numberOfPeople">Number of People</label>
+        <input
+          id="numberOfPeople"
+          type="number"
+          min="1"
+          formControlName="numberOfPeople"
+          placeholder="Number of people"
+          [class.invalid]="
+            formGroup.get('numberOfPeople')?.invalid && isFormGroupValid
+          "
+        />
+        <div
+          class="error-text"
+          *ngIf="formGroup.get('numberOfPeople')?.invalid && isFormGroupValid"
+        >
+          Number of people is required
+        </div>
+      </div>
+
+      <!-- Budget -->
+      <div class="field has-support-text">
+        <label class="field-name" for="budget">Budget</label>
+        <input
+          id="budget"
+          type="number"
+          min="0"
+          formControlName="budget"
+          placeholder="Enter budget"
+          [class.invalid]="formGroup.get('budget')?.invalid && isFormGroupValid"
+        />
+        <div
+          class="error-text"
+          *ngIf="formGroup.get('budget')?.invalid && isFormGroupValid"
+        >
+          Budget is required
+        </div>
+      </div>
+    </div>
+    <!-- Submit -->
+    <div class="button-container">
+      <button type="submit" (click)="onCreateTrip()" class="button">
+      Create Trip
+      </button>
+    </div>
+  </form>
+</div>

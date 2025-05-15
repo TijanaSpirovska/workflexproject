@@ -1,0 +1,168 @@
+.side-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 55px;
+  transform: none;
+  background-color: #f4f6fa;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  padding: 1rem 0;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  transition: width 0.4s ease;
+
+  &.visible {
+    display: none;
+  }
+
+  &.expanded {
+    width: 200px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+    li {
+       margin: 0; /* No margin between items */
+      width: calc(100% - 24px);
+      cursor: pointer;
+      padding: 10px;
+      padding-left: 12px;
+      border-radius: 50px;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: var(--green-button);
+      }
+      &.active {
+        background-color: var(--green-button);
+        z-index: 2; // on top
+        border-radius: 16px; // <- bigger for more pill-like effect
+        
+      }
+      &.active span:first-child {
+        color: #ddd;
+      }
+      &.active span {
+        color: #ddd;
+      }
+
+      span.material-symbols-outlined {
+        font-size: 28px;
+        color: black;
+        font-weight: 500;
+        margin-right: 10px;
+      }
+
+      .label {
+        white-space: nowrap;
+        font-size: 16px;
+        font-weight: 500;
+        color: black;
+      }
+    }
+  }
+
+  .toggle {
+    margin-top: auto;
+    padding: 10px;
+    text-align: right;
+    cursor: pointer;
+    border-radius: 50px;
+    width: calc(100% - 24px);
+    span {
+      font-size: 24px;
+    }
+  }
+  .new-trip {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px 12px;
+    margin: 20px 0;
+    border-radius: 50px;
+    transition: background-color 0.3s ease;
+    color: #333;
+    width: calc(100% - 26px);
+    border-color: #d1fae5;
+
+    &.active {
+      background-color: var(--green-button);
+      border-color: var(--green-button);
+
+      span.material-symbols-outlined {
+      color: #ddd;
+      }
+
+      .label {
+      color: #ddd;
+      }
+    }
+
+    &:hover {
+      background-color: var(--green-button);
+    }
+
+    span.material-symbols-outlined {
+      font-size: 28px;
+      color: black;
+      margin-right: 5px;
+    }
+
+    .label {
+      font-size: 18px;
+      margin-right: 35px;
+      white-space: nowrap;
+      text-align: center;
+      width: 100%;
+    }
+  }
+}
+.button {
+  display: flex;
+  align-items: center !important;
+  justify-content: center;
+  font-size: 15px;
+  height: 50px;
+  width: 45px;
+  margin-left: 5px;
+  margin-bottom: 20px; /* Add margin at the bottom */
+  position: absolute; /* Position the button */
+  bottom: 0; /* Align it to the bottom of the container */
+  left: 0; /* Align it to the left of the container */
+  transition: width 0.5s ease !important;
+
+  span.material-symbols-outlined {
+    font-size: 32px;
+    margin-right: 0;
+  }
+
+  &.expanded {
+    transition: width 0.3s ease !important;
+    width: 180px;
+    height: 45px;
+    margin-left: 10px;
+
+    justify-content: center;
+
+    .label {
+      margin-top: 5px;
+      text-align: center;
+    }
+
+    span.material-symbols-outlined {
+      margin-right: 10px;
+    }
+  }
+}

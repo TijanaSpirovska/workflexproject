@@ -1,0 +1,14 @@
+<div class="breadcrumb-container">
+  <ul class="breadcrumb">
+    <ng-container *ngFor="let item of items; let i = index; let last = last">
+      <li
+        [class.active]="item.active"
+        (click)="onNavigate(i)"
+        [attr.aria-current]="item.active ? 'page' : null"
+      >
+        {{ item.label }}
+      </li>
+      <li *ngIf="!last" class="separator">/</li>
+    </ng-container>
+  </ul>
+</div>

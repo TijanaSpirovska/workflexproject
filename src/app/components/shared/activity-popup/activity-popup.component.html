@@ -1,0 +1,23 @@
+<!-- Single Activity Popup -->
+<div class="activity-popup" *ngIf="!isMultiActivity">
+  <strong>{{activity.activityName}}</strong>
+  <p>{{activity.description}}</p>
+  <p><i class="fas fa-map-marker-alt"></i> {{locationDisplay}}</p>
+  <p *ngIf="activity.activityType"><i class="fas fa-tag"></i> {{activity.activityType}}</p>
+  <p *ngIf="activity.startTime"><i class="fas fa-clock"></i> {{formatDate(activity.startTime)}}</p>
+  <img *ngIf="activity.imageUrl" [src]="activity.imageUrl" [alt]="activity.activityName" class="popup-image">
+</div>
+
+<!-- Multiple Activities Popup -->
+<div class="activity-popup multi-activity" *ngIf="isMultiActivity">
+  <h4>{{locationDisplay}}</h4>
+  <p><i class="fas fa-map-marker-alt"></i> {{multipleActivities.length}} activities found</p>
+  <div class="popup-activity-list">
+    <div *ngFor="let activity of multipleActivities; let last = last" class="popup-activity-item">
+      <strong>{{activity.activityName}}</strong>
+      <p>{{activity.activityType || 'General Activity'}}</p>
+      <small *ngIf="activity.startTime"><i class="fas fa-clock"></i> {{formatShortDate(activity.startTime)}}</small>
+      <hr *ngIf="!last" class="popup-divider">
+    </div>
+  </div>
+</div>

@@ -1,0 +1,5 @@
+export enum AccommodationFeature {
+  WIFI = 'wifi',
+  PARKING = 'parking',
+  BREAKFAST_INCLUDED = 'breakfastIncluded'
+}

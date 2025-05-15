@@ -1,0 +1,29 @@
+<div [class.visible]="!isVisible" [class.expanded]="isExpanded" class="side-bar">
+  <ul>
+    <div [class.active]="true" class="toggle" (click)="toggleExpand()">
+      <span class="material-symbols-outlined">{{
+        isExpanded ? "chevron_left" : "grid_view"
+      }}</span>
+    </div>
+    <div [class.active]="isNewTripActive" class="new-trip" (click)="createNewTrip()">
+      <span class="material-symbols-outlined">add_circle</span>
+      <span class="label" *ngIf="isExpanded">Plan new trip</span>
+    </div>
+
+    <li 
+    *ngFor="let item of menuItems" 
+    [class.active]="item.active" 
+    (click)="navigate(item)">
+    <span class="material-symbols-outlined">{{ item.icon }}</span>
+    <span class="label" *ngIf="isExpanded">{{ item.label }}</span>
+  </li>
+    <button (click)="logout()" class="button" [class.expanded]="isExpanded">
+      <span class="material-symbols-outlined">{{
+        isLoggedIn ? "logout" : "login"
+      }}</span>
+      <span class="label" *ngIf="isExpanded">{{
+        isLoggedIn ? "Log Out" : "Sign In"
+      }}</span>
+    </button>
+  </ul>
+</div>

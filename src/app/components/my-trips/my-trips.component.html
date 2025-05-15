@@ -1,0 +1,36 @@
+<app-menu (onExpanded)="onExpanded($event)" [isVisible]="true"></app-menu>
+<div class="trips-container" [class.expanded]="isExpanded">
+  <div
+    class="background"
+    [ngStyle]="{
+      'background-image': 'url(' + trips[selectedTripIndex].imageUrl + ')'
+    }"
+  >
+    <!-- Overlay text -->
+    <div class="overlay-content">
+      <h1>{{ trips[selectedTripIndex].tripName }}</h1>
+      <p>{{ trips[selectedTripIndex].description }}</p>
+      <button class="read-more">READ MORE</button>
+    </div>
+
+    <!-- Cards on right side starting from middle -->
+    <div class="scroll-container-wrapper">
+      <button class="scroll-button left" (click)="scroll(-300)">‹</button>
+
+      <div class="scroll-container" #scrollContainer>
+        <div
+          class="trip-card"
+          *ngFor="let trip of trips; let i = index"
+          (mouseenter)="selectTrip(i)"
+          (mouseleave)="onLeave($event)"
+          [class.active]="i === selectedTripIndex"
+        >
+          <img [src]="trip.imageUrl" [alt]="trip.tripName" />
+          <div class="trip-label">{{ trip.tripName }}</div>
+        </div>
+      </div>
+
+      <button class="scroll-button right" (click)="scroll(300)">›</button>
+    </div>
+  </div>
+</div>

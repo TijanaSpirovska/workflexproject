@@ -1,0 +1,127 @@
+<app-menu [isVisible]="true" [isLoggedIn]="isLoggedIn"></app-menu>
+<div class="login-container">
+  <h2 *ngIf="!isForgotPassword">Sign In</h2>
+  <h2 *ngIf="isForgotPassword">Reset password</h2>
+
+  <div *ngIf="!isForgotPassword" class="social-buttons">
+    <button class="social-button google">
+      <img src="assets/images/google-logo.png" alt="Google Logo" class="social-icon" />
+      Continue with Google
+    </button>
+  </div>
+
+  <div *ngIf="!isForgotPassword" class="divider">Or with Email</div>
+
+  <form *ngIf="formGroup" [formGroup]="formGroup">
+    <div class="field has-support-text">
+      <div class="form-group">
+        <input
+          type="text"
+          formControlName="email"
+          placeholder="Email"
+          [class.invalid]="
+            hasError('email', 'required') || hasError('email', 'email')
+          "
+        />
+        <div *ngIf="hasError('email', 'required')" class="error-text">
+          Email is required
+        </div>
+        <div *ngIf="hasError('email', 'email')" class="error-text">
+          Please enter a valid email
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="isForgotPassword && !isResetPassword"
+      class="field has-support-text"
+    >
+      <div class="form-group">
+        <input
+          type="text"
+          formControlName="token"
+          placeholder="Token"
+          [class.invalid]="
+            hasError('token', 'required') || hasError('token', 'token')
+          "
+        />
+        <div *ngIf="hasError('token', 'required')" class="error-text">
+          Generated token is required
+        </div>
+      </div>
+    </div>
+
+    <div class="field has-support-text">
+      <div *ngIf="!isResetPassword" class="form-group">
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="Password"
+          [class.invalid]="hasError('password', 'required')"
+        />
+        <div *ngIf="hasError('password', 'required')" class="error-text">
+          Password is required
+        </div>
+      </div>
+      <a
+        *ngIf="
+          !formGroup.get('password')?.value &&
+          !isForgotPassword &&
+          !isResetPassword
+        "
+        (click)="forgotPassword()"
+        class="forgot-link"
+        >Forgot?</a
+      >
+    </div>
+    <div *ngIf="isForgotPassword && !isResetPassword" class="field">
+      <div class="form-group">
+        <input
+          type="text"
+          formControlName="confirmPassword"
+          placeholder="Confirm Password"
+          [class.invalid]="
+          hasError('confirmPassword', 'required') ||
+          (formGroup.errors?.['passwordMismatch'] && formGroup.get('confirmPassword')?.touched)
+        "
+        />
+        <div class="error-text" *ngIf="hasError('confirmPassword', 'required')">
+          Please confirm your password
+        </div>
+        <div
+          class="error-text"
+          *ngIf="formGroup.errors?.['passwordMismatch'] && formGroup.get('confirmPassword')?.touched"
+        >
+          Passwords do not match
+        </div>
+      </div>
+    </div>
+    <button
+      *ngIf="!isForgotPassword && !isResetPassword"
+      type="submit"
+      (click)="login()"
+      class="button"
+    >
+      Sign In
+    </button>
+    <button
+      *ngIf="isForgotPassword"
+      type="submit"
+      (click)="resetPassword()"
+      class="button"
+    >
+      Reset password
+    </button>
+    <button
+      *ngIf="isResetPassword"
+      type="submit"
+      (click)="sendToken()"
+      class="button"
+    >
+      Send email
+    </button>
+  </form>
+  <div *ngIf="!isForgotPassword && !isResetPassword" class="footer-text">
+    Sign up for free <a routerLink="/sign-up">Sign Up</a>
+  </div>
+</div>

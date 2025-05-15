@@ -1,0 +1,121 @@
+<app-menu [isVisible]="true"></app-menu>
+<div class="auth-container">
+  <div class="auth-header">
+    <h2>Sign Up</h2>
+    <p>Create a new account</p>
+  </div>
+
+  <div  class="social-buttons">
+    <button class="social-button google">
+      <img src="assets/images/google-logo.png" alt="Google Logo" class="social-icon" />
+      Continue with Google
+    </button>
+  </div>
+
+  <div class="divider">Or with Email</div>
+
+  <form *ngIf="formGroup" [formGroup]="formGroup">
+    <!-- Full Name -->
+    <div class="field">
+      <div class="form-group">
+        <input
+          type="text"
+          formControlName="fullName"
+          placeholder="Full Name"
+          [class.invalid]="hasError('fullName', 'required')"
+        />
+        <div class="error-text" *ngIf="hasError('fullName', 'required')">
+          Full name is required
+        </div>
+      </div>
+    </div>
+    <!-- Email -->
+    <div class="field">
+      <div class="form-group">
+        <input
+          type="text"
+          formControlName="email"
+          placeholder="Email"
+          [class.invalid]="
+            hasError('email', 'required') || hasError('email', 'email')
+          "
+        />
+        <div class="error-text" *ngIf="hasError('email', 'required')">
+          Email is required
+        </div>
+        <div class="error-text" *ngIf="hasError('email', 'email')">
+          Please enter a valid email
+        </div>
+      </div>
+    </div>
+    <!-- Username -->
+     <div class="field">
+    <div class="form-group">
+      <input
+        type="text"
+        formControlName="username"
+        placeholder="Username"
+        [class.invalid]="
+          hasError('username', 'required') || hasError('username', 'pattern')
+        "
+      />
+      <div class="error-text" *ngIf="hasError('username', 'required')">
+        Username is required
+      </div>
+      <div class="error-text" *ngIf="hasError('username', 'pattern')">
+        Please enter a valid username
+      </div>
+    </div>
+</div>
+    <!-- Password -->
+    <div class="field">
+      <div class="form-group">
+        <input
+          type="text"
+          formControlName="password"
+          placeholder="Password"
+          [class.invalid]="hasError('password', 'required')"
+        />
+        <div class="error-text" *ngIf="hasError('password', 'required')">
+          Password is required
+        </div>
+      </div>
+    </div>
+    <!-- Confirm Password -->
+    <div class="field">
+      <div class="form-group">
+        <input
+          type="text"
+          formControlName="confirmPassword"
+          placeholder="Confirm Password"
+          [class.invalid]="
+          hasError('confirmPassword', 'required') ||
+          (formGroup.errors?.['passwordMismatch'] && formGroup.get('confirmPassword')?.touched)
+        "
+        />
+        <div class="error-text" *ngIf="hasError('confirmPassword', 'required')">
+          Please confirm your password
+        </div>
+        <div
+          class="error-text"
+          *ngIf="formGroup.errors?.['passwordMismatch'] && formGroup.get('confirmPassword')?.touched"
+        >
+          Passwords do not match
+        </div>
+      </div>
+    </div>
+    <!-- Submit -->
+    <button
+      type="submit"
+      (click)="onSubmit()"
+      class="button"
+      [disabled]="!formGroup.valid"
+    >
+      Sign Up
+    </button>
+  </form>
+
+  <div class="footer-text">
+    Already have an account? <a routerLink="/">Sign In</a>
+  </div>
+</div>
