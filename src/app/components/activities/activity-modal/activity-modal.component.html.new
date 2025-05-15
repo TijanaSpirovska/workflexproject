@@ -1,0 +1,206 @@
+<div *ngIf="isOpen" class="modal-backdrop">
+  <div class="form-modal">
+    <button class="close-btn" (click)="onClose()">×</button>
+    <h3>{{ isEdit ? "Edit" : "Add New" }} Activity</h3>
+    
+    <form *ngIf="formGroup" [formGroup]="formGroup">
+      <!-- Activity Name -->
+      <div class="field has-support-text">
+        <label class="field-name" for="activityName">Activity Name</label>
+        <input
+          id="activityName"
+          type="text"
+          formControlName="activityName"
+          placeholder="Enter activity name"
+          [class.invalid]="
+            formGroup.get('activityName')?.invalid && isFormValid
+          "
+        />
+        <div
+          class="error-text"
+          *ngIf="formGroup.get('activityName')?.invalid && isFormValid"
+        >
+          Activity name is required
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="field has-support-text">
+        <label class="field-name" for="description">Description</label>
+        <input
+          id="description"
+          type="text"
+          formControlName="description"
+          placeholder="Enter description"
+          [class.invalid]="
+            formGroup.get('description')?.invalid && isFormValid
+          "
+        />
+        <div
+          class="error-text"
+          *ngIf="formGroup.get('description')?.invalid && isFormValid"
+        >
+          Description is required
+        </div>
+      </div>
+
+      <!-- Activity Type -->
+      <div class="field has-support-text">
+        <label class="field-name" for="activityType">Activity Type</label>
+        <input
+          id="activityType"
+          type="text"
+          formControlName="activityType"
+          placeholder="Enter activity type (e.g., Hiking, Museum)"
+          [class.invalid]="
+            formGroup.get('activityType')?.invalid && isFormValid
+          "
+        />
+        <div
+          class="error-text"
+          *ngIf="formGroup.get('activityType')?.invalid && isFormValid"
+        >
+          Activity type is required
+        </div>
+      </div>
+
+      <!-- Activity Duration -->
+      <div class="field has-support-text">
+        <label class="field-name" for="durationHours">Duration (hours)</label>
+        <input
+          id="durationHours"
+          type="number"
+          formControlName="durationHours"
+          placeholder="Enter duration in hours"
+          min="0"
+          [class.invalid]="
+            formGroup.get('durationHours')?.invalid && isFormValid
+          "
+        />
+        <div
+          class="error-text"
+          *ngIf="formGroup.get('durationHours')?.invalid && isFormValid"
+        >
+          Duration must be a positive number
+        </div>
+      </div>
+
+      <!-- Transportation -->
+      <div class="field has-support-text">
+        <label class="field-name" for="transportation">Transportation</label>
+        <input
+          id="transportation"
+          type="text"
+          formControlName="transportation"
+          placeholder="Enter transportation method"
+          [class.invalid]="
+            formGroup.get('transportation')?.invalid && isFormValid
+          "
+        />
+        <div
+          class="error-text"
+          *ngIf="formGroup.get('transportation')?.invalid && isFormValid"
+        >
+          Transportation is required
+        </div>
+      </div>
+
+      <!-- Start Time -->
+      <div class="field has-support-text">
+        <label class="field-name" for="startTime">Start Time</label>
+        <input
+          id="startTime"
+          type="datetime-local"
+          formControlName="startTime"
+          [class.invalid]="formGroup.get('startTime')?.invalid && isFormValid"
+        />
+        <div
+          class="error-text"
+          *ngIf="formGroup.get('startTime')?.invalid && isFormValid"
+        >
+          Start time is required
+        </div>
+      </div>
+
+      <!-- Address/Location -->
+      <div class="field has-support-text">
+        <label class="field-name" for="address">Address/Location</label>
+        <input
+          id="address"
+          type="text"
+          formControlName="address"
+          placeholder="Enter location"
+          [class.invalid]="formGroup.get('address')?.invalid && isFormValid"
+        />
+        <div
+          class="error-text"
+          *ngIf="formGroup.get('address')?.invalid && isFormValid"
+        >
+          Location is required
+        </div>
+      </div>
+
+      <!-- Number of People -->
+      <div class="field has-support-text">
+        <label class="field-name" for="numberOfPeople">Number of People</label>
+        <input
+          id="numberOfPeople"
+          type="number"
+          formControlName="numberOfPeople"
+          min="1"
+          placeholder="Enter number of participants"
+          [class.invalid]="
+            formGroup.get('numberOfPeople')?.invalid && isFormValid
+          "
+        />
+        <div
+          class="error-text"
+          *ngIf="formGroup.get('numberOfPeople')?.invalid && isFormValid"
+        >
+          Number of people must be at least 1
+        </div>
+      </div>
+
+      <!-- Image Upload -->
+      <div class="field">
+        <label class="field-name">Activity Image</label>
+        <div class="file-upload">
+          <input
+            type="file"
+            id="activityImage"
+            (change)="onFileSelected($event)"
+            accept="image/*"
+          />
+          <label for="activityImage" class="upload-button">
+            <i class="fas fa-upload"></i> Choose Image
+          </label>
+          <span class="file-name">
+            {{ imagePreviewUrl ? "Image selected" : "No file chosen" }}
+          </span>
+        </div>
+
+        <!-- Image Preview -->
+        <div class="image-preview" *ngIf="imagePreviewUrl">
+          <img [src]="imagePreviewUrl" alt="Activity preview" />
+          <button class="remove-image" type="button" title="Remove image">
+            ×
+          </button>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="button cancel-btn" (click)="onClose()">
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="button submit-btn"
+          [disabled]="formGroup.invalid"
+          (click)="onSave()"
+        >
+          {{ isEdit ? "Update" : "Create" }} Activity
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

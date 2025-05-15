@@ -1,0 +1,130 @@
+.event-box {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  max-width: 450px;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.event-content {
+  display: flex;
+  flex-grow: 1;
+  gap: 0.75rem;
+  align-items: center;
+  cursor: pointer;
+  outline: none;
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px #4a90e2;
+  }
+}
+
+.event-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f1f4f7;
+  border-radius: 8px;
+  padding: 0.4rem 0.5rem;
+  min-width: 45px;
+
+  .month {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #444;
+    text-transform: uppercase;
+  }
+
+  .day {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #000;
+    line-height: 1;
+  }
+}
+
+.event-info {
+  flex: 1;
+  overflow: hidden;
+}
+
+.event-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 2px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-location {
+  font-size: 0.8rem;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-actions {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+
+  button {
+    background: none;
+    border: none;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:focus-visible {
+      outline: 2px solid #4a90e2;
+    }
+
+    i {
+      font-size: 0.8rem;
+    }
+  }
+
+  .map-btn {
+    color: #4a90e2;
+
+    &:hover {
+      background-color: #e6f0ff;
+    }
+  }
+  .delete-btn {
+    color: #e74c3c;
+    width: 24px;
+    height: 24px;
+
+    &:hover {
+      background-color: #ffe6e6;
+    }
+
+    i {
+      font-size: 0.75rem;
+    }
+  }
+}

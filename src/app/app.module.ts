@@ -32,6 +32,9 @@ import { MyTripsComponent } from './components/my-trips/my-trips.component';
 import { ActivitiesComponent } from './components/activities/activities.component';
 import { AccommodationComponent } from './components/accommodation/accommodation.component';
 import { BreadcrumbComponent } from './components/shared/breadcrumb/breadcrumb.component';
+import { ActivityMapComponent } from './components/activities/activity-map/activity-map.component';
+import { ActivityCardComponent } from './components/activities/activity-card/activity-card.component';
+import { ActivityModalComponent } from './components/activities/activity-modal/activity-modal.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +49,9 @@ import { BreadcrumbComponent } from './components/shared/breadcrumb/breadcrumb.c
     ActivitiesComponent,
     AccommodationComponent,
     BreadcrumbComponent,
+    ActivityMapComponent,
+    ActivityCardComponent,
+    ActivityModalComponent,
   ],
   imports: [
     BrowserModule,

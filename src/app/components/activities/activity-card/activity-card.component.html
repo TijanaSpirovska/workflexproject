@@ -1,0 +1,37 @@
+<div class="event-box">
+  <div
+    class="event-content"
+    (click)="onEdit()"
+    tabindex="0"
+    role="button"
+    (keydown.enter)="onEdit()"
+    (keydown.space)="onEdit()"
+  >
+    <div class="event-date">
+      <span class="month">{{ getMonth(activity.startTime) }}</span>
+      <span class="day">{{ getDay(activity.startTime) }}</span>
+    </div>
+    <div class="event-info">
+      <div class="event-title">{{ activity.activityName }}</div>
+      <div class="event-location">{{ activity.description }}</div>
+    </div>
+  </div>
+  <div class="event-actions">
+    <button
+      class="map-btn"
+      (click)="onFocusMap($event)"
+      aria-label="Show on map"
+      title="Show on map"
+    >
+      <i class="fas fa-map-marker-alt"></i>
+    </button>
+    <button
+      class="delete-btn"
+      (click)="onDelete($event)"
+      aria-label="Delete activity"
+      title="Delete activity"
+    >
+      <i class="fas fa-trash"></i>
+    </button>
+  </div>
+</div>

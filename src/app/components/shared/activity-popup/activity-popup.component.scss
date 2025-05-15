@@ -1,27 +1,27 @@
 .activity-popup {
   padding: 12px;
   max-width: 250px;
-  
+
   strong {
     display: block;
     color: #1ca698;
     margin-bottom: 6px;
     font-size: 14px;
   }
-  
+
   p {
     font-size: 12px;
     color: #555;
     margin: 4px 0;
   }
-  
+
   i {
     margin-right: 5px;
     color: #1ca698;
     width: 14px;
     text-align: center;
   }
-  
+
   .popup-image {
     width: 100%;
     height: auto;
@@ -40,40 +40,40 @@
     margin-bottom: 8px;
     font-size: 16px;
   }
-  
+
   .popup-activity-list {
     max-height: 200px;
     overflow-y: auto;
     margin-top: 8px;
     padding-right: 4px;
-    
+
     &::-webkit-scrollbar {
       width: 4px;
     }
-    
+
     &::-webkit-scrollbar-track {
       background: #f1f1f1;
     }
-    
+
     &::-webkit-scrollbar-thumb {
       background: #1ca698;
       border-radius: 4px;
     }
   }
-  
+
   .popup-activity-item {
     margin-bottom: 8px;
-    
+
     strong {
       font-size: 13px;
       margin-bottom: 2px;
     }
-    
+
     p {
       margin: 2px 0;
       font-size: 11px;
     }
-    
+
     small {
       display: block;
       font-size: 10px;
@@ -81,7 +81,7 @@
       margin-top: 2px;
     }
   }
-  
+
   .popup-divider {
     margin: 8px 0;
     border: none;

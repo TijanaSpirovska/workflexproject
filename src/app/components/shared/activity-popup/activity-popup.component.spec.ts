@@ -7,10 +7,9 @@ describe('ActivityPopupComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ActivityPopupComponent]
-    })
-    .compileComponents();
-    
+      imports: [ActivityPopupComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(ActivityPopupComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
