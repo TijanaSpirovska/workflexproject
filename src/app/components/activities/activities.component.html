@@ -38,20 +38,37 @@
     <div class="scroll-wrapper">
       <!-- Scroll Button Left -->
       <button class="scroll-btn left" (click)="scrollLeft()">‹</button>
-
       <!-- Featured Activities -->
       <div class="featured-activities">
         <h2>Featured Activities</h2>
-        <div class="activity-cards-scroll" #scrollContainer>
+        <div
+          *ngIf="isFeaturedActivitiesLoading"
+          class="loading-spinner-container"
+        >
+          <div class="loading-spinner"></div>
+        </div>
+        <div
+          *ngIf="!isFeaturedActivitiesLoading && featuredActivities.length > 0"
+          class="activity-cards-scroll"
+          #scrollContainer
+        >
           <div
             class="activity-card"
             *ngFor="let activity of featuredActivities"
           >
             <img [src]="activity.image" [alt]="activity.title" />
             <h3>{{ activity.title }}</h3>
-            <p>{{ activity.duration }}</p>
+            <p>{{ activity.description }}</p>
             <button>{{ activity.buttonText }}</button>
           </div>
+        </div>
+        <div
+          *ngIf="
+            !isFeaturedActivitiesLoading && featuredActivities.length === 0
+          "
+          class="no-activities-message"
+        >
+          No featured activities found. Try again later.
         </div>
       </div>
 
@@ -75,37 +92,7 @@
   <!-- Events Section -->
   <section class="events">
     <h2>Upcoming Events / Seasonal Activities</h2>
-
-    <!-- Filter Pills -->
-    <div class="location-filters" *ngIf="uniqueLocations.length">
-      <span class="filter-label">Filter by location:</span>
-      <div class="location-pills">
-        <button
-          *ngFor="let location of uniqueLocations"
-          class="location-pill"
-          [class.active]="selectedLocation === location"
-          (click)="toggleLocationFilter(location)"
-        >
-          <i class="fas fa-map-marker-alt"></i> {{ location }}
-          <span *ngIf="selectedLocation === location" class="active-indicator"
-            >✓</span
-          >
-        </button>
-
-        <!-- Clear Filter -->
-        <button
-          *ngIf="selectedLocation"
-          class="location-pill clear-filter"
-          (click)="filterActivitiesByLocation(null)"
-        >
-          <i class="fas fa-times"></i> Clear filter
-        </button>
-      </div>
-
-      <div *ngIf="selectedLocation" class="selected-filter-message">
-        Showing activities in: <strong>{{ selectedLocation }}</strong>
-      </div>
-    </div>
+    <!-- Filter Pills section removed as it's no longer needed -->
 
     <!-- Activity Cards -->
     <div *ngFor="let activity of filteredActivities; trackBy: trackById">

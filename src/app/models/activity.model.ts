@@ -19,3 +19,10 @@ export class ActivityDto {
   imageUrl?: string | null;
   userId: number = 0; // New field for user ID
 }
+
+export interface FeaturedActivityDto {
+  title: string;
+  image: string;
+  description: string;
+  buttonText: string;
+}

@@ -10,7 +10,7 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivityService } from '../../services/activity.service';
 import { ToastrService } from 'ngx-toastr';
-import { ActivityDto } from '../../models/activity.model';
+import { ActivityDto, FeaturedActivityDto } from '../../models/activity.model';
 import { isPlatformBrowser } from '@angular/common';
 import { GeocodingService } from '../../services/geocoding.service';
 
@@ -31,36 +31,58 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
   activityDto: ActivityDto = new ActivityDto();
   upcomingActivities: ActivityDto[] = [];
-  baseUrl: string = 'activity/browse?location=Wayanad';
+  baseUrl: string = 'activity/browse?location=Madrid';
   isEditActivity: boolean = false;
 
   // Properties for delete confirmation
   showDeleteConfirmation: boolean = false;
   activityToDelete: ActivityDto | null = null;
-
   // Properties for location filtering
   selectedLocation: string | null = null;
   filteredActivities: ActivityDto[] = [];
+  featuredActivities: FeaturedActivityDto[] = [];
   uniqueLocations: string[] = [];
+
+  // Loading state for featured activities
+  isFeaturedActivitiesLoading: boolean = false;
 
   // Track by function for optimizing lists
   trackById(index: number, activity: ActivityDto): number {
     return activity.id;
   }
-
   getActivityByLocation(): void {
-    // this.activityService.getByPath(this.baseUrl).subscribe({
-    //   next: (response: { data: ActivityDto[] }) => {
-    //     console.log(response.data);
-    //     this.upcomingActivities = response.data;
-    //   },
-    //   error: (error) => {
-    //     this.toastr.error(
-    //       error.error.description ?? 'Failed to fetch activities by location',
-    //       'Error'
-    //     );
-    //   },
-    // });
+    this.isFeaturedActivitiesLoading = true;
+    this.activityService.getByPath(this.baseUrl).subscribe({
+      next: (response) => {
+        const uniqueMap = new Map<string, any>();
+
+        response.forEach((activity: any) => {
+          const uniqueKey = `${activity.activityName}-${activity.imageUrl}`;
+          if (!uniqueMap.has(uniqueKey)) {
+            uniqueMap.set(uniqueKey, {
+              image: activity.imageUrl,
+              title: activity.activityName,
+              description: activity.description
+                ? activity.description.charAt(0).toUpperCase() +
+                  activity.description.slice(1)
+                : '',
+
+              buttonText: 'View More',
+            });
+          }
+        });
+
+        this.featuredActivities = Array.from(uniqueMap.values());
+        this.isFeaturedActivitiesLoading = false;
+      },
+      error: (error) => {
+        this.isFeaturedActivitiesLoading = false;
+        this.toastr.error(
+          error.error.description ?? 'Failed to fetch activities by location',
+          'Error'
+        );
+      },
+    });
   }
 
   scrollLeft() {
@@ -106,7 +128,7 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
       numberOfPeople: [1, [Validators.required, Validators.min(1)]],
       startTime: ['', Validators.required],
 
-      address: ['vienna', [Validators.required]],
+      address: ['', [Validators.required]],
 
       planTripId: [1, Validators.required],
       userId: [15, Validators.required],
@@ -134,26 +156,6 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
     this.isExpanded = event;
   }
 
-  featuredActivities = [
-    {
-      title: 'Visit Wayanad Elephant Camp',
-      image: '/assets/images/elephant.png',
-      duration: 'Holiday Trip',
-      buttonText: 'Book Now',
-    },
-    {
-      title: 'Guided Forest Walk',
-      image: '/assets/images/forest.png',
-      duration: '3 hours - 4.8★',
-      buttonText: 'Book Now',
-    },
-    {
-      title: 'River Rafting Experience',
-      image: '/assets/images/rafting.png',
-      duration: '5 hours',
-      buttonText: 'See Details',
-    },
-  ];
   onFileChange(event: any) {
     // Check if this is a remove image event
     if (event.type === 'remove') {
@@ -213,7 +215,7 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
     if (this.activityDto?.id) {
       // Update existing
       this.activityService
-        .updateById(this.activityDto.id.toString(), formData)
+        .updateById(this.activityDto.id.toString(), this.formGroup.value)
         .subscribe({
           next: () => {
             this.toastr.success('Activity updated successfully!', 'Success');
