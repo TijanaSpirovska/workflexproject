@@ -1,0 +1,60 @@
+<app-menu (onExpanded)="onExpanded($event)" [isVisible]="true"></app-menu>
+<div class="recommended-locations">
+  <!-- Title Section -->
+  <div class="title-section">
+    <div class="explore-tag">EXPLORE NOW</div>
+    <h2>Find Your Dream Destination</h2>
+  </div>
+
+  <!-- Categories Filter -->
+  <div class="categories-filter">
+    <button
+      *ngFor="let category of categories"
+      (click)="filterByCategory(category)"
+      [class.active]="selectedCategory === category"
+      class="category-btn"
+    >
+      {{ category }}
+    </button>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Loading destinations...</p>
+  </div>
+
+  <!-- Destinations Grid -->
+  <div
+    class="destinations-grid"
+    *ngIf="!isLoading && filteredDestinations.length > 0"
+  >
+    <div
+      class="destination-card"
+      *ngFor="let destination of filteredDestinations"
+    >
+      <div
+        class="card-image"
+        [style.background-image]="'url(' + destination.imageUrl + ')'"
+      >
+        <div class="rating">
+          <i class="fas fa-star"></i> {{ destination.rating }}
+        </div>
+      </div>
+      <div class="card-info">
+        <h3>{{ destination.name }}</h3>
+        <p><i class="fas fa-map-marker-alt"></i> {{ destination.location }}</p>
+        <button class="view-details-btn">View Details</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Results Message -->
+  <div
+    *ngIf="!isLoading && filteredDestinations.length === 0"
+    class="no-results"
+  >
+    <p>No destinations found matching your criteria</p>
+    <button class="reset-btn" (click)="resetFilters()">Clear filters</button>
+  </div>
+</div>

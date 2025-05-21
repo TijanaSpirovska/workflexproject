@@ -61,9 +61,8 @@ export class ActivityMapComponent
   }
   ngAfterViewInit(): void {
     if (this.isBrowser) {
-
       setTimeout(() => {
-          this.initMap();
+        this.initMap();
       }, 100);
     }
   }
@@ -99,7 +98,6 @@ export class ActivityMapComponent
 
     // If map is already initialized, just update markers
     if (this.map) {
-
       this.addMarkers(
         this.filteredActivities.length > 0
           ? this.filteredActivities
@@ -112,14 +110,12 @@ export class ActivityMapComponent
       // Check if the map container exists in the DOM
       const mapContainer = document.getElementById('activityMap');
       if (!mapContainer) {
-
         return;
       }
 
       // Check if there's an existing Leaflet map instance on this container
       // @ts-ignore: Accessing internal Leaflet property
       if (mapContainer._leaflet_id) {
-  
         // @ts-ignore: Accessing internal Leaflet property
         delete mapContainer._leaflet_id;
       }
@@ -186,22 +182,18 @@ export class ActivityMapComponent
   private addMarkers(activities: ActivityDto[]): void {
     // Validate all required dependencies and data
     if (!this.isBrowser) {
-
       return;
     }
 
     if (!this.map) {
-
       return;
     }
 
     if (!this.L) {
-
       return;
     }
 
     if (!activities || !activities.length) {
-
       return;
     }
 
@@ -239,7 +231,7 @@ export class ActivityMapComponent
                 .bindPopup(popupContent);
 
               // Add click handler for location filtering
-              this.addClickHandlerToMarker(marker, locationName);
+              // this.addClickHandlerToMarker(marker, locationName);
 
               this.activityMarkers.push(marker);
 
@@ -355,28 +347,28 @@ export class ActivityMapComponent
   // These methods are now in the ActivityMapHelperService
 
   // Add click handler to marker
-  private addClickHandlerToMarker(marker: any, locationName: string): void {
-    // Add click event to filter by this location
-    marker.on('click', () => {
-      // Directly fly to location for immediate feedback
-      if (this.map) {
-        this.geocodingService.getCoordinates(locationName).subscribe(
-          (coordinates) => {
-            this.map.flyTo([coordinates.lat, coordinates.lng], 10, {
-              animate: true,
-              duration: 1.0,
-            });
-          },
-          (error) => {
-            console.error('Error getting coordinates for marker click:', error);
-          }
-        );
-      }
+  // private addClickHandlerToMarker(marker: any, locationName: string): void {
+  //   // Add click event to filter by this location
+  //   marker.on('click', () => {
+  //     // Directly fly to location for immediate feedback
+  //     if (this.map) {
+  //       this.geocodingService.getCoordinates(locationName).subscribe(
+  //         (coordinates) => {
+  //           this.map.flyTo([coordinates.lat, coordinates.lng], 10, {
+  //             animate: true,
+  //             duration: 1.0,
+  //           });
+  //         },
+  //         (error) => {
+  //           console.error('Error getting coordinates for marker click:', error);
+  //         }
+  //       );
+  //     }
 
-      // Emit the selected location to the parent component
-      setTimeout(() => {
-        this.locationSelected.emit(locationName);
-      }, 100);
-    });
-  }
+  //     // Emit the selected location to the parent component
+  //     setTimeout(() => {
+  //       this.locationSelected.emit(locationName);
+  //     }, 100);
+  //   });
+  // }
 }

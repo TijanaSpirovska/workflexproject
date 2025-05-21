@@ -35,6 +35,7 @@ import { BreadcrumbComponent } from './components/shared/breadcrumb/breadcrumb.c
 import { ActivityMapComponent } from './components/activities/activity-map/activity-map.component';
 import { ActivityCardComponent } from './components/activities/activity-card/activity-card.component';
 import { ActivityModalComponent } from './components/activities/activity-modal/activity-modal.component';
+import { RecommendedLocationsComponent } from './components/recommended-locations/recommended-locations.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { ActivityModalComponent } from './components/activities/activity-modal/a
     ActivityMapComponent,
     ActivityCardComponent,
     ActivityModalComponent,
+    RecommendedLocationsComponent,
   ],
   imports: [
     BrowserModule,

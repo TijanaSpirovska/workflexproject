@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  travel-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - CONFIGURATION=production
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always
+    environment:
+      - NODE_ENV=production
+      # Add your production API URL and other environment variables here
+      # - API_URL=https://api.yourdomain.com
+    volumes:
+      - ./ssl:/etc/nginx/ssl:ro
+    # For production, consider adding healthcheck
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

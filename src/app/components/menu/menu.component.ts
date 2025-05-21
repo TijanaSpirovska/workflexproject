@@ -28,18 +28,26 @@ export class MenuComponent implements OnInit {
       this.isLoggedIn = localStorage.getItem('authToken') != null;
     }
   }
-
   menuItems = [
-    // { icon: 'flight', label: 'Flights', route: '/', active: false }, //Add this in my trips details page
     { icon: 'your_trips', label: 'My trips', route: 'my-trips', active: false },
     {
-      icon: 'travel_explore',
-      label: 'Explore',
-      route: '/audio',
+      icon: 'location_city',
+      label: 'Accommodation',
+      route: 'accommodation',
       active: false,
     },
-    { icon: 'location_city', label: 'Accommodation', route: 'accommodation', active: false },
-    { icon: 'local_see', label: 'Activity', route: 'activities', active: false },
+    {
+      icon: 'map',
+      label: 'Destinations',
+      route: 'destinations',
+      active: false,
+    },
+    {
+      icon: 'local_see',
+      label: 'Activity',
+      route: 'activities',
+      active: false,
+    },
   ];
 
   navigate(selectedItem: any) {
