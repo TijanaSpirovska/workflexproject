@@ -102,7 +102,7 @@ $mobile-small: 640px;
 
 body {
   overflow-x: hidden;
-  // overflow-y: hidden;
+  overflow-y: visible;
   background-color: var(--green-button);
 }
 

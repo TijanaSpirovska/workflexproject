@@ -3,7 +3,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Destination } from '../../models/destination.model';
 import { DestinationService } from '../../services/destination.service';
 import { ToastrService } from 'ngx-toastr';
-import { finalize } from 'rxjs/operators';
+import { NewTripService } from '../../services/new-trip.service';
+import { RecommendedTripService } from '../../services/new-trip.service copy';
 
 @Component({
   selector: 'app-recommended-locations',
@@ -33,6 +34,7 @@ export class RecommendedLocationsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private destinationService: DestinationService,
+    private recommendedTripService: RecommendedTripService,
     private toastr: ToastrService
   ) {
     this.filterForm = this.fb.group({
@@ -61,21 +63,32 @@ export class RecommendedLocationsComponent implements OnInit {
   loadDestinations(): void {
     this.isLoading = true;
 
-    this.destinationService
-      .getDestinations()
-      .pipe(finalize(() => (this.isLoading = false)))
-      .subscribe({
-        next: (data) => {
-          this.destinations = data;
-          this.filteredDestinations = [...this.destinations];
-        },
-        error: (error) => {
-          this.toastr.error('Failed to load destinations', 'Error');
-        },
-      });
+    this.recommendedTripService.getAll().subscribe({
+      next: (data) => {
+        console.log('Destinations:', data);
+        this.destinations = data;
+        this.filteredDestinations = [...this.destinations];
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.toastr.error('Failed to load destinations', 'Error');
+        this.isLoading = false;
+      },
+    });
+
+    // this.destinationService
+    //   .getDestinations()
+    //   .pipe(finalize(() => (this.isLoading = false)))
+    //   .subscribe({
+    //     next: (data) => {
+    //       this.destinations = data;
+    //       this.filteredDestinations = [...this.destinations];
+    //     },
+    //     error: (error) => {
+    //       this.toastr.error('Failed to load destinations', 'Error');
+    //     },
+    //   });
   }
-
-
 
   filterByCategory(category: string): void {
     this.selectedCategory = category;
@@ -102,11 +115,11 @@ export class RecommendedLocationsComponent implements OnInit {
     // Apply filters if any values are set
     let filtered = [...this.destinations];
 
-    if (formValues.location) {
-      filtered = filtered.filter((dest) =>
-        dest.location.toLowerCase().includes(formValues.location.toLowerCase())
-      );
-    }
+    // if (formValues.location) {
+    //   filtered = filtered.filter((dest) =>
+    //     dest.location.toLowerCase().includes(formValues.location.toLowerCase())
+    //   );
+    // }
 
     // Budget filtering - this is a simplified example
     if (formValues.budget) {
