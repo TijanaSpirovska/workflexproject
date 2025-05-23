@@ -14,16 +14,15 @@ import { TripService } from '../../services/trip.service';
 export class MyTripsComponent implements OnInit {
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
   isExpanded: boolean = false;
-  trips: NewTripDto[] = [];
-  constructor(
-    private readonly tripService: NewTripService,
+  trips: NewTripDto[] = [];  constructor(
+    private readonly newTripService: NewTripService,
+    private readonly tripService: TripService,
     private readonly router: Router,
     @Inject(PLATFORM_ID) private readonly platformId: Object
   ) {}
-
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.tripService.getAll().subscribe({
+      this.newTripService.getAll().subscribe({
         next: (response: { data: NewTripDto[] }) => {
           console.log('Trips response:', response);
           this.trips = response.data;
@@ -72,8 +71,11 @@ export class MyTripsComponent implements OnInit {
   selectTrip(index: number): void {
     this.selectedTripIndex = index;
   }
-  
-  viewTripDetails(index: number): void {
+    viewTripDetails(index: number): void {
+    // Set the selected trip image before navigating
+    const selectedTrip = this.trips[index];
+    this.tripService.setSelectedTripImage(selectedTrip.imageUrl);
+    
     // For demo purposes we'll use a hardcoded trip ID
     // In a real application, you would use the actual trip ID from the API
     const demoTripIds = ['1', '2', '3'];

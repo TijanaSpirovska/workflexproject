@@ -1,4 +1,4 @@
-<div class="trip-details-container" *ngIf="!loading && trip">  <!-- Hero Section: Full-width Cover Image with Curved Bottom -->  <div class="hero-banner" [style.background-image]="'url(' + trip.imageUrl + ')'">
+<div class="trip-details-container" *ngIf="!loading && trip">  <!-- Hero Section: Full-width Cover Image with Curved Bottom -->  <div class="hero-banner" [style.background-image]="'url(' + (tripBackgroundImage || trip.imageUrl || '/assets/images/travel.png') + ')'">
     <div class="hero-overlay">
       <!-- Back button with proper styling -->
       <button class="back-button" (click)="goBack()">
@@ -60,11 +60,10 @@
     <div class="itinerary-section">
       <h2 class="section-title">Your Day-by-Day Trip Plan</h2>
       
-      <div class="days-list">
-        <div 
+      <div class="days-list">        <div 
           *ngFor="let day of trip.days" 
           class="day-card"
-          [class.day-current]="day.isToday"
+          [class.day-current]="isToday(day.date)"
         >          <div class="day-left">
             <div class="calendar-icon">
               <i class="fas fa-calendar-alt"></i>
@@ -77,7 +76,7 @@
           
           <div class="day-right">
             <div class="day-label">{{ day.label }}</div>
-            <div *ngIf="day.isToday" class="today-badge">Today</div>
+            <div *ngIf="isToday(day.date)" class="today-badge">Today</div>
             <div class="day-activities" *ngIf="day.activities?.length">
               <div class="activity-item" *ngFor="let activity of day.activities">
                 <i class="fas fa-map-marker-alt"></i> {{ activity }}

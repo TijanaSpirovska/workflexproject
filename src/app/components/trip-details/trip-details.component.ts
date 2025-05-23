@@ -14,14 +14,19 @@ export class TripDetailsComponent implements OnInit {
   trip: Trip | null = null;
   loading: boolean = true;
   error: string | null = null;
+  tripBackgroundImage: string = '';
   
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private tripService: TripService,
     private location: Location
-  ) {}
-
+  ) {
+    // Subscribe to the selected trip image
+    this.tripService.selectedTripImage$.subscribe(imageUrl => {
+      this.tripBackgroundImage = imageUrl;
+    });
+  }
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const tripId = params.get('id');
@@ -39,6 +44,12 @@ export class TripDetailsComponent implements OnInit {
     this.tripService.getTripById(tripId).subscribe({
       next: (trip) => {
         this.trip = trip;
+        // If we're coming directly to this page (not via my-trips), 
+        // update the background image with the trip's image
+        if (!this.tripBackgroundImage) {
+          this.tripBackgroundImage = trip.imageUrl;
+        } 
+        // Otherwise use the image passed from my-trips (which is already set via subscription)
         this.loading = false;
       },
       error: (err) => {
@@ -68,10 +79,21 @@ export class TripDetailsComponent implements OnInit {
     const date = new Date(isoDate);
     return date.toLocaleDateString('en-US', { weekday: 'short' });
   }
-  
-  getDayNumber(isoDate: string): number {
+    getDayNumber(isoDate: string): number {
     const date = new Date(isoDate);
     return date.getDate();
+  }
+  
+  /**
+   * Check if the given date is today
+   */
+  isToday(isoDate: string): boolean {
+    const today = new Date();
+    const dayDate = new Date(isoDate);
+    
+    return today.getFullYear() === dayDate.getFullYear() &&
+           today.getMonth() === dayDate.getMonth() &&
+           today.getDate() === dayDate.getDate();
   }
 
   goBack(): void {
@@ -82,13 +104,12 @@ export class TripDetailsComponent implements OnInit {
     // In a real app, navigate to edit form
     alert('Edit functionality would open here');
   }
-  
-  getTripProgress(): number {
+    getTripProgress(): number {
     if (!this.trip) return 0;
     
     const startDate = new Date(this.trip.startDate);
     const endDate = this.getEndDate();
-    const today = new Date();
+    const today = new Date(); // This uses the real current date
     
     // If trip hasn't started yet
     if (today < startDate) return 0;
