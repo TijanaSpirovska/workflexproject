@@ -2,6 +2,8 @@ import { Component, ElementRef, HostListener, Inject, OnInit, PLATFORM_ID, ViewC
 import { NewTripDto } from '../../models/new-trip.model';
 import { NewTripService } from '../../services/new-trip.service';
 import { isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
+import { TripService } from '../../services/trip.service';
 
 @Component({
   selector: 'app-my-trips',
@@ -15,6 +17,7 @@ export class MyTripsComponent implements OnInit {
   trips: NewTripDto[] = [];
   constructor(
     private readonly tripService: NewTripService,
+    private readonly router: Router,
     @Inject(PLATFORM_ID) private readonly platformId: Object
   ) {}
 
@@ -66,8 +69,15 @@ export class MyTripsComponent implements OnInit {
   }
 
   selectedTripIndex = 0;
-
   selectTrip(index: number): void {
     this.selectedTripIndex = index;
+  }
+  
+  viewTripDetails(index: number): void {
+    // For demo purposes we'll use a hardcoded trip ID
+    // In a real application, you would use the actual trip ID from the API
+    const demoTripIds = ['1', '2', '3'];
+    const tripId = demoTripIds[index % demoTripIds.length];
+    this.router.navigate(['/trip', tripId]);
   }
 }

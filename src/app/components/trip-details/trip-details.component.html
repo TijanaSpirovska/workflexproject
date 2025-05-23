@@ -1,0 +1,105 @@
+<div class="trip-details-container" *ngIf="!loading && trip">  <!-- Hero Section: Full-width Cover Image with Curved Bottom -->  <div class="hero-banner" [style.background-image]="'url(' + trip.imageUrl + ')'">
+    <div class="hero-overlay">
+      <!-- Back button with proper styling -->
+      <button class="back-button" (click)="goBack()">
+        ‹
+      </button>
+      
+      <!-- Destination info with proper typography -->
+      <div class="destination-info">
+        <h1 class="city">{{ trip.destination }}</h1>
+        <h2 class="country">{{ trip.country }}</h2>
+      </div>
+    </div>
+    <!-- Curved bottom edge -->
+    <div class="curve-mask"></div>
+  </div>
+  
+  <!-- Main Content Card -->
+  <div class="content-card">
+    <!-- Trip Meta Info Section -->
+    <div class="trip-header">      <div class="date-info">
+        <span class="date">{{ formatDate(trip.startDate) }}</span>
+        <span class="separator">•</span>
+        <span class="duration">{{ trip.durationDays }} days</span>
+      </div>
+      <button class="edit-button" (click)="editTrip()">
+        <i class="fas fa-pencil-alt"></i>
+      </button>
+    </div>
+    
+    <!-- Trip Progress Bar -->
+    <div class="progress-section">
+      <div class="progress-container">
+        <div class="progress-bar" [style.width.%]="getTripProgress()"></div>
+      </div>
+      <div class="progress-dates">
+        <span>{{ formatDate(trip.startDate) }}</span>
+        <span>{{ formatDate(getEndDate().toISOString()) }}</span>
+      </div>
+    </div>
+      <!-- Flight Details Card -->
+    <div class="flight-card">      <div class="flight-header">
+        <i class="fas fa-plane"></i>
+        <span>Your flight</span>
+      </div>
+        <div class="flight-content">
+        <div class="route">
+          <div class="airport from">{{ trip.flight.from }}</div>
+          <div class="flight-icon">›</div>
+          <div class="airport to">{{ trip.flight.to }}</div>
+        </div>
+        
+        <div class="flight-details">
+          <div class="departure-time">{{ formatFlightDate(trip.flight.departureTime) }}</div>
+          <div class="duration">{{ trip.flight.duration }}</div>
+        </div>
+      </div>
+    </div>
+      <!-- Day-by-Day Trip Cards -->
+    <div class="itinerary-section">
+      <h2 class="section-title">Your Day-by-Day Trip Plan</h2>
+      
+      <div class="days-list">
+        <div 
+          *ngFor="let day of trip.days" 
+          class="day-card"
+          [class.day-current]="day.isToday"
+        >          <div class="day-left">
+            <div class="calendar-icon">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="day-date">
+              <div class="date-abbr">{{ getDayAbbreviation(day.date) }}</div>
+              <div class="date-num">{{ getDayNumber(day.date) }}</div>
+            </div>
+          </div>
+          
+          <div class="day-right">
+            <div class="day-label">{{ day.label }}</div>
+            <div *ngIf="day.isToday" class="today-badge">Today</div>
+            <div class="day-activities" *ngIf="day.activities?.length">
+              <div class="activity-item" *ngFor="let activity of day.activities">
+                <i class="fas fa-map-marker-alt"></i> {{ activity }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading spinner -->
+<div class="loading-container" *ngIf="loading">
+  <div class="spinner"></div>
+  <p>Loading trip details...</p>
+</div>
+
+<!-- Error display -->
+<div class="error-container" *ngIf="!loading && error">
+  <div class="error-icon"><i class="fas fa-exclamation-triangle"></i></div>
+  <h2>Something went wrong</h2>
+  <p>{{ error }}</p>
+  <button (click)="goBack()">Go back</button>
+</div>

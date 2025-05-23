@@ -1,0 +1,481 @@
+@import '../../../styles.scss';
+
+// Define primaryColor variable
+$primaryColor: #003584;
+
+:host {
+  display: block;
+  background-color: #f6f7f9;
+  min-height: 100vh;
+}
+
+.trip-details-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-bottom: 2rem;
+}
+
+// Hero Banner Section with curved bottom
+.hero-banner {
+  position: relative;
+  height: 280px;
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%);
+  }
+  
+  .hero-overlay {
+    position: relative;
+    height: 100%;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 2;
+  }
+  .back-button {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 5;
+    font-size: 24px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background: white;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+  }
+  
+  .destination-info {
+    margin-top: auto;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    
+    .city {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin: 0;
+      letter-spacing: 0.5px;
+    }
+    
+    .country {
+      font-size: 1.2rem;
+      font-weight: 400;
+      margin: 0.5rem 0 0;
+      opacity: 0.9;
+    }
+  }
+  
+  .curve-mask {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background-color: #f6f7f9;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    z-index: 3;
+  }
+}
+
+// Main content area
+.content-card {
+  position: relative;
+  margin: -20px 1.5rem 0;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  z-index: 4;
+  max-width: 1100px;
+  width: calc(100% - 3rem);
+}
+
+// Trip meta info (date and edit button)
+.trip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  
+  .date-info {
+    color: #666;
+    font-size: 0.9rem;
+    
+    .date {
+      font-weight: 500;
+    }
+    
+    .separator {
+      margin: 0 0.5rem;
+    }
+    
+    .duration {
+      font-weight: 500;
+    }
+  }
+  
+  .edit-button {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background-color: #f0f2f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    
+    &:hover {
+      background-color: darken(#f0f2f5, 5%);
+    }
+    
+    i {
+      color: #555;
+      font-size: 14px;
+    }
+  }
+}
+
+// Progress bar section
+.progress-section {
+  margin-bottom: 1.5rem;
+  
+  .progress-container {
+    height: 6px;
+    background-color: #eee;
+    border-radius: 3px;
+    overflow: hidden;
+    
+    .progress-bar {
+      height: 100%;
+      background-color: $primaryColor;
+      border-radius: 3px;
+    }
+  }
+  
+  .progress-dates {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: #777;
+    margin-top: 0.5rem;
+  }
+}
+
+// Flight card section
+.flight-card {
+  background-color: #f9f9fb;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  
+  .flight-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    
+    i {
+      color: $primaryColor;
+      font-size: 1rem;
+      margin-right: 0.5rem;
+    }
+    
+    span {
+      font-weight: 600;
+      font-size: 1rem;
+      color: #333;
+    }
+  }
+  
+  .flight-content {
+    .route {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      
+      .airport {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #333;
+        
+        &.from {
+          color: #555;
+        }
+      }      .flight-icon {
+        margin: 0 0.75rem;
+        color: $primaryColor;
+        font-size: 24px;
+        font-weight: bold;
+      }
+    }
+    
+    .flight-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      
+      .departure-time {
+        font-size: 0.85rem;
+        color: #666;
+      }
+      
+      .duration {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: $primaryColor;
+        background-color: rgba($primaryColor, 0.1);
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+      }
+    }
+  }
+}
+
+// Day-by-day itinerary section
+.itinerary-section {
+  .section-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid rgba($primaryColor, 0.2);
+    padding-bottom: 0.75rem;
+  }
+  
+  .days-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    
+    .day-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem;
+      background-color: #f9f9fb;
+      border-radius: 12px;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+      min-height: 120px;
+      
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+      }
+      
+      &.day-current {
+        background-color: rgba($primaryColor, 0.08);
+        border-left: 3px solid $primaryColor;
+      }
+      
+      .day-left {
+        display: flex;
+        align-items: center;
+          .calendar-icon {
+          width: 36px;
+          height: 36px;
+          background-color: white;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: 0.75rem;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          
+          i {
+            color: $primaryColor;
+            font-size: 16px;
+          }
+        }
+        
+        .day-date {
+          .date-abbr {
+            font-size: 0.8rem;
+            color: #777;
+            margin-bottom: 0.1rem;
+          }
+          
+          .date-num {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+          }
+        }
+      }
+        .day-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        
+        .day-label {
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: #333;
+          margin-bottom: 0.25rem;
+        }
+        
+        .today-badge {
+          font-size: 0.7rem;
+          font-weight: 600;
+          color: white;
+          background-color: $primaryColor;
+          padding: 0.15rem 0.5rem;
+          border-radius: 20px;
+          margin-bottom: 0.5rem;
+        }
+        
+        .day-activities {
+          margin-top: 0.75rem;
+          width: 100%;
+          
+          .activity-item {
+            font-size: 0.85rem;
+            color: #555;
+            margin-bottom: 0.3rem;
+            text-align: right;
+            
+            i {
+              color: $primaryColor;
+              margin-right: 0.25rem;
+              font-size: 0.75rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Loading spinner
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba($primaryColor, 0.3);
+    border-radius: 50%;
+    border-top-color: $primaryColor;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    color: #777;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+}
+
+// Error display
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  padding: 0 2rem;
+  text-align: center;
+    .error-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #e74c3c;
+    
+    i {
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    }
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+  
+  p {
+    color: #777;
+    margin-bottom: 1.5rem;
+  }
+  
+  button {
+    background-color: $primaryColor;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    
+    &:hover {
+      background-color: darken($primaryColor, 5%);
+    }
+  }
+}
+
+// Responsive styles
+@media (min-width: 768px) {
+  .content-card {
+    margin: -20px 2rem 0;
+    padding: 2rem;
+  }
+  
+  .hero-banner {
+    height: 320px;
+    
+    .destination-info {
+      .city {
+        font-size: 3rem;
+      }
+      
+      .country {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .content-card {
+    max-width: 1200px;
+    margin: -20px auto 0;
+  }
+  
+  .trip-details-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}

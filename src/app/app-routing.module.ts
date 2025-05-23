@@ -8,6 +8,7 @@ import { MyTripsComponent } from './components/my-trips/my-trips.component';
 import { ActivitiesComponent } from './components/activities/activities.component';
 import { AccommodationComponent } from './components/accommodation/accommodation.component';
 import { RecommendedLocationsComponent } from './components/recommended-locations/recommended-locations.component';
+import { TripDetailsComponent } from './components/trip-details/trip-details.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'activities', component: ActivitiesComponent },
   { path: 'accommodation', component: AccommodationComponent },
   { path: 'destinations', component: RecommendedLocationsComponent },
+  { path: 'trip/:id', component: TripDetailsComponent },
 ];
 
 @NgModule({

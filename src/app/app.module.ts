@@ -36,6 +36,7 @@ import { ActivityMapComponent } from './components/activities/activity-map/activ
 import { ActivityCardComponent } from './components/activities/activity-card/activity-card.component';
 import { ActivityModalComponent } from './components/activities/activity-modal/activity-modal.component';
 import { RecommendedLocationsComponent } from './components/recommended-locations/recommended-locations.component';
+import { TripDetailsComponent } from './components/trip-details/trip-details.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { RecommendedLocationsComponent } from './components/recommended-location
     ActivityCardComponent,
     ActivityModalComponent,
     RecommendedLocationsComponent,
+    TripDetailsComponent,
   ],
   imports: [
     BrowserModule,
