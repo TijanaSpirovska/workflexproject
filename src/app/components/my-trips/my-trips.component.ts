@@ -48,9 +48,10 @@ export class MyTripsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
+    const userId = localStorage.getItem('userId');
+    if (isPlatformBrowser(this.platformId) && userId) {
       this.isLoading = true;
-      this.newTripService.getAll().subscribe({
+      this.newTripService.getOneById(userId).subscribe({
         next: (response: { data: NewTripDto[] }) => {
           this.trips = response.data;
           this.isLoading = false;
@@ -85,6 +86,30 @@ export class MyTripsComponent implements OnInit {
     card.style.transform = 'scale(1)';
     card.style.zIndex = '1';
     card.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+  }
+
+  // Format date for display
+  formatDate(date: Date): string {
+    if (!date) return 'N/A';
+
+    // Convert string to Date object if needed
+    const dateObj = date instanceof Date ? date : new Date(date);
+
+    // Format the date as May 26, 2025
+    return dateObj.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  }
+
+  // Get date range string for display
+  getDateRangeString(trip: NewTripDto): string {
+    if (!trip || !trip.startDate || !trip.endDate) return '';
+
+    return `${this.formatDate(trip.startDate)} - ${this.formatDate(
+      trip.endDate
+    )}`;
   }
 
   @HostListener('wheel', ['$event'])
@@ -128,6 +153,19 @@ export class MyTripsComponent implements OnInit {
       // In a real application, you would use the actual trip ID from the API
       const demoTripIds = ['1', '2', '3'];
       const tripId = demoTripIds[index % demoTripIds.length];
+
+      // In a real application with an API, you would store the actual trip ID and data
+      // Store real trip data in localStorage for use after page refresh
+      localStorage.setItem('selectedTripName', selectedTrip.tripName);
+      localStorage.setItem(
+        'selectedTripStartDate',
+        selectedTrip.startDate.toString()
+      );
+      localStorage.setItem(
+        'selectedTripEndDate',
+        selectedTrip.endDate.toString()
+      );
+
       this.router.navigate(['/trip', tripId]);
     } else {
       console.error('Selected trip is undefined at index:', index);

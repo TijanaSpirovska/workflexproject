@@ -27,6 +27,13 @@
             : "Please wait while we load your trips"
         }}
       </p>
+      <div
+        class="date-range"
+        *ngIf="trips && trips.length > 0 && trips[selectedTripIndex].startDate"
+      >
+        <i class="fas fa-calendar"></i>
+        {{ getDateRangeString(trips[selectedTripIndex]) }}
+      </div>
       <button class="read-more" (click)="viewTripDetails(selectedTripIndex)">
         READ MORE
       </button>
@@ -45,7 +52,12 @@
           (click)="viewTripDetails(i)"
         >
           <img [src]="trip.imageUrl || defaultImageUrl" [alt]="trip.tripName" />
-          <div class="trip-label">{{ trip.tripName }}</div>
+          <div class="trip-info">
+            <div class="trip-label">{{ trip.tripName }}</div>
+            <div class="trip-dates" *ngIf="trip.startDate && trip.endDate">
+              {{ getDateRangeString(trip) }}
+            </div>
+          </div>
         </div>
       </div>
 

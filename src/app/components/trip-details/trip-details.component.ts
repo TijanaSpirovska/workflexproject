@@ -14,7 +14,8 @@ export class TripDetailsComponent implements OnInit {
   trip: Trip | null = null;
   loading: boolean = true;
   error: string | null = null;
-  tripBackgroundImage: string = '';  constructor(
+  tripBackgroundImage: string = '';
+  constructor(
     private route: ActivatedRoute,
     private router: Router,
     private tripService: TripService,
@@ -35,18 +36,38 @@ export class TripDetailsComponent implements OnInit {
       if (tripId) {
         this.loadTripDetails(tripId);
       } else {
-        this.error = 'Trip ID not found';
-        this.loading = false;
+        // If no ID in route, check localStorage
+        const storedTripId = this.tripService.getStoredTripId();
+        if (storedTripId) {
+          this.loadTripDetails(storedTripId);
+        } else {
+          this.error = 'Trip ID not found';
+          this.loading = false;
+        }
       }
     });
-  }  loadTripDetails(tripId: string): void {
+  }
+  loadTripDetails(tripId: string): void {
     this.loading = true;
     this.tripService.getTripById(tripId).subscribe({
       next: (trip) => {
         this.trip = trip;
 
+        // Check for stored trip name and dates from localStorage
+        const storedTripName = localStorage.getItem('selectedTripName');
+        const storedStartDate = localStorage.getItem('selectedTripStartDate');
+        const storedEndDate = localStorage.getItem('selectedTripEndDate');
+
+        // If we have stored trip data, use it
+        if (storedTripName) {
+          this.trip.destination = storedTripName;
+        }
+
+        if (storedStartDate) {
+          this.trip.startDate = new Date(storedStartDate).toISOString();
+        }
+
         // Only use the trip's image if we don't already have a stored image
-        // This ensures we keep using the image that was selected in my-trips
         if (this.tripBackgroundImage === '/assets/images/travel.png') {
           // Make sure there's a valid image URL
           if (trip && trip.imageUrl) {
@@ -55,6 +76,8 @@ export class TripDetailsComponent implements OnInit {
             this.tripBackgroundImage = trip.imageUrl;
           }
         }
+        // Calculate duration days from stored dates if available
+        this.calculateDuration();
         // Otherwise use the image passed from my-trips (which is already set via subscription)
         this.loading = false;
       },
@@ -121,7 +144,7 @@ export class TripDetailsComponent implements OnInit {
     alert('Edit functionality would open here');
   }
   getTripProgress(): number {
-    if (!this.trip || !this.trip.startDate) return 0;
+    if (!this.trip?.startDate) return 0;
 
     const startDate = new Date(this.trip.startDate);
     const endDate = this.getEndDate();
@@ -138,13 +161,26 @@ export class TripDetailsComponent implements OnInit {
     const elapsed = today.getTime() - startDate.getTime();
     return Math.floor((elapsed / totalDuration) * 100);
   }
-
   getEndDate(): Date {
-    if (!this.trip || !this.trip.startDate) return new Date();
+    if (!this.trip?.startDate) return new Date();
 
     const startDate = new Date(this.trip.startDate);
     const endDate = new Date(startDate);
     endDate.setDate(startDate.getDate() + (this.trip.durationDays || 0) - 1);
     return endDate;
+  }
+
+  // Calculate duration days from stored dates if available
+  calculateDuration(): void {
+    const storedStartDate = localStorage.getItem('selectedTripStartDate');
+    const storedEndDate = localStorage.getItem('selectedTripEndDate');
+
+    if (storedStartDate && storedEndDate && this.trip) {
+      const start = new Date(storedStartDate);
+      const end = new Date(storedEndDate);
+      const diffTime = Math.abs(end.getTime() - start.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      this.trip.durationDays = diffDays || 1; // Ensure at least 1 day
+    }
   }
 }

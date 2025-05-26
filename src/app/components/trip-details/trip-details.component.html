@@ -3,19 +3,20 @@
   <div
     class="hero-banner"
     [style.background-image]="
-      'url(' +
-      (tripBackgroundImage || trip.imageUrl) +
-      ')'
+      'url(' + (tripBackgroundImage || trip.imageUrl) + ')'
     "
   >
     <div class="hero-overlay">
       <!-- Back button with proper styling -->
       <button class="back-button" (click)="goBack()">‹</button>
-
       <!-- Destination info with proper typography -->
       <div class="destination-info">
         <h1 class="city">{{ trip.destination }}</h1>
         <h2 class="country">{{ trip.country }}</h2>
+        <div class="date-range">
+          <i class="fas fa-calendar"></i> {{ formatDate(trip.startDate) }} -
+          {{ formatDate(getEndDate().toISOString()) }}
+        </div>
       </div>
     </div>
   </div>

@@ -10,8 +10,9 @@ import { map } from 'rxjs/operators';
 })
 export class TripService extends CoreService {
   private readonly STORAGE_KEY = 'selectedTripImage';
+  private readonly TRIP_ID_KEY = 'selectedTripId';
   private readonly DEFAULT_IMAGE = '/assets/images/travel.png';
-  
+
   // For sharing trip data between components
   private selectedTripImageSource = new BehaviorSubject<string>(
     this.getStoredImageUrl()
@@ -211,8 +212,8 @@ export class TripService extends CoreService {
   /**
    * Get trip by ID
    */ getTripById(id: string): Observable<Trip> {
-    // In a real app, you would use:
-    // return this.getOneById(id);
+    // Store the selected trip ID for retrieval after page refresh
+    this.storeSelectedTripId(id);
 
     // For demo, we'll use mock data:
     return of(this.mockTrips.find((trip) => trip.id === id)).pipe(
@@ -259,7 +260,8 @@ export class TripService extends CoreService {
       month: 'short',
       day: 'numeric',
     });
-  }  /**
+  }
+  /**
    * Sets the selected trip image URL
    */
   setSelectedTripImage(imageUrl: string): void {
@@ -268,7 +270,7 @@ export class TripService extends CoreService {
     // Update the BehaviorSubject
     this.selectedTripImageSource.next(imageUrl);
   }
-  
+
   /**
    * Store image URL in localStorage
    */
@@ -281,7 +283,6 @@ export class TripService extends CoreService {
       console.error('Error storing image URL in localStorage:', error);
     }
   }
-  
   /**
    * Get stored image URL from localStorage
    */
@@ -289,11 +290,37 @@ export class TripService extends CoreService {
     try {
       if (typeof window !== 'undefined' && window.localStorage) {
         const storedUrl = localStorage.getItem(this.STORAGE_KEY);
-        return storedUrl || this.DEFAULT_IMAGE;
+        return storedUrl ?? this.DEFAULT_IMAGE;
       }
     } catch (error) {
       console.error('Error retrieving image URL from localStorage:', error);
     }
     return this.DEFAULT_IMAGE;
+  }
+
+  /**
+   * Store selected trip ID in localStorage
+   */
+  private storeSelectedTripId(tripId: string): void {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem(this.TRIP_ID_KEY, tripId);
+      }
+    } catch (error) {
+      console.error('Error storing trip ID in localStorage:', error);
+    }
+  }
+  /**
+   * Get stored trip ID from localStorage
+   */
+  getStoredTripId(): string | null {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        return localStorage.getItem(this.TRIP_ID_KEY);
+      }
+    } catch (error) {
+      console.error('Error retrieving trip ID from localStorage:', error);
+    }
+    return null;
   }
 }

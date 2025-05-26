@@ -76,7 +76,6 @@ $primaryColor: #003584;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     }
   }
-
   .destination-info {
     margin-top: auto;
     color: white;
@@ -94,6 +93,21 @@ $primaryColor: #003584;
       font-weight: 400;
       margin: 0.5rem 0 0;
       opacity: 0.9;
+    }
+    .date-range {
+      display: flex;
+      align-items: center;
+      font-size: 1rem;
+      margin-top: 10px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 8px 12px;
+      border-radius: 4px;
+      max-width: fit-content;
+
+      i {
+        margin-right: 6px;
+        color: rgba(255, 255, 255, 0.8);
+      }
     }
   }
 
@@ -117,7 +131,7 @@ $primaryColor: #003584;
   margin-bottom: 2rem;
   padding: 2rem;
   background-color: white;
-  border-radius: 30px 30px 0 0; /* Rounded top corners */
+  border-radius: 30px;
   box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.15);
   z-index: 4; /* Higher z-index to appear above the fixed background */
   max-width: 1100px;
@@ -149,7 +163,6 @@ $primaryColor: #003584;
       font-weight: 500;
     }
   }
-
   .edit-button {
     width: 36px;
     height: 36px;
@@ -166,9 +179,14 @@ $primaryColor: #003584;
       background-color: darken(#f0f2f5, 5%);
     }
 
-    i {
+    .material-symbols-outlined {
       color: #555;
-      font-size: 14px;
+      font-size: 18px;
+      font-variation-settings: 
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
     }
   }
 }
@@ -486,7 +504,6 @@ $primaryColor: #003584;
 @media (min-width: 992px) {
   .content-card {
     max-width: 1200px;
-    margin-top: 60vh; /* Same as tablet size */
     margin-left: auto;
     margin-right: auto;
   }
