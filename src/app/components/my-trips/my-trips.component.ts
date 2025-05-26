@@ -1,4 +1,12 @@
-import { Component, ElementRef, HostListener, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Inject,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+} from '@angular/core';
 import { NewTripDto } from '../../models/new-trip.model';
 import { NewTripService } from '../../services/new-trip.service';
 import { isPlatformBrowser } from '@angular/common';
@@ -14,18 +22,38 @@ import { TripService } from '../../services/trip.service';
 export class MyTripsComponent implements OnInit {
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
   isExpanded: boolean = false;
-  trips: NewTripDto[] = [];  constructor(
+  trips: NewTripDto[] = [];
+  selectedTripIndex: number = 0;
+  defaultImageUrl: string = '/assets/images/travel.png';
+  isLoading: boolean = true;
+  constructor(
     private readonly newTripService: NewTripService,
     private readonly tripService: TripService,
     private readonly router: Router,
     @Inject(PLATFORM_ID) private readonly platformId: Object
-  ) {}
+  ) {
+    // Initialize with default trips until real data loads
+    this.initializeDefaultTrips();
+
+    // Initialize the trip service with the default image
+    this.tripService.setSelectedTripImage(this.defaultImageUrl);
+  }
+
+  initializeDefaultTrips(): void {
+    const defaultTrip = new NewTripDto();
+    defaultTrip.tripName = 'Loading trips...';
+    defaultTrip.description = 'Please wait while we load your trips';
+    defaultTrip.imageUrl = this.defaultImageUrl;
+    this.trips = [defaultTrip];
+  }
+
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
+      this.isLoading = true;
       this.newTripService.getAll().subscribe({
         next: (response: { data: NewTripDto[] }) => {
-          console.log('Trips response:', response);
           this.trips = response.data;
+          this.isLoading = false;
         },
         error: (error) => {
           console.error('Failed to load trips', error);
@@ -66,20 +94,43 @@ export class MyTripsComponent implements OnInit {
       event.preventDefault();
     }
   }
-
-  selectedTripIndex = 0;
   selectTrip(index: number): void {
-    this.selectedTripIndex = index;
+    if (index >= 0 && index < this.trips.length) {
+      this.selectedTripIndex = index;
+
+      // Safety check: if there's a trip at this index and it has an imageUrl
+      const selectedTrip = this.trips[index];
+      if (selectedTrip) {
+        // Update the selected trip image in the service
+        this.tripService.setSelectedTripImage(
+          selectedTrip.imageUrl || this.defaultImageUrl
+        );
+      }
+    }
   }
-    viewTripDetails(index: number): void {
-    // Set the selected trip image before navigating
+  viewTripDetails(index: number): void {
+    // Check if the trip exists at this index
+    if (index < 0 || index >= this.trips.length) {
+      console.error('Invalid trip index:', index);
+      return;
+    }
+
     const selectedTrip = this.trips[index];
-    this.tripService.setSelectedTripImage(selectedTrip.imageUrl);
-    
-    // For demo purposes we'll use a hardcoded trip ID
-    // In a real application, you would use the actual trip ID from the API
-    const demoTripIds = ['1', '2', '3'];
-    const tripId = demoTripIds[index % demoTripIds.length];
-    this.router.navigate(['/trip', tripId]);
+
+    // Check if the trip exists before using it
+    if (selectedTrip) {
+      // Set the image URL, with a fallback to the default if none is available
+      this.tripService.setSelectedTripImage(
+        selectedTrip.imageUrl || this.defaultImageUrl
+      );
+
+      // For demo purposes we'll use a hardcoded trip ID
+      // In a real application, you would use the actual trip ID from the API
+      const demoTripIds = ['1', '2', '3'];
+      const tripId = demoTripIds[index % demoTripIds.length];
+      this.router.navigate(['/trip', tripId]);
+    } else {
+      console.error('Selected trip is undefined at index:', index);
+    }
   }
 }

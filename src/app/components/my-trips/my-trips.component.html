@@ -3,18 +3,39 @@
   <div
     class="background"
     [ngStyle]="{
-      'background-image': 'url(' + trips[selectedTripIndex].imageUrl + ')'
+      'background-image':
+        'url(' +
+        (trips && trips.length > 0 && trips[selectedTripIndex]?.imageUrl
+          ? trips[selectedTripIndex].imageUrl
+          : defaultImageUrl) +
+        ')'
     }"
   >
-    <!-- Overlay text -->    <div class="overlay-content">
-      <h1>{{ trips[selectedTripIndex].tripName }}</h1>
-      <p>{{ trips[selectedTripIndex].description }}</p>
-      <button class="read-more" (click)="viewTripDetails(selectedTripIndex)">READ MORE</button>
+    <!-- Overlay text -->
+    <div class="overlay-content">
+      <h1>
+        {{
+          trips && trips.length > 0
+            ? trips[selectedTripIndex].tripName
+            : "Loading..."
+        }}
+      </h1>
+      <p>
+        {{
+          trips && trips.length > 0
+            ? trips[selectedTripIndex].description
+            : "Please wait while we load your trips"
+        }}
+      </p>
+      <button class="read-more" (click)="viewTripDetails(selectedTripIndex)">
+        READ MORE
+      </button>
     </div>
 
     <!-- Cards on right side starting from middle -->
     <div class="scroll-container-wrapper">
-      <button class="scroll-button left" (click)="scroll(-300)">‹</button>      <div class="scroll-container" #scrollContainer>
+      <button class="scroll-button left" (click)="scroll(-300)">‹</button>
+      <div class="scroll-container" #scrollContainer>
         <div
           class="trip-card"
           *ngFor="let trip of trips; let i = index"
@@ -23,7 +44,7 @@
           [class.active]="i === selectedTripIndex"
           (click)="viewTripDetails(i)"
         >
-          <img [src]="trip.imageUrl" [alt]="trip.tripName" />
+          <img [src]="trip.imageUrl || defaultImageUrl" [alt]="trip.tripName" />
           <div class="trip-label">{{ trip.tripName }}</div>
         </div>
       </div>

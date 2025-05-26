@@ -31,7 +31,7 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
   activityDto: ActivityDto = new ActivityDto();
   upcomingActivities: ActivityDto[] = [];
-  baseUrl: string = 'activity/browse?location=Madrid';
+  baseUrl: string = 'activity/browse?location=Berlin';
   isEditActivity: boolean = false;
 
   // Properties for delete confirmation

@@ -54,7 +54,7 @@ export class AccommodationComponent implements OnInit {
       this.getLocations();
       this.getAllAccommodations();
       this.loadReservedRooms();
-      this.hasAdminRole = localStorage.getItem('userRole') === 'ADMIN';
+      this.hasAdminRole = localStorage.getItem('userRole') !== 'ADMIN';
     }
     this.createFormGroup();
     this.createReservationFormGroup();
