@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { Trip } from '../models/trip-details.model';
 import { CoreService } from './core.service';
 import { map } from 'rxjs/operators';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -194,8 +195,7 @@ export class TripService extends CoreService {
       ],
     },
   ];
-
-  constructor(http: HttpClient) {
+  constructor(http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) {
     super('trip-details', http);
   }
 
@@ -270,13 +270,12 @@ export class TripService extends CoreService {
     // Update the BehaviorSubject
     this.selectedTripImageSource.next(imageUrl);
   }
-
   /**
    * Store image URL in localStorage
    */
   private storeImageUrl(imageUrl: string): void {
     try {
-      if (typeof window !== 'undefined' && window.localStorage) {
+      if (isPlatformBrowser(this.platformId)) {
         localStorage.setItem(this.STORAGE_KEY, imageUrl);
       }
     } catch (error) {
@@ -288,7 +287,7 @@ export class TripService extends CoreService {
    */
   private getStoredImageUrl(): string {
     try {
-      if (typeof window !== 'undefined' && window.localStorage) {
+      if (isPlatformBrowser(this.platformId)) {
         const storedUrl = localStorage.getItem(this.STORAGE_KEY);
         return storedUrl ?? this.DEFAULT_IMAGE;
       }
@@ -297,13 +296,12 @@ export class TripService extends CoreService {
     }
     return this.DEFAULT_IMAGE;
   }
-
   /**
    * Store selected trip ID in localStorage
    */
   private storeSelectedTripId(tripId: string): void {
     try {
-      if (typeof window !== 'undefined' && window.localStorage) {
+      if (isPlatformBrowser(this.platformId)) {
         localStorage.setItem(this.TRIP_ID_KEY, tripId);
       }
     } catch (error) {
@@ -315,7 +313,7 @@ export class TripService extends CoreService {
    */
   getStoredTripId(): string | null {
     try {
-      if (typeof window !== 'undefined' && window.localStorage) {
+      if (isPlatformBrowser(this.platformId)) {
         return localStorage.getItem(this.TRIP_ID_KEY);
       }
     } catch (error) {

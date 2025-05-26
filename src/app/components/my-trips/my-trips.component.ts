@@ -46,20 +46,30 @@ export class MyTripsComponent implements OnInit {
     defaultTrip.imageUrl = this.defaultImageUrl;
     this.trips = [defaultTrip];
   }
-
   ngOnInit(): void {
-    const userId = localStorage.getItem('userId');
-    if (isPlatformBrowser(this.platformId) && userId) {
-      this.isLoading = true;
-      this.newTripService.getOneById(userId).subscribe({
-        next: (response: { data: NewTripDto[] }) => {
-          this.trips = response.data;
-          this.isLoading = false;
-        },
-        error: (error) => {
-          console.error('Failed to load trips', error);
-        },
-      });
+    // First check if we're in a browser environment before accessing localStorage
+    if (isPlatformBrowser(this.platformId)) {
+      const userId = localStorage.getItem('userId');
+      if (userId) {
+        this.isLoading = true;
+        this.newTripService.getOneById(userId).subscribe({
+          next: (response: { data: NewTripDto[] }) => {
+            this.trips = response.data;
+            this.isLoading = false;
+          },
+          error: (error) => {
+            console.error('Failed to load trips', error);
+            this.isLoading = false;
+          },
+        });
+      } else {
+        // No userId in localStorage
+        this.isLoading = false;
+      }
+    } else {
+      // Not in browser environment, can't access localStorage
+      console.log('Not in browser environment, skipping localStorage access');
+      this.isLoading = false;
     }
   }
 
@@ -132,8 +142,7 @@ export class MyTripsComponent implements OnInit {
         );
       }
     }
-  }
-  viewTripDetails(index: number): void {
+  }  viewTripDetails(index: number): void {
     // Check if the trip exists at this index
     if (index < 0 || index >= this.trips.length) {
       console.error('Invalid trip index:', index);
@@ -154,19 +163,15 @@ export class MyTripsComponent implements OnInit {
       const demoTripIds = ['1', '2', '3'];
       const tripId = demoTripIds[index % demoTripIds.length];
 
-      // In a real application with an API, you would store the actual trip ID and data
-      // Store real trip data in localStorage for use after page refresh
-      localStorage.setItem('selectedTripName', selectedTrip.tripName);
-      localStorage.setItem(
-        'selectedTripStartDate',
-        selectedTrip.startDate.toString()
-      );
-      localStorage.setItem(
-        'selectedTripEndDate',
-        selectedTrip.endDate.toString()
-      );
-
-      this.router.navigate(['/trip', tripId]);
+      // Pass data via router state to avoid localStorage dependency
+      this.router.navigate(['/trip', tripId], {
+        state: {
+          tripName: selectedTrip.tripName,
+          tripStartDate: selectedTrip.startDate?.toString(),
+          tripEndDate: selectedTrip.endDate?.toString(),
+          tripImageUrl: selectedTrip.imageUrl || this.defaultImageUrl
+        }
+      });
     } else {
       console.error('Selected trip is undefined at index:', index);
     }
