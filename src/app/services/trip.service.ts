@@ -195,7 +195,10 @@ export class TripService extends CoreService {
       ],
     },
   ];
-  constructor(http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) {
+  constructor(
+    http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
     super('trip-details', http);
   }
 

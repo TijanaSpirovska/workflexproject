@@ -142,7 +142,8 @@ export class MyTripsComponent implements OnInit {
         );
       }
     }
-  }  viewTripDetails(index: number): void {
+  }
+  viewTripDetails(index: number): void {
     // Check if the trip exists at this index
     if (index < 0 || index >= this.trips.length) {
       console.error('Invalid trip index:', index);
@@ -169,8 +170,8 @@ export class MyTripsComponent implements OnInit {
           tripName: selectedTrip.tripName,
           tripStartDate: selectedTrip.startDate?.toString(),
           tripEndDate: selectedTrip.endDate?.toString(),
-          tripImageUrl: selectedTrip.imageUrl || this.defaultImageUrl
-        }
+          tripImageUrl: selectedTrip.imageUrl || this.defaultImageUrl,
+        },
       });
     } else {
       console.error('Selected trip is undefined at index:', index);

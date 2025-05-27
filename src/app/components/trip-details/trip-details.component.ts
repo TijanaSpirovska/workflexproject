@@ -1,8 +1,17 @@
-import { Component, OnInit, Input, Output, EventEmitter, Inject, PLATFORM_ID } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  Inject,
+  PLATFORM_ID,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Trip } from '../../models/trip-details.model';
 import { TripService } from '../../services/trip.service';
 import { Location, isPlatformBrowser } from '@angular/common';
+import moment from 'moment';
 
 @Component({
   selector: 'app-trip-details',
@@ -16,16 +25,16 @@ export class TripDetailsComponent implements OnInit {
   @Input() tripStartDate: string | null = null;
   @Input() tripEndDate: string | null = null;
   @Input() tripImageUrl: string | null = null;
-  
+
   // Output events for communication with parent components
   @Output() editTripEvent = new EventEmitter<Trip>();
   @Output() goBackEvent = new EventEmitter<void>();
-  
+
   trip: Trip | null = null;
   loading: boolean = true;
   error: string | null = null;
   tripBackgroundImage: string = '';
-  
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -41,14 +50,14 @@ export class TripDetailsComponent implements OnInit {
       tripEndDate?: string;
       tripImageUrl?: string;
     };
-    
+
     if (state) {
       this.tripName = state.tripName || null;
       this.tripStartDate = state.tripStartDate || null;
       this.tripEndDate = state.tripEndDate || null;
       this.tripImageUrl = state.tripImageUrl || null;
     }
-    
+
     // Subscribe to the selected trip image from the service
     // This will be used as fallback if not provided via @Input or router state
     this.tripService.selectedTripImage$.subscribe((imageUrl) => {
@@ -58,7 +67,7 @@ export class TripDetailsComponent implements OnInit {
       }
     });
   }
-  
+
   ngOnInit(): void {
     // Check if we have input properties first (highest priority)
     if (this.tripName && this.tripStartDate && this.tripEndDate) {
@@ -85,13 +94,13 @@ export class TripDetailsComponent implements OnInit {
         }
       });
     }
-    
+
     // Set background image if provided
     if (this.tripImageUrl) {
       this.tripBackgroundImage = this.tripImageUrl;
     }
   }
-  
+
   // Create a trip object from Input properties
   createTripFromInputs(): Trip {
     // Create a basic trip object using the input properties
@@ -99,56 +108,56 @@ export class TripDetailsComponent implements OnInit {
       id: Math.random().toString(36).substring(2, 9), // Generate a random ID
       destination: this.tripName || 'Unknown Destination',
       country: '', // Default country
-      startDate: this.tripStartDate || new Date().toISOString(),
+      startDate: this.tripStartDate || moment().toISOString(),
       durationDays: this.calculateDurationFromDates(),
       imageUrl: this.tripImageUrl || '/assets/images/travel.png',
       flight: {
         from: 'Home',
         to: this.tripName || 'Destination',
-        departureTime: this.tripStartDate || new Date().toISOString(),
-        duration: '3h 45m'
+        departureTime: this.tripStartDate || moment().toISOString(),
+        duration: '3h 45m',
       },
-      days: []
+      days: [],
     };
-    
+
     // Generate trip days
     if (this.tripStartDate) {
-      const startDate = new Date(this.tripStartDate);
+      const startDate = moment(this.tripStartDate);
       this.generateTripDays(startDate, trip.durationDays, trip);
     }
-    
+
     return trip;
   }
-  
+
   // Calculate duration based on input dates
   calculateDurationFromDates(): number {
     if (this.tripStartDate && this.tripEndDate) {
-      const start = new Date(this.tripStartDate);
-      const end = new Date(this.tripEndDate);
-      const diffTime = Math.abs(end.getTime() - start.getTime());
+      const start = moment(this.tripStartDate);
+      const end = moment(this.tripEndDate);
+      const diffTime = end.diff(start, 'milliseconds');
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       return diffDays > 0 ? diffDays : 1; // Ensure at least 1 day
     }
     return 1; // Default to 1 day
   }
-  
+
   // Generate day-by-day trip plan based on input dates
-  generateTripDays(startDate: Date, durationDays: number, trip: Trip): void {
+  generateTripDays(
+    startDate: moment.Moment,
+    durationDays: number,
+    trip: Trip
+  ): void {
     const days = [];
-    const today = new Date();
-    
+    const today = moment();
+
     for (let i = 0; i < durationDays; i++) {
-      const currentDate = new Date(startDate);
-      currentDate.setDate(startDate.getDate() + i);
-      
-      const isCurrentDay = 
-        today.getFullYear() === currentDate.getFullYear() &&
-        today.getMonth() === currentDate.getMonth() &&
-        today.getDate() === currentDate.getDate();
-      
+      const currentDate = moment(startDate).add(i, 'days');
+
+      const isCurrentDay = today.isSame(currentDate, 'day');
+
       // Create some sample activities based on the day number
       let activities: string[] = [];
-      
+
       if (i === 0) {
         activities = ['Arrival', 'Hotel check-in', 'Welcome dinner'];
       } else if (i === durationDays - 1) {
@@ -156,31 +165,40 @@ export class TripDetailsComponent implements OnInit {
       } else {
         // Generate some random activities for middle days
         const possibleActivities = [
-          'City tour', 'Museum visit', 'Beach day', 'Hiking trip',
-          'Local cuisine tasting', 'Shopping tour', 'Boat excursion',
-          'Relaxing at hotel', 'Spa day', 'Photography tour'
+          'City tour',
+          'Museum visit',
+          'Beach day',
+          'Hiking trip',
+          'Local cuisine tasting',
+          'Shopping tour',
+          'Boat excursion',
+          'Relaxing at hotel',
+          'Spa day',
+          'Photography tour',
         ];
-        
+
         // Select 2-3 random activities
         const numActivities = Math.floor(Math.random() * 2) + 2;
         for (let j = 0; j < numActivities; j++) {
-          const activityIndex = Math.floor(Math.random() * possibleActivities.length);
+          const activityIndex = Math.floor(
+            Math.random() * possibleActivities.length
+          );
           activities.push(possibleActivities[activityIndex]);
           possibleActivities.splice(activityIndex, 1); // Remove to avoid duplicates
         }
       }
-      
+
       days.push({
         date: currentDate.toISOString(),
         label: `Day ${i + 1}`,
         isToday: isCurrentDay,
-        activities: activities
+        activities: activities,
       });
     }
-    
+
     trip.days = days;
   }
-  
+
   loadTripDetails(tripId: string): void {
     this.loading = true;
     this.tripService.getTripById(tripId).subscribe({
@@ -198,30 +216,33 @@ export class TripDetailsComponent implements OnInit {
         }
 
         if (this.tripStartDate) {
-          this.trip.startDate = new Date(this.tripStartDate).toISOString();
+          this.trip.startDate = moment(this.tripStartDate).toISOString();
         } else if (isPlatformBrowser(this.platformId)) {
           const storedStartDate = localStorage.getItem('selectedTripStartDate');
           if (storedStartDate) {
-            this.trip.startDate = new Date(storedStartDate).toISOString();
+            this.trip.startDate = moment(storedStartDate).toISOString();
           }
         }
 
         // Update image from inputs, service or trip data
         if (this.tripImageUrl) {
           this.tripBackgroundImage = this.tripImageUrl;
-        } else if (this.tripBackgroundImage === '/assets/images/travel.png' && trip.imageUrl) {
+        } else if (
+          this.tripBackgroundImage === '/assets/images/travel.png' &&
+          trip.imageUrl
+        ) {
           // Update both the local property and the stored value in the service
           this.tripService.setSelectedTripImage(trip.imageUrl);
           this.tripBackgroundImage = trip.imageUrl;
         }
-        
+
         // Calculate duration days
         if (this.tripStartDate && this.tripEndDate) {
           this.trip.durationDays = this.calculateDurationFromDates();
         } else if (isPlatformBrowser(this.platformId)) {
           this.calculateDuration();
         }
-        
+
         this.loading = false;
       },
       error: (err) => {
@@ -231,7 +252,7 @@ export class TripDetailsComponent implements OnInit {
       },
     });
   }
-  
+
   formatDate(isoDate: string): string {
     if (!isoDate) return 'N/A';
     return this.tripService.formatDate(isoDate);
@@ -240,44 +261,32 @@ export class TripDetailsComponent implements OnInit {
   formatFlightDate(isoDate: string): string {
     if (!isoDate) return 'N/A';
 
-    const date = new Date(isoDate);
-    return date.toLocaleDateString('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-    });
+    const date = moment(isoDate);
+    return date.format('ddd, MMM D, h:mm A');
   }
 
   getDayAbbreviation(isoDate: string): string {
     if (!isoDate) return '';
 
-    const date = new Date(isoDate);
-    return date.toLocaleDateString('en-US', { weekday: 'short' });
+    const date = moment(isoDate);
+    return date.format('ddd');
   }
 
   getDayNumber(isoDate: string): number {
     if (!isoDate) return 0;
 
-    const date = new Date(isoDate);
-    return date.getDate();
+    const date = moment(isoDate);
+    return date.date();
   }
-  
+
   /**
    * Check if the given date is today
    */
   isToday(isoDate: string): boolean {
-    if (!isoDate) return false;
-
-    const today = new Date();
-    const dayDate = new Date(isoDate);
-
-    return (
-      today.getFullYear() === dayDate.getFullYear() &&
-      today.getMonth() === dayDate.getMonth() &&
-      today.getDate() === dayDate.getDate()
-    );
+    const today = moment().startOf('day');
+    const dayDate = moment(isoDate).startOf('day');
+    console.log(today, dayDate); // Debugging line to check the values
+    return today.isSame(dayDate, 'day');
   }
 
   goBack(): void {
@@ -296,46 +305,46 @@ export class TripDetailsComponent implements OnInit {
       alert('Edit functionality would open here');
     }
   }
-  
+
   getTripProgress(): number {
     if (!this.trip?.startDate) return 0;
 
-    const startDate = new Date(this.trip.startDate);
-    const endDate = this.getEndDate();
-    const today = new Date(); // This uses the real current date
+    const startDate = moment(this.trip.startDate);
+    const endDate = moment(this.getEndDate());
+    const today = moment(); // This uses the real current date
 
     // If trip hasn't started yet
-    if (today < startDate) return 0;
+    if (today.isBefore(startDate)) return 0;
 
     // If trip has ended
-    if (today > endDate) return 100;
+    if (today.isAfter(endDate)) return 100;
 
     // Calculate progress
-    const totalDuration = endDate.getTime() - startDate.getTime();
-    const elapsed = today.getTime() - startDate.getTime();
+    const totalDuration = endDate.diff(startDate, 'milliseconds');
+    const elapsed = today.diff(startDate, 'milliseconds');
     return Math.floor((elapsed / totalDuration) * 100);
   }
-  
-  getEndDate(): Date {
-    if (!this.trip?.startDate) return new Date();
 
-    const startDate = new Date(this.trip.startDate);
-    const endDate = new Date(startDate);
-    endDate.setDate(startDate.getDate() + (this.trip.durationDays || 0) - 1);
-    return endDate;
+  getEndDate(): moment.Moment {
+    if (!this.trip?.startDate) return moment();
+
+    const startDate = moment(this.trip.startDate);
+    return moment(startDate)
+      .add(this.trip.durationDays || 0, 'days')
+      .subtract(1, 'days');
   }
 
   // Calculate duration days from stored dates if available
   calculateDuration(): void {
     if (!isPlatformBrowser(this.platformId) || !this.trip) return;
-    
+
     const storedStartDate = localStorage.getItem('selectedTripStartDate');
     const storedEndDate = localStorage.getItem('selectedTripEndDate');
 
     if (storedStartDate && storedEndDate) {
-      const start = new Date(storedStartDate);
-      const end = new Date(storedEndDate);
-      const diffTime = Math.abs(end.getTime() - start.getTime());
+      const start = moment(storedStartDate);
+      const end = moment(storedEndDate);
+      const diffTime = end.diff(start, 'milliseconds');
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       this.trip.durationDays = diffDays || 1; // Ensure at least 1 day
     }
