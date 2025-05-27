@@ -36,15 +36,9 @@ export class TripService extends CoreService {
       },
       days: [
         {
-          date: '2025-05-20T00:00:00.000Z', // Day 1
-          label: 'Day 1',
-          isToday: false,
           activities: ['Arrival', 'Hotel Check-in', 'Welcome Dinner'],
         },
         {
-          date: '2025-05-21T00:00:00.000Z', // Day 2
-          label: 'Day 2',
-          isToday: false,
           activities: [
             'City Tour',
             'Museum Visit',
@@ -52,15 +46,9 @@ export class TripService extends CoreService {
           ],
         },
         {
-          date: '2025-05-22T00:00:00.000Z', // Day 3
-          label: 'Day 3',
-          isToday: false,
           activities: ['Shopping Tour', 'Broadway Show', 'Dinner Cruise'],
         },
         {
-          date: '2025-05-23T00:00:00.000Z', // Day 4 - Today
-          label: 'Day 4',
-          isToday: true,
           activities: [
             'Ferry to Staten Island',
             'Brooklyn Bridge Walk',
@@ -68,21 +56,12 @@ export class TripService extends CoreService {
           ],
         },
         {
-          date: '2025-05-24T00:00:00.000Z', // Day 5
-          label: 'Day 5',
-          isToday: false,
           activities: ['Central Park Tour', 'Biking', 'Rooftop Bar'],
         },
         {
-          date: '2025-05-25T00:00:00.000Z', // Day 6
-          label: 'Day 6',
-          isToday: false,
           activities: ['Art Gallery Visit', 'Shopping in SoHo', 'Jazz Club'],
         },
         {
-          date: '2025-05-26T00:00:00.000Z', // Day 7
-          label: 'Day 7',
-          isToday: false,
           activities: ['Checkout', 'Airport Transfer', 'Departure'],
         },
       ],
@@ -102,29 +81,19 @@ export class TripService extends CoreService {
       },
       days: [
         {
-          date: '2025-05-27T00:00:00.000Z', // Upcoming - Day 1
-          label: 'Day 1',
-          isToday: false,
+          activities: ['Arrival', 'Hotel Check-in', 'Dinner at Eiffel Tower'],
         },
         {
-          date: '2025-05-28T00:00:00.000Z', // Upcoming - Day 2
-          label: 'Day 2',
-          isToday: false,
+          activities: ['Louvre Museum', 'Seine River Cruise', 'Notre-Dame'],
         },
         {
-          date: '2025-05-29T00:00:00.000Z', // Upcoming - Day 3
-          label: 'Day 3',
-          isToday: false,
+          activities: ['Versailles Day Trip', 'Palace Tour', 'Gardens Visit'],
         },
         {
-          date: '2025-05-30T00:00:00.000Z', // Upcoming - Day 4
-          label: 'Day 4',
-          isToday: false,
+          activities: ['Montmartre Exploration', 'Sacré-Cœur Basilica', 'Moulin Rouge'],
         },
         {
-          date: '2025-05-31T00:00:00.000Z', // Upcoming - Day 5
-          label: 'Day 5',
-          isToday: false,
+          activities: ['Shopping in Le Marais', 'Picnic at Luxembourg Gardens'],
         },
       ],
     },
@@ -143,54 +112,34 @@ export class TripService extends CoreService {
       },
       days: [
         {
-          date: '2025-05-10T00:00:00.000Z', // Past - Day 1
-          label: 'Day 1',
-          isToday: false,
+          activities: ['Arrival', 'Hotel Check-in', 'Dinner at Robot Restaurant'],
         },
         {
-          date: '2025-05-11T00:00:00.000Z', // Past - Day 2
-          label: 'Day 2',
-          isToday: false,
+          activities: ['Shibuya Crossing', 'Harajuku Shopping', 'Meiji Shrine'],
         },
         {
-          date: '2025-05-12T00:00:00.000Z', // Past - Day 3
-          label: 'Day 3',
-          isToday: false,
+          activities: ['Tsukiji Outer Market', 'Sumo Wrestling Practice', 'Asakusa Temple'],
         },
         {
-          date: '2025-05-13T00:00:00.000Z', // Past - Day 4
-          label: 'Day 4',
-          isToday: false,
+          activities: ['Akihabara Electric Town', 'Anime and Manga Shopping'],
         },
         {
-          date: '2025-05-14T00:00:00.000Z', // Past - Day 5
-          label: 'Day 5',
-          isToday: false,
+          activities: ['Ueno Park', 'Tokyo National Museum', 'Ameyoko Market'],
         },
         {
-          date: '2025-05-15T00:00:00.000Z', // Past - Day 6
-          label: 'Day 6',
-          isToday: false,
+          activities: ['Odaiba Seaside Park', 'TeamLab Borderless', 'DiverCity Tokyo Plaza'],
         },
         {
-          date: '2025-05-16T00:00:00.000Z', // Past - Day 7
-          label: 'Day 7',
-          isToday: false,
+          activities: ['Day Trip to Mount Fuji', 'Lake Kawaguchi', 'Onsen Experience'],
         },
         {
-          date: '2025-05-17T00:00:00.000Z', // Past - Day 8
-          label: 'Day 8',
-          isToday: false,
+          activities: ['Nara Day Trip', 'Todai-ji Temple', 'Nara Park'],
         },
         {
-          date: '2025-05-18T00:00:00.000Z', // Past - Day 9
-          label: 'Day 9',
-          isToday: false,
+          activities: ['Kyoto Day Trip', 'Kinkaku-ji (Golden Pavilion)', 'Gion District'],
         },
         {
-          date: '2025-05-19T00:00:00.000Z', // Past - Day 10
-          label: 'Day 10',
-          isToday: false,
+          activities: ['Checkout', 'Airport Transfer', 'Departure'],
         },
       ],
     },

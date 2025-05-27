@@ -66,35 +66,39 @@
         </div>
       </div>
     </div>
+
     <!-- Day-by-Day Trip Cards -->
     <div class="itinerary-section">
       <h2 class="section-title">Your Day-by-Day Trip Plan</h2>
 
       <div class="days-list">
         <div
-          *ngFor="let day of trip.days"
+          *ngFor="let day of trip.days; let i = index"
           class="day-card"
-          [class.day-current]="isToday(day.date)"
+          [class.day-current]="isToday(getDayDate(trip.startDate, i))"
         >
           <div class="day-left">
             <div class="calendar-icon">
               <i class="fas fa-calendar-alt"></i>
             </div>
             <div class="day-date">
-              <div class="date-abbr">{{ getDayAbbreviation(day.date) }}</div>
-              <div class="date-num">{{ getDayNumber(day.date) }}</div>
+              <div class="date-abbr">
+                {{ getDayAbbreviation(getDayDate(trip.startDate, i)) }}
+              </div>
+              <div class="date-num">
+                {{ getDayNumber(getDayDate(trip.startDate, i)) }}
+              </div>
             </div>
           </div>
 
           <div class="day-right">
-            <div class="day-label">{{ day.label }}</div>
-            <div *ngIf="isToday(day.date)" class="today-badge">Today</div>
+            <div class="day-label">Day {{ i + 1 }}</div>
+            <div *ngIf="isToday(getDayDate(trip.startDate, i))" class="today-badge">
+              Today
+            </div>
             <div class="day-activities" *ngIf="day.activities?.length">
-              <div
-                class="activity-item"
-                *ngFor="let activity of day.activities"
-              >
-              <i class="fa-solid fa-location-dot"></i> {{ activity }}
+              <div class="activity-item" *ngFor="let activity of day.activities">
+                <i class="fa-solid fa-location-dot"></i> {{ activity }}
               </div>
             </div>
           </div>

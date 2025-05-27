@@ -12,9 +12,6 @@ export interface Trip {
     duration: string;
   };
   days: {
-    date: string; // ISO
-    label: string;
-    isToday: boolean;
     activities?: string[];
   }[];
 }

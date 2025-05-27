@@ -348,4 +348,24 @@ export class TripDetailsComponent implements OnInit {
       this.trip.durationDays = diffDays || 1; // Ensure at least 1 day
     }
   }
+
+  getDayLabel(startDate: string, dayIndex: number): string {
+    const date = moment(startDate).add(dayIndex, 'days');
+    return `Day ${dayIndex + 1} - ${date.format('MMM D, YYYY')}`;
+  }
+
+  getDayDate(startDate: string, dayIndex: number): string {
+    return moment(startDate).add(dayIndex, 'days').toISOString();
+  }
+
+  getDayLabelAndDate(startDate: string, dayIndex: number): string {
+    const date = moment(startDate).add(dayIndex, 'days');
+    return `Day ${dayIndex + 1} - ${date.format('MMM D, YYYY')}`;
+  }
+
+  isDayToday(startDate: string, dayIndex: number): boolean {
+    const today = moment().startOf('day');
+    const dayDate = moment(startDate).add(dayIndex, 'days').startOf('day');
+    return today.isSame(dayDate, 'day');
+  }
 }
