@@ -1,19 +1,21 @@
-
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
 html {
-  @include mat.theme((
-    color: (
-      theme-type: light,
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
-}$tablet: 1024px;
+  @include mat.theme(
+    (
+      color: (
+        theme-type: light,
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
+$tablet: 1024px;
 $tablet-small: 970px;
 $mobile-large: 768px;
 $mobile-small: 640px;
@@ -32,7 +34,7 @@ $mobile-small: 640px;
   --menu-selected-item-background: #003584;
   --sub-menu-item-background: #18488f;
   --sub-menu-hover-item-background: #305a99;
-  --page-background:#fef9e8;
+  --page-background: #fef9e8;
 
   --screen-text-in-table: #484949;
   --table-header-background: #d6dde7;
@@ -107,53 +109,58 @@ body {
 }
 
 .mat-datepicker-content .mat-calendar {
-    width: 296px;
-    height: 354px;
-    background-color: var( --user-info-tooltip-background);
-    border-radius:30px ;
+  width: 296px;
+  height: 354px;
+  background-color: var(--user-info-tooltip-background);
+  border-radius: 30px;
 }
 .mat-datepicker-content {
   background-color: var(--green-button-hover) !important;
-    border-radius: 30px !important;
+  border-radius: 30px !important;
 }
-.mat-mdc-icon-button img, .mat-mdc-icon-button svg {
-    width: var(--mdc-icon-button-icon-size, 24px);
-    height: var(--mdc-icon-button-icon-size, 24px);
-    vertical-align: baseline;
-    color: var(--green-button);
+.mat-mdc-icon-button img,
+.mat-mdc-icon-button svg {
+  width: var(--mdc-icon-button-icon-size, 24px);
+  height: var(--mdc-icon-button-icon-size, 24px);
+  vertical-align: baseline;
+  color: var(--green-button);
 }
 
 .mat-calendar-body-selected {
-    background-color: var(--green-button, var(--green-button)) !important;
-    color: var(--mat-datepicker-calendar-date-selected-state-text-color, var(--mat-sys-on-primary));
+  background-color: var(--green-button, var(--green-button)) !important;
+  color: var(
+    --mat-datepicker-calendar-date-selected-state-text-color,
+    var(--mat-sys-on-primary)
+  );
 }
 
 .mat-calendar-body-selected.mat-calendar-body-today {
-    box-shadow: inset 0 0 0 1px var(--green-button, var(--green-button)) !important;
+  box-shadow: inset 0 0 0 1px var(--green-button, var(--green-button)) !important;
 }
 
-.mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
-    border-color: var(--green-button, var(--green-button));
+.mat-calendar-body-today:not(.mat-calendar-body-selected):not(
+    .mat-calendar-body-comparison-identical
+  ) {
+  border-color: var(--green-button, var(--green-button));
 }
 
 .button {
-   background: var(--green-button);
-      color: white;
-      padding: 10px;
-      border-radius: 10px;
-      border: none;
-      font-weight: bold;
-      margin-top: 1rem;
-      cursor: pointer;
+  background: var(--green-button);
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  font-weight: bold;
+  margin-top: 1rem;
+  cursor: pointer;
   &:disabled {
     border: none;
   }
   &:hover {
-  background-color: var(--green-button-hover);
-  transform: translateY(-3px) scale(1); /* make it "jump" a bit */
-  box-shadow: 0 8px 16px rgba(0, 123, 255, 0.3); /* glow like sky/air feeling */
-}
-
+    background-color: var(--green-button-hover);
+    transform: translateY(-3px) scale(1); /* make it "jump" a bit */
+    box-shadow: 0 8px 16px rgba(0, 123, 255, 0.3); /* glow like sky/air feeling */
+  }
 
   &.neutral {
     background-color: var(--menu-text);
@@ -196,7 +203,6 @@ textarea {
   padding: 0.75rem;
   border-radius: 1rem;
 }
-
 
 // toast
 .toast-success {
@@ -243,7 +249,6 @@ textarea {
   border-radius: 30px !important;
   width: 350px !important;
   box-shadow: none !important;
-
 }
 
 .toast-top-center {
@@ -261,6 +266,12 @@ textarea {
   position: relative;
   margin-bottom: 1rem;
   display: inline-block;
+
+  &.has-support-text {
+    min-height: 72px;
+    margin-bottom: 0;
+  }
+
   .forgot-link {
     position: absolute;
     right: 10px;
@@ -272,50 +283,44 @@ textarea {
     cursor: pointer;
     text-decoration: none;
   }
- 
-
-  &.has-support-text {
-    min-height: 72px;
-    margin-bottom: 0;
-  }
 
   .field-name {
     font-size: 0.9rem;
     margin-bottom: 1px;
     margin-left: 8px;
-
     display: block;
+
     &.field-name-line {
       padding-bottom: 0;
       border-bottom: 1px solid var(--table-header-background);
     }
-  }}
-  
+  }
+}
+
 .error-text {
   font-size: 8pt;
   margin-left: 7px;
   color: var(--supporting-text-error);
 }
 
- form {
-    width: 100%;
-    max-width: 300px;
+form {
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  .form-group {
     display: flex;
     flex-direction: column;
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      min-height: 50px;
-    }
-    .primary-btn {
-      background: #6c63ff;
-      color: white;
-      padding: 10px;
-      border-radius: 10px;
-      border: none;
-      font-weight: bold;
-      margin-top: 1rem;
-      cursor: pointer;
-    }
+    min-height: 50px;
   }
-
+  .primary-btn {
+    background: #6c63ff;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    font-weight: bold;
+    margin-top: 1rem;
+    cursor: pointer;
+  }
+}

@@ -63,18 +63,18 @@ export class RecommendedLocationsComponent implements OnInit {
   loadDestinations(): void {
     this.isLoading = true;
 
-    this.recommendedTripService.getAll().subscribe({
-      next: (data) => {
-        console.log('Destinations:', data);
-        this.destinations = data;
-        this.filteredDestinations = [...this.destinations];
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.toastr.error('Failed to load destinations', 'Error');
-        this.isLoading = false;
-      },
-    });
+    // this.recommendedTripService.getAll().subscribe({
+    //   next: (data) => {
+    //     console.log('Destinations:', data);
+    //     this.destinations = data;
+    //     this.filteredDestinations = [...this.destinations];
+    //     this.isLoading = false;
+    //   },
+    //   error: (error) => {
+    //     this.toastr.error('Failed to load destinations', 'Error');
+    //     this.isLoading = false;
+    //   },
+    // });
 
     // this.destinationService
     //   .getDestinations()

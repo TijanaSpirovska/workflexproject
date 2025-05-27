@@ -285,7 +285,6 @@ export class TripDetailsComponent implements OnInit {
   isToday(isoDate: string): boolean {
     const today = moment().startOf('day');
     const dayDate = moment(isoDate).startOf('day');
-    console.log(today, dayDate); // Debugging line to check the values
     return today.isSame(dayDate, 'day');
   }
 

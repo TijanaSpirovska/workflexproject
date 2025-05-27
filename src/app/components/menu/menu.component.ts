@@ -36,12 +36,12 @@ export class MenuComponent implements OnInit {
       route: 'accommodation',
       active: false,
     },
-    {
-      icon: 'map',
-      label: 'Destinations',
-      route: 'destinations',
-      active: false,
-    },
+    // {
+    //   icon: 'map',
+    //   label: 'Destinations',
+    //   route: 'destinations',
+    //   active: false,
+    // },
     {
       icon: 'local_see',
       label: 'Activity',
