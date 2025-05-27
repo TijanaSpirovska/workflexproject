@@ -7,24 +7,20 @@
     "
   >
     <div class="hero-overlay">
-      <!-- Back button with proper styling -->
       <button class="back-button" (click)="goBack()">‹</button>
-      <!-- Destination info with proper typography -->
-      <div class="destination-info">
-        <h1 class="city">{{ trip.destination }}</h1>
-        <h2 class="country">{{ trip.country }}</h2>
-        <div class="date-range">
-          <i class="fas fa-calendar"></i> {{ formatDate(trip.startDate) }} -
-          {{ formatDate(getEndDate().toISOString()) }}
-        </div>
-      </div>
     </div>
   </div>
 
   <!-- Main Content Card -->
   <div class="content-card">
+    <div class="trip-name">
+      <h1>{{ trip.destination }}</h1>
+      <h2 class="country">{{ trip.country }}</h2>
+    </div>
+  
     <!-- Trip Meta Info Section -->
     <div class="trip-header">
+      
       <div class="date-info">
         <span class="date">{{ formatDate(trip.startDate) }}</span>
         <span class="separator">•</span>
