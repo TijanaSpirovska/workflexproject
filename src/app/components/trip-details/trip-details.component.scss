@@ -1,4 +1,5 @@
-@import "../../../styles.scss";
+@use "../../../styles.scss";
+@use "sass:color";
 
 // Define primaryColor variable
 $primaryColor: #003584;
@@ -176,7 +177,7 @@ $primaryColor: #003584;
     transition: background-color 0.2s ease;
 
     &:hover {
-      background-color: darken(#f0f2f5, 5%);
+      background-color: color.adjust(#f0f2f5, $lightness: -5%);
     }
 
     .material-symbols-outlined {
@@ -470,7 +471,7 @@ $primaryColor: #003584;
     transition: background-color 0.2s ease;
 
     &:hover {
-      background-color: darken($primaryColor, 5%);
+      background-color: color.adjust($primaryColor, $lightness: -5%);
     }
   }
 }
