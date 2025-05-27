@@ -93,11 +93,17 @@
 
           <div class="day-right">
             <div class="day-label">Day {{ i + 1 }}</div>
-            <div *ngIf="isToday(getDayDate(trip.startDate, i))" class="today-badge">
+            <div
+              *ngIf="isToday(getDayDate(trip.startDate, i))"
+              class="today-badge"
+            >
               Today
             </div>
             <div class="day-activities" *ngIf="day.activities?.length">
-              <div class="activity-item" *ngFor="let activity of day.activities">
+              <div
+                class="activity-item"
+                *ngFor="let activity of day.activities"
+              >
                 <i class="fa-solid fa-location-dot"></i> {{ activity }}
               </div>
             </div>

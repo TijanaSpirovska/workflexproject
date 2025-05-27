@@ -90,7 +90,11 @@ export class TripService extends CoreService {
           activities: ['Versailles Day Trip', 'Palace Tour', 'Gardens Visit'],
         },
         {
-          activities: ['Montmartre Exploration', 'Sacré-Cœur Basilica', 'Moulin Rouge'],
+          activities: [
+            'Montmartre Exploration',
+            'Sacré-Cœur Basilica',
+            'Moulin Rouge',
+          ],
         },
         {
           activities: ['Shopping in Le Marais', 'Picnic at Luxembourg Gardens'],
@@ -112,13 +116,21 @@ export class TripService extends CoreService {
       },
       days: [
         {
-          activities: ['Arrival', 'Hotel Check-in', 'Dinner at Robot Restaurant'],
+          activities: [
+            'Arrival',
+            'Hotel Check-in',
+            'Dinner at Robot Restaurant',
+          ],
         },
         {
           activities: ['Shibuya Crossing', 'Harajuku Shopping', 'Meiji Shrine'],
         },
         {
-          activities: ['Tsukiji Outer Market', 'Sumo Wrestling Practice', 'Asakusa Temple'],
+          activities: [
+            'Tsukiji Outer Market',
+            'Sumo Wrestling Practice',
+            'Asakusa Temple',
+          ],
         },
         {
           activities: ['Akihabara Electric Town', 'Anime and Manga Shopping'],
@@ -127,16 +139,28 @@ export class TripService extends CoreService {
           activities: ['Ueno Park', 'Tokyo National Museum', 'Ameyoko Market'],
         },
         {
-          activities: ['Odaiba Seaside Park', 'TeamLab Borderless', 'DiverCity Tokyo Plaza'],
+          activities: [
+            'Odaiba Seaside Park',
+            'TeamLab Borderless',
+            'DiverCity Tokyo Plaza',
+          ],
         },
         {
-          activities: ['Day Trip to Mount Fuji', 'Lake Kawaguchi', 'Onsen Experience'],
+          activities: [
+            'Day Trip to Mount Fuji',
+            'Lake Kawaguchi',
+            'Onsen Experience',
+          ],
         },
         {
           activities: ['Nara Day Trip', 'Todai-ji Temple', 'Nara Park'],
         },
         {
-          activities: ['Kyoto Day Trip', 'Kinkaku-ji (Golden Pavilion)', 'Gion District'],
+          activities: [
+            'Kyoto Day Trip',
+            'Kinkaku-ji (Golden Pavilion)',
+            'Gion District',
+          ],
         },
         {
           activities: ['Checkout', 'Airport Transfer', 'Departure'],
