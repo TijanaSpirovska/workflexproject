@@ -160,10 +160,7 @@ export class MyTripsComponent implements OnInit {
         selectedTrip.imageUrl || this.defaultImageUrl
       );
 
-      // For demo purposes we'll use a hardcoded trip ID
-      // In a real application, you would use the actual trip ID from the API
-      const demoTripIds = ['1', '2', '3'];
-      const tripId = demoTripIds[index % demoTripIds.length];
+      const tripId = selectedTrip.id; // Use the exact trip ID from the fetched data
 
       // Pass data via router state to avoid localStorage dependency
       this.router.navigate(['/trip', tripId], {

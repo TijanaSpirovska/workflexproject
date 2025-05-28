@@ -169,7 +169,7 @@ export class TripService extends CoreService {
     http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    super('trip-details', http);
+    super('plan-trips/trip-details', http);
   }
 
   /**

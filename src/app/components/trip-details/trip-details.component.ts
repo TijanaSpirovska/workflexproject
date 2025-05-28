@@ -69,29 +69,31 @@ export class TripDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Check if we have input properties first (highest priority)
-    if (this.tripName && this.tripStartDate && this.tripEndDate) {
-      // If we have all input properties, use them directly
-      this.trip ??= this.createTripFromInputs();
-      this.loading = false;
-    } else {
-      // If not, fall back to route params
-      this.route.paramMap.subscribe((params) => {
-        const tripId = params.get('id');
-        if (tripId) {
-          this.loadTripDetails(tripId);
+    this.route.paramMap.subscribe((params) => {
+      const tripId = params.get('id');
+      console.log(tripId);
+      if (tripId) {
+        this.loadTripDetails(tripId);
+      } else {
+        // If no ID in route, check service for stored trip ID
+        const storedTripId = this.tripService.getStoredTripId();
+        if (storedTripId) {
+          this.loadTripDetails(storedTripId);
         } else {
-          // If no ID in route, check service for stored trip ID
-          const storedTripId = this.tripService.getStoredTripId();
-          if (storedTripId) {
-            this.loadTripDetails(storedTripId);
-          } else {
-            this.error = 'Trip ID not found';
-            this.loading = false;
-          }
+          this.error = 'Trip ID not found';
+          this.loading = false;
         }
-      });
-    }
+      }
+    });
+    // Check if we have input properties first (highest priority)
+    // if (this.tripName && this.tripStartDate && this.tripEndDate) {
+    //   // If we have all input properties, use them directly
+    //   this.trip ??= this.createTripFromInputs();
+    //   this.loading = false;
+    // } else {
+    //   // If not, fall back to route params
+      
+    // }
 
     // Set background image if provided
     if (this.tripImageUrl) {

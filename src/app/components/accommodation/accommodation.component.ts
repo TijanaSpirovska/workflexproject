@@ -28,6 +28,7 @@ export class AccommodationComponent implements OnInit {
   formGroup!: FormGroup;
   isFormGroupValid: boolean = false;
   hasAdminRole: boolean = false;
+  userId:string = '';
 
   selectedAccommodationForReservation: AccommodationDto | null = null;
   reservationFormGroup!: FormGroup;
@@ -50,6 +51,7 @@ export class AccommodationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.userId = localStorage.getItem('userId') ?? '';
     if (isPlatformBrowser(this.platformId)) {
       this.getLocations();
       this.getAllAccommodations();
@@ -97,7 +99,7 @@ export class AccommodationComponent implements OnInit {
         state: ['Tokyo', [Validators.required]], // Corrected prefill
       }),
       rating: [5, [Validators.min(0), Validators.max(5)]],
-      userId: [15, Validators.required],
+      userId: [this.userId, Validators.required],
       rooms: this.formBuilder.array(
         roomsData.map((room) => this.createRoomFormGroup(room))
       ),

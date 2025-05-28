@@ -1,4 +1,5 @@
 export class NewTripDto {
+  id: string = ''; // Added ID property to uniquely identify trips
   tripName: string = '';
   description: string = '';
   location: LocationDto = new LocationDto();
@@ -6,13 +7,11 @@ export class NewTripDto {
   endDate: Date = new Date();
   numberOfPeople: number = 1;
   budget: number = 0;
-  imageUrl:string='';
+  imageUrl: string = '';
 }
-
 
 export class LocationDto {
-  country: string='';
-  state: string='';
-  city: string='';
+  country: string = '';
+  state: string = '';
+  city: string = '';
 }
-

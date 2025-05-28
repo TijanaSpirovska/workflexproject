@@ -33,6 +33,7 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
   upcomingActivities: ActivityDto[] = [];
   baseUrl: string = 'activity/browse?location=Berlin';
   isEditActivity: boolean = false;
+  userId:string='';
 
   // Properties for delete confirmation
   showDeleteConfirmation: boolean = false;
@@ -110,6 +111,7 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.userId = localStorage.getItem('userId') ?? '';
     this.createFormGroup();
     this.updateFormGroup();
     if (this.isBrowser) {
@@ -131,7 +133,7 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
       address: ['', [Validators.required]],
 
       planTripId: [1, Validators.required],
-      userId: [15, Validators.required],
+      userId: [this.userId, Validators.required],
     });
   }
 
@@ -194,7 +196,7 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
       startTime: activity.startTime,
       planTripId: 1,
       address: activity.address,
-      userId: 15,
+      userId:this.userId,
     });
 
     // Optionally store the activity ID for later update
