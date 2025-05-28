@@ -52,10 +52,10 @@ export class TripDetailsComponent implements OnInit {
     };
 
     if (state) {
-      this.tripName = state.tripName || null;
-      this.tripStartDate = state.tripStartDate || null;
-      this.tripEndDate = state.tripEndDate || null;
-      this.tripImageUrl = state.tripImageUrl || null;
+      this.tripName = state.tripName ?? null;
+      this.tripStartDate = state.tripStartDate ?? null;
+      this.tripEndDate = state.tripEndDate ?? null;
+      this.tripImageUrl = state.tripImageUrl ?? null;
     }
 
     // Subscribe to the selected trip image from the service
@@ -72,9 +72,7 @@ export class TripDetailsComponent implements OnInit {
     // Check if we have input properties first (highest priority)
     if (this.tripName && this.tripStartDate && this.tripEndDate) {
       // If we have all input properties, use them directly
-      if (!this.trip) {
-        this.trip = this.createTripFromInputs();
-      }
+      this.trip ??= this.createTripFromInputs();
       this.loading = false;
     } else {
       // If not, fall back to route params
@@ -106,15 +104,14 @@ export class TripDetailsComponent implements OnInit {
     // Create a basic trip object using the input properties
     const trip: Trip = {
       id: Math.random().toString(36).substring(2, 9), // Generate a random ID
-      destination: this.tripName || 'Unknown Destination',
+      destination: this.tripName ?? 'Unknown Destination',
       country: '', // Default country
-      startDate: this.tripStartDate || moment().toISOString(),
-      durationDays: this.calculateDurationFromDates(),
-      imageUrl: this.tripImageUrl || '/assets/images/travel.png',
+      startDate: this.tripStartDate ?? moment().toISOString(),
+      imageUrl: this.tripImageUrl ?? '/assets/images/travel.png',
       flight: {
         from: 'Home',
-        to: this.tripName || 'Destination',
-        departureTime: this.tripStartDate || moment().toISOString(),
+        to: this.tripName ?? 'Destination',
+        departureTime: this.tripStartDate ?? moment().toISOString(),
         duration: '3h 45m',
       },
       days: [],
@@ -123,7 +120,7 @@ export class TripDetailsComponent implements OnInit {
     // Generate trip days
     if (this.tripStartDate) {
       const startDate = moment(this.tripStartDate);
-      this.generateTripDays(startDate, trip.durationDays, trip);
+      this.generateTripDays(startDate, this.calculateDurationFromDates(), trip);
     }
 
     return trip;
@@ -201,6 +198,12 @@ export class TripDetailsComponent implements OnInit {
 
   loadTripDetails(tripId: string): void {
     this.loading = true;
+    const userId = localStorage.getItem('userId');
+    this.tripService.getOneById(`${userId}/${tripId}`).subscribe({
+      next:(response)=>{
+        console.log('Trip details loaded:', response);
+      }
+    })
     this.tripService.getTripById(tripId).subscribe({
       next: (trip) => {
         this.trip = trip;
@@ -234,13 +237,6 @@ export class TripDetailsComponent implements OnInit {
           // Update both the local property and the stored value in the service
           this.tripService.setSelectedTripImage(trip.imageUrl);
           this.tripBackgroundImage = trip.imageUrl;
-        }
-
-        // Calculate duration days
-        if (this.tripStartDate && this.tripEndDate) {
-          this.trip.durationDays = this.calculateDurationFromDates();
-        } else if (isPlatformBrowser(this.platformId)) {
-          this.calculateDuration();
         }
 
         this.loading = false;
@@ -329,24 +325,8 @@ export class TripDetailsComponent implements OnInit {
 
     const startDate = moment(this.trip.startDate);
     return moment(startDate)
-      .add(this.trip.durationDays || 0, 'days')
+      .add(this.calculateDurationFromDates(), 'days')
       .subtract(1, 'days');
-  }
-
-  // Calculate duration days from stored dates if available
-  calculateDuration(): void {
-    if (!isPlatformBrowser(this.platformId) || !this.trip) return;
-
-    const storedStartDate = localStorage.getItem('selectedTripStartDate');
-    const storedEndDate = localStorage.getItem('selectedTripEndDate');
-
-    if (storedStartDate && storedEndDate) {
-      const start = moment(storedStartDate);
-      const end = moment(storedEndDate);
-      const diffTime = end.diff(start, 'milliseconds');
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      this.trip.durationDays = diffDays || 1; // Ensure at least 1 day
-    }
   }
 
   getDayLabel(startDate: string, dayIndex: number): string {

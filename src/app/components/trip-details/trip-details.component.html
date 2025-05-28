@@ -17,14 +17,13 @@
       <h1>{{ trip.destination }}</h1>
       <h2 class="country">{{ trip.country }}</h2>
     </div>
-  
+
     <!-- Trip Meta Info Section -->
     <div class="trip-header">
-      
       <div class="date-info">
         <span class="date">{{ formatDate(trip.startDate) }}</span>
         <span class="separator">•</span>
-        <span class="duration">{{ trip.durationDays }} days</span>
+        <span class="duration">{{ calculateDurationFromDates() }} days</span>
       </div>
       <button class="edit-button" (click)="editTrip()">
         <i class="fas fa-pencil-alt"></i>

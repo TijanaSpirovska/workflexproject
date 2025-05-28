@@ -26,7 +26,6 @@ export class TripService extends CoreService {
       destination: 'New York City',
       country: 'USA',
       startDate: '2025-05-20T00:00:00.000Z', // Starting 3 days ago from today (May 23, 2025)
-      durationDays: 7,
       imageUrl: '/assets/images/travel.png',
       flight: {
         from: 'NYC',
@@ -71,7 +70,6 @@ export class TripService extends CoreService {
       destination: 'Paris',
       country: 'France',
       startDate: '2025-05-27T00:00:00.000Z', // Starting next week
-      durationDays: 5,
       imageUrl: '/assets/images/travel.png',
       flight: {
         from: 'CDG',
@@ -106,7 +104,6 @@ export class TripService extends CoreService {
       destination: 'Tokyo',
       country: 'Japan',
       startDate: '2025-05-10T00:00:00.000Z', // Already finished trip (ended May 19)
-      durationDays: 10,
       imageUrl: '/assets/images/japan.png',
       flight: {
         from: 'NRT',

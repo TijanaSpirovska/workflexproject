@@ -55,6 +55,7 @@ export class MyTripsComponent implements OnInit {
         this.newTripService.getOneById(userId).subscribe({
           next: (response: { data: NewTripDto[] }) => {
             this.trips = response.data;
+            console.log('Trips loaded:', this.trips);
             this.isLoading = false;
           },
           error: (error) => {

@@ -3,7 +3,6 @@ export interface Trip {
   destination: string;
   country: string;
   startDate: string; // ISO format
-  durationDays: number;
   imageUrl: string;
   flight: {
     from: string;
