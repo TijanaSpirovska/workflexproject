@@ -5,18 +5,17 @@
   justify-content: center;
   padding: 2rem;
   z-index: 99999;
-  background: #ffffff; 
-  border-radius: 12px; 
+  background: #ffffff;
+  border-radius: 12px;
   height: 575px;
   width: 100%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-  max-width: 600px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
 
-    position: absolute;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-
 
   .auth-header {
     margin-bottom: 0.4rem;

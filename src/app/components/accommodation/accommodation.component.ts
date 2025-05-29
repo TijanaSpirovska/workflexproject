@@ -94,7 +94,7 @@ export class AccommodationComponent implements OnInit {
         [Validators.required, Validators.maxLength(255)],
       ],
       location: this.formBuilder.group({
-        id:28,
+        id: 28,
         city: ['Tokyo', [Validators.required]],
         country: ['Japan', [Validators.required]], // Corrected prefill
         state: ['Tokyo', [Validators.required]], // Corrected prefill

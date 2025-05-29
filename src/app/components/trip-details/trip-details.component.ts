@@ -10,7 +10,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { Trip } from '../../models/trip-details.model';
 import { TripService } from '../../services/trip.service';
-import { Location } from '@angular/common';
+import { Location, isPlatformBrowser } from '@angular/common';
 import moment from 'moment';
 
 @Component({
@@ -35,6 +35,9 @@ export class TripDetailsComponent implements OnInit {
   error: string | null = null;
   tripBackgroundImage: string = '';
 
+  totalDays: number = 0;
+  progressPercentage: number = 0;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -57,28 +60,35 @@ export class TripDetailsComponent implements OnInit {
       this.tripEndDate = state.tripEndDate ?? null;
       this.tripImageUrl = state.tripImageUrl ?? null;
 
-      // Validate dates
-      if (this.tripStartDate && isNaN(Date.parse(this.tripStartDate))) {
-        console.error('Invalid start date:', this.tripStartDate);
-        this.tripStartDate = null;
-      }
+      // Validate and calculate total days
+      if (this.tripStartDate && this.tripEndDate) {
+        const start = moment(this.tripStartDate);
+        const end = moment(this.tripEndDate);
 
-      if (this.tripEndDate && isNaN(Date.parse(this.tripEndDate))) {
-        console.error('Invalid end date:', this.tripEndDate);
-        this.tripEndDate = null;
+        if (start.isValid() && end.isValid() && end.isAfter(start)) {
+          this.totalDays = end.diff(start, 'days') + 1;
+
+          // Calculate progress percentage
+          const today = moment();
+          if (today.isBefore(start)) {
+            this.progressPercentage = 0;
+          } else if (today.isAfter(end)) {
+            this.progressPercentage = 100;
+          } else {
+            const elapsed = today.diff(start, 'days');
+            this.progressPercentage = Math.floor(
+              (elapsed / this.totalDays) * 100
+            );
+          }
+        } else {
+          console.error(
+            'Invalid date range:',
+            this.tripStartDate,
+            this.tripEndDate
+          );
+        }
       }
     }
-
-    // Ensure `this.trip` and `this.trip.days` are initialized
-    this.trip = {
-      id: '',
-      destination: '',
-      country: '',
-      startDate: '',
-      imageUrl: '',
-      flight: { from: '', to: '', departureTime: '', duration: '' },
-      days: this.trip?.days || [],
-    };
 
     // Subscribe to the selected trip image from the service
     // This will be used as fallback if not provided via @Input or router state
@@ -107,48 +117,11 @@ export class TripDetailsComponent implements OnInit {
         }
       }
     });
-    // Check if we have input properties first (highest priority)
-    // if (this.tripName && this.tripStartDate && this.tripEndDate) {
-    //   // If we have all input properties, use them directly
-    //   this.trip ??= this.createTripFromInputs();
-    //   this.loading = false;
-    // } else {
-    //   // If not, fall back to route params
-      
-    // }
-
-    // Set background image if provided
     if (this.tripImageUrl) {
       this.tripBackgroundImage = this.tripImageUrl;
     }
   }
 
-  // Create a trip object from Input properties
-  createTripFromInputs(): Trip {
-    // Create a basic trip object using the input properties
-    const trip: Trip = {
-      id: Math.random().toString(36).substring(2, 9), // Generate a random ID
-      destination: this.tripName ?? 'Unknown Destination',
-      country: '', // Default country
-      startDate: this.tripStartDate ?? moment().toISOString(),
-      imageUrl: this.tripImageUrl ?? '/assets/images/travel.png',
-      flight: {
-        from: 'Home',
-        to: this.tripName ?? 'Destination',
-        departureTime: this.tripStartDate ?? moment().toISOString(),
-        duration: '3h 45m',
-      },
-      days: [],
-    };
-
-    // Generate trip days
-    if (this.tripStartDate) {
-      const startDate = moment(this.tripStartDate);
-      this.generateTripDays(startDate, this.calculateDurationFromDates(), trip);
-    }
-
-    return trip;
-  }
 
   // Calculate duration based on input dates
   calculateDurationFromDates(): number {
@@ -162,85 +135,49 @@ export class TripDetailsComponent implements OnInit {
     return 1; // Default to 1 day
   }
 
-  // Generate day-by-day trip plan based on input dates
-  generateTripDays(
-    startDate: moment.Moment,
-    durationDays: number,
-    trip: Trip
-  ): void {
-    const days = [];
-    const today = moment();
-
-    for (let i = 0; i < durationDays; i++) {
-      const currentDate = moment(startDate).add(i, 'days');
-
-      const isCurrentDay = today.isSame(currentDate, 'day');
-
-      // Create some sample activities based on the day number
-      let activities: string[] = [];
-
-      if (i === 0) {
-        activities = ['Arrival', 'Hotel check-in', 'Welcome dinner'];
-      } else if (i === durationDays - 1) {
-        activities = ['Breakfast', 'Last-minute shopping', 'Departure'];
-      } else {
-        // Generate some random activities for middle days
-        const possibleActivities = [
-          'City tour',
-          'Museum visit',
-          'Beach day',
-          'Hiking trip',
-          'Local cuisine tasting',
-          'Shopping tour',
-          'Boat excursion',
-          'Relaxing at hotel',
-          'Spa day',
-          'Photography tour',
-        ];
-
-        // Select 2-3 random activities
-        const numActivities = Math.floor(Math.random() * 2) + 2;
-        for (let j = 0; j < numActivities; j++) {
-          const activityIndex = Math.floor(
-            Math.random() * possibleActivities.length
-          );
-          activities.push(possibleActivities[activityIndex]);
-          possibleActivities.splice(activityIndex, 1); // Remove to avoid duplicates
-        }
-      }
-
-      days.push({
-        date: currentDate.toISOString(),
-        label: `Day ${i + 1}`,
-        isToday: isCurrentDay,
-        activities: activities,
-      });
-    }
-
-    trip.days = days;
-  }
-
   loadTripDetails(tripId: string): void {
     this.loading = true;
     const userId = localStorage.getItem('userId');
     this.tripService.getOneById(`${userId}/${tripId}`).subscribe({
       next: (response) => {
-        const tripData = response.data;
-        this.trip = tripData;
-        this.tripStartDate = tripData.startDate;
-        this.tripEndDate = tripData.endDate ?? null;
-        this.tripName = tripData.destination;
-        this.tripImageUrl = tripData.imageUrl;
-        this.tripBackgroundImage = tripData.imageUrl ?? '/assets/images/travel.png';
-        if (this.trip) {
-          this.trip.flight = {
-            from: tripData.flight?.fromLocation ?? '',
-            to: tripData.flight?.toLocation ?? '',
-            departureTime: tripData.flight?.departureTime ?? '',
-            duration: tripData.flight?.duration ?? ''
-          };
-     
+        console.log('Trip details loaded:', response);
+      },
+    });
+    this.tripService.getTripById(tripId).subscribe({
+      next: (trip) => {
+        this.trip = trip;
+
+        // Use input properties if available, otherwise fallback to localStorage
+        if (this.tripName) {
+          this.trip.destination = this.tripName;
+        } else if (isPlatformBrowser(this.platformId)) {
+          const storedTripName = localStorage.getItem('selectedTripName');
+          if (storedTripName) {
+            this.trip.destination = storedTripName;
+          }
         }
+
+        if (this.tripStartDate) {
+          this.trip.startDate = moment(this.tripStartDate).toISOString();
+        } else if (isPlatformBrowser(this.platformId)) {
+          const storedStartDate = localStorage.getItem('selectedTripStartDate');
+          if (storedStartDate) {
+            this.trip.startDate = moment(storedStartDate).toISOString();
+          }
+        }
+
+        // Update image from inputs, service or trip data
+        if (this.tripImageUrl) {
+          this.tripBackgroundImage = this.tripImageUrl;
+        } else if (
+          this.tripBackgroundImage === '/assets/images/travel.png' &&
+          trip.imageUrl
+        ) {
+          // Update both the local property and the stored value in the service
+          this.tripService.setSelectedTripImage(trip.imageUrl);
+          this.tripBackgroundImage = trip.imageUrl;
+        }
+
         this.loading = false;
       },
       error: (err) => {
@@ -287,10 +224,7 @@ export class TripDetailsComponent implements OnInit {
   }
 
   goBack(): void {
-    // Emit an event first
-    this.goBackEvent.emit();
-    // Then fall back to location.back() if no parent is listening
-    this.location.back();
+    this.router.navigate(['/my-trips'])
   }
 
   editTrip(): void {
@@ -345,9 +279,4 @@ export class TripDetailsComponent implements OnInit {
     return `Day ${dayIndex + 1} - ${date.format('MMM D, YYYY')}`;
   }
 
-  isDayToday(startDate: string, dayIndex: number): boolean {
-    const today = moment().startOf('day');
-    const dayDate = moment(startDate).add(dayIndex, 'days').startOf('day');
-    return today.isSame(dayDate, 'day');
-  }
 }
