@@ -31,6 +31,7 @@ export class NewTripComponent {
   }
 
   createFormGroup(): void {
+    const userId = localStorage.getItem('userId') ?? '';
     this.formGroup = this.formBuilder.group({
       tripName: ['', [Validators.required, Validators.maxLength(255)]],
       description: ['', [Validators.required, Validators.maxLength(255)]],
@@ -40,7 +41,7 @@ export class NewTripComponent {
         state: [' ', [Validators.required, Validators.maxLength(255)]],
       }),
       user: this.formBuilder.group({
-        username: ['spirovskat', [Validators.required, Validators.maxLength(255)]],
+        id: [userId, [Validators.required, Validators.maxLength(255)]],
       }),
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],

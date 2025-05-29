@@ -229,7 +229,7 @@ export class AccommodationComponent implements OnInit {
   }
 
   editAccommodationSetup(accommodation: AccommodationDto): void {
-    this.isNewAccommodation = true;
+    this.isNewAccommodation = false; // Set to false to indicate editing mode
     this.formGroup.patchValue({
       id: accommodation.id,
       type: accommodation.type,

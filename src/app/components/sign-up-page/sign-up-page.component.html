@@ -2,23 +2,25 @@
 <div class="auth-container">
   <div class="auth-header">
     <h2>Sign Up</h2>
-    <p>Create a new account</p>
+    <!-- <p>Create a new account</p> -->
   </div>
 
-  <div  class="social-buttons">
+  <!-- <div  class="social-buttons">
     <button class="social-button google">
       <img src="assets/images/google-logo.png" alt="Google Logo" class="social-icon" />
       Continue with Google
     </button>
-  </div>
+  </div> -->
 
-  <div class="divider">Or with Email</div>
+  <!-- <div class="divider">Or with Email</div> -->
 
   <form *ngIf="formGroup" [formGroup]="formGroup">
     <!-- Full Name -->
     <div class="field">
+      <label class="field-name" for="fullName">Full Name</label>
       <div class="form-group">
         <input
+          id="fullName"
           type="text"
           formControlName="fullName"
           placeholder="Full Name"
@@ -31,8 +33,10 @@
     </div>
     <!-- Email -->
     <div class="field">
+      <label class="field-name" for="email">Email</label>
       <div class="form-group">
         <input
+          id="email"
           type="text"
           formControlName="email"
           placeholder="Email"
@@ -50,28 +54,32 @@
     </div>
     <!-- Username -->
      <div class="field">
-    <div class="form-group">
-      <input
-        type="text"
-        formControlName="username"
-        placeholder="Username"
-        [class.invalid]="
-          hasError('username', 'required') || hasError('username', 'pattern')
-        "
-      />
-      <div class="error-text" *ngIf="hasError('username', 'required')">
-        Username is required
-      </div>
-      <div class="error-text" *ngIf="hasError('username', 'pattern')">
-        Please enter a valid username
-      </div>
-    </div>
-</div>
-    <!-- Password -->
-    <div class="field">
+      <label class="field-name" for="username">Username</label>
       <div class="form-group">
         <input
+          id="username"
           type="text"
+          formControlName="username"
+          placeholder="Username"
+          [class.invalid]="
+            hasError('username', 'required') || hasError('username', 'pattern')
+          "
+        />
+        <div class="error-text" *ngIf="hasError('username', 'required')">
+          Username is required
+        </div>
+        <div class="error-text" *ngIf="hasError('username', 'pattern')">
+          Please enter a valid username
+        </div>
+      </div>
+    </div>
+    <!-- Password -->
+    <div class="field">
+      <label class="field-name" for="password">Password</label>
+      <div class="form-group">
+        <input
+          id="password"
+          type="password"
           formControlName="password"
           placeholder="Password"
           [class.invalid]="hasError('password', 'required')"
@@ -83,22 +91,28 @@
     </div>
     <!-- Confirm Password -->
     <div class="field">
+      <label class="field-name" for="confirmPassword">Confirm Password</label>
       <div class="form-group">
         <input
-          type="text"
+          id="confirmPassword"
+          type="password"
           formControlName="confirmPassword"
           placeholder="Confirm Password"
           [class.invalid]="
-          hasError('confirmPassword', 'required') ||
-          (formGroup.errors?.['passwordMismatch'] && formGroup.get('confirmPassword')?.touched)
-        "
+            hasError('confirmPassword', 'required') ||
+            (formGroup.errors?.['passwordMismatch'] &&
+              formGroup.get('confirmPassword')?.touched)
+          "
         />
         <div class="error-text" *ngIf="hasError('confirmPassword', 'required')">
           Please confirm your password
         </div>
         <div
           class="error-text"
-          *ngIf="formGroup.errors?.['passwordMismatch'] && formGroup.get('confirmPassword')?.touched"
+          *ngIf="
+            formGroup.errors?.['passwordMismatch'] &&
+            formGroup.get('confirmPassword')?.touched
+          "
         >
           Passwords do not match
         </div>
