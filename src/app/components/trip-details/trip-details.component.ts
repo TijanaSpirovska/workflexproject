@@ -10,7 +10,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { Trip } from '../../models/trip-details.model';
 import { TripService } from '../../services/trip.service';
-import { Location, isPlatformBrowser } from '@angular/common';
+import { Location } from '@angular/common';
 import moment from 'moment';
 
 @Component({
@@ -56,7 +56,29 @@ export class TripDetailsComponent implements OnInit {
       this.tripStartDate = state.tripStartDate ?? null;
       this.tripEndDate = state.tripEndDate ?? null;
       this.tripImageUrl = state.tripImageUrl ?? null;
+
+      // Validate dates
+      if (this.tripStartDate && isNaN(Date.parse(this.tripStartDate))) {
+        console.error('Invalid start date:', this.tripStartDate);
+        this.tripStartDate = null;
+      }
+
+      if (this.tripEndDate && isNaN(Date.parse(this.tripEndDate))) {
+        console.error('Invalid end date:', this.tripEndDate);
+        this.tripEndDate = null;
+      }
     }
+
+    // Ensure `this.trip` and `this.trip.days` are initialized
+    this.trip = {
+      id: '',
+      destination: '',
+      country: '',
+      startDate: '',
+      imageUrl: '',
+      flight: { from: '', to: '', departureTime: '', duration: '' },
+      days: this.trip?.days || [],
+    };
 
     // Subscribe to the selected trip image from the service
     // This will be used as fallback if not provided via @Input or router state
@@ -202,45 +224,23 @@ export class TripDetailsComponent implements OnInit {
     this.loading = true;
     const userId = localStorage.getItem('userId');
     this.tripService.getOneById(`${userId}/${tripId}`).subscribe({
-      next:(response)=>{
-        console.log('Trip details loaded:', response);
-      }
-    })
-    this.tripService.getTripById(tripId).subscribe({
-      next: (trip) => {
-        this.trip = trip;
-
-        // Use input properties if available, otherwise fallback to localStorage
-        if (this.tripName) {
-          this.trip.destination = this.tripName;
-        } else if (isPlatformBrowser(this.platformId)) {
-          const storedTripName = localStorage.getItem('selectedTripName');
-          if (storedTripName) {
-            this.trip.destination = storedTripName;
-          }
+      next: (response) => {
+        const tripData = response.data;
+        this.trip = tripData;
+        this.tripStartDate = tripData.startDate;
+        this.tripEndDate = tripData.endDate ?? null;
+        this.tripName = tripData.destination;
+        this.tripImageUrl = tripData.imageUrl;
+        this.tripBackgroundImage = tripData.imageUrl ?? '/assets/images/travel.png';
+        if (this.trip) {
+          this.trip.flight = {
+            from: tripData.flight?.fromLocation ?? '',
+            to: tripData.flight?.toLocation ?? '',
+            departureTime: tripData.flight?.departureTime ?? '',
+            duration: tripData.flight?.duration ?? ''
+          };
+     
         }
-
-        if (this.tripStartDate) {
-          this.trip.startDate = moment(this.tripStartDate).toISOString();
-        } else if (isPlatformBrowser(this.platformId)) {
-          const storedStartDate = localStorage.getItem('selectedTripStartDate');
-          if (storedStartDate) {
-            this.trip.startDate = moment(storedStartDate).toISOString();
-          }
-        }
-
-        // Update image from inputs, service or trip data
-        if (this.tripImageUrl) {
-          this.tripBackgroundImage = this.tripImageUrl;
-        } else if (
-          this.tripBackgroundImage === '/assets/images/travel.png' &&
-          trip.imageUrl
-        ) {
-          // Update both the local property and the stored value in the service
-          this.tripService.setSelectedTripImage(trip.imageUrl);
-          this.tripBackgroundImage = trip.imageUrl;
-        }
-
         this.loading = false;
       },
       error: (err) => {
