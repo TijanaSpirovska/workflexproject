@@ -28,7 +28,7 @@ export class AccommodationComponent implements OnInit {
   formGroup!: FormGroup;
   isFormGroupValid: boolean = false;
   hasAdminRole: boolean = false;
-  userId:string = '';
+  userId: string = '';
 
   selectedAccommodationForReservation: AccommodationDto | null = null;
   reservationFormGroup!: FormGroup;
@@ -94,6 +94,7 @@ export class AccommodationComponent implements OnInit {
         [Validators.required, Validators.maxLength(255)],
       ],
       location: this.formBuilder.group({
+        id:28,
         city: ['Tokyo', [Validators.required]],
         country: ['Japan', [Validators.required]], // Corrected prefill
         state: ['Tokyo', [Validators.required]], // Corrected prefill
@@ -265,26 +266,71 @@ export class AccommodationComponent implements OnInit {
     }
   }
 
-  addAccommodation(): void {
+  updateAccommodation(): void {
+    // if (this.formGroup.invalid) {
+    //   this.toastr.error('Please fill all required fields.', 'Error');
+    //   return;
+    // }
+
     const accommodationData = this.formGroup.value as AccommodationDto;
 
-    // Create new accommodation
-    this.accommodationService.create(accommodationData).subscribe({
-      next: (response: { data: AccommodationDto }) => {
-        this.toastr.success('Accommodation created successfully!', 'Success');
-        this.accommodations.push(response.data);
-        this.filterAccommodations();
-        this.createFormGroup(); // Reset form to initial prefill for a new accommodation
-        this.isNewAccommodation = false;
-        this.isFormGroupValid = false;
-      },
-      error: (error: any) => {
-        this.toastr.error(
-          error.error?.description ?? 'Accommodation creation failed',
-          'Error'
-        );
-      },
-    });
+    this.accommodationService
+      .updateById(accommodationData.id.toString(), accommodationData)
+      .subscribe({
+        next: (response: { data: AccommodationDto }) => {
+          this.toastr.success('Accommodation updated successfully!', 'Success');
+          const index = this.accommodations.findIndex(
+            (acc) => acc.id === accommodationData.id
+          );
+          if (index !== -1) {
+            this.accommodations[index] = response.data;
+          }
+          this.filterAccommodations();
+          this.createFormGroup(); // Reset form to initial prefill
+          this.isNewAccommodation = false;
+          this.isFormGroupValid = false;
+        },
+        error: (error: any) => {
+          this.toastr.error(
+            error.error?.description ?? 'Accommodation update failed',
+            'Error'
+          );
+        },
+      });
+  }
+
+  addAccommodation(): void {
+    if (!this.formGroup.get('id')?.value) {
+      const accommodationData = this.formGroup.value as AccommodationDto;
+
+      // Create new accommodation
+      this.accommodationService.updateById('1', accommodationData).subscribe({
+        next: (response: { data: AccommodationDto }) => {
+          this.toastr.success('Accommodation created successfully!', 'Success');
+          this.accommodations.push(response.data);
+          this.filterAccommodations();
+          this.createFormGroup(); // Reset form to initial prefill for a new accommodation
+          this.isNewAccommodation = false;
+          this.isFormGroupValid = false;
+        },
+        error: (error: any) => {
+          this.toastr.error(
+            error.error?.description ?? 'Accommodation creation failed',
+            'Error'
+          );
+        },
+      });
+    } else {
+      this.updateAccommodation();
+    }
+  }
+
+  handleAccommodationAction(): void {
+    if (this.isNewAccommodation) {
+      this.addAccommodation();
+    } else {
+      this.updateAccommodation();
+    }
   }
 
   // --- Methods for reservation modal ---
@@ -342,7 +388,7 @@ export class AccommodationComponent implements OnInit {
           checkOutDate: reservationData.checkOutDate,
           guestName: reservationData.guestName,
           guestEmail: reservationData.guestEmail,
-          status: response.status || 'CONFIRMED',
+          status: response.status ?? 'CONFIRMED',
           pricePerNight: roomToReserve.pricePerNight,
           totalPrice: this.calculateTotalPrice(
             reservationData.checkInDate,

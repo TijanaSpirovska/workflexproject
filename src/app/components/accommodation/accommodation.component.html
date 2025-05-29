@@ -4,7 +4,11 @@
     <div class="header">
       <h1>Accommodations</h1>
       <div class="controls">
-        <button *ngIf="hasAdminRole" class="add-accommodation-btn" (click)="addNewAccommodation(0)">
+        <button
+          *ngIf="hasAdminRole"
+          class="add-accommodation-btn"
+          (click)="addNewAccommodation(0)"
+        >
           Add New Accommodation
         </button>
       </div>
@@ -12,7 +16,7 @@
 
     <!-- Breadcrumb Navigation -->
     <app-breadcrumb
-    *ngIf="!hasAdminRole"
+      *ngIf="!hasAdminRole"
       [items]="breadcrumbItems"
       (navigate)="handleBreadcrumbNavigation($event)"
     ></app-breadcrumb>
@@ -24,7 +28,10 @@
           ×
         </button>
         <h3>
-          {{ formGroup.get("id")?.value !==0 ? "Edit" : "Add New" }} Accommodation
+          {{
+            formGroup.get("id")?.value !== 0 ? "Edit" : "Add New"
+          }}
+          Accommodation
         </h3>
 
         <form
@@ -291,7 +298,7 @@
                     reservationFormGroup.get('checkInDate')?.invalid &&
                     reservationFormGroup.get('checkInDate')?.touched
                   "
-                  [max]="getDateValue('checkOutDate')" 
+                  [max]="getDateValue('checkOutDate')"
                   readonly
                 />
                 <mat-datepicker-toggle
@@ -305,7 +312,7 @@
               <mat-datepicker #checkInDatePicker></mat-datepicker>
             </div>
           </div>
-          
+
           <div class="field has-support-text">
             <label class="field-name" for="checkOutDate">Check-out Date</label>
             <div class="form-group date-icon">
@@ -320,7 +327,7 @@
                     reservationFormGroup.get('checkOutDate')?.invalid &&
                     reservationFormGroup.get('checkOutDate')?.touched
                   "
-                  [min]="getDateValue('checkInDate')" 
+                  [min]="getDateValue('checkInDate')"
                   readonly
                 />
                 <mat-datepicker-toggle
@@ -334,7 +341,7 @@
               <mat-datepicker #checkOutDatePicker></mat-datepicker>
             </div>
           </div>
-          
+
           <div class="field">
             <label for="guestName">Guest Name</label>
             <input
@@ -372,7 +379,11 @@
       <div
         class="card"
         *ngFor="let acc of accommodations"
-        (click)="!hasAdminRole?  openReservationModal(acc) : addNewAccommodation(acc.id)"
+        (click)="
+          !hasAdminRole
+            ? openReservationModal(acc)
+            : addNewAccommodation(acc.id)
+        "
       >
         <img [src]="acc.image || 'assets/images/hotel.png'" [alt]="acc.name" />
         <!-- Added default image -->
@@ -406,7 +417,10 @@
     </div>
 
     <!-- My Reserved Rooms Section -->
-    <div class="reservations-section" *ngIf="showMyReservationsView && !hasAdminRole">
+    <div
+      class="reservations-section"
+      *ngIf="showMyReservationsView && !hasAdminRole"
+    >
       <!-- Added *ngIf to toggle view -->
       <h2>My Reserved Rooms</h2>
       <div *ngIf="reservedRooms.length === 0" class="no-results">
