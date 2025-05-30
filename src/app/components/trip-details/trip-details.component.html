@@ -37,7 +37,7 @@
       </div>
       <div class="progress-dates">
         <span>{{ formatDate(trip.startDate) }}</span>
-        <!-- <span>{{ formatDate(getEndDate().toISOString()) }}</span> -->
+        <span>{{ formatDate(getEndDate().toISOString()) }}</span>
       </div>
     </div>
     <!-- Flight Details Card -->
@@ -57,7 +57,7 @@
           <div class="departure-time">
             {{ formatFlightDate(trip.flight.departureTime) }}
           </div>
-          <div class="duration">{{ trip.flight.duration }}</div>
+          <div class="duration">{{ trip.flight.duration }}h</div>
         </div>
       </div>
     </div>

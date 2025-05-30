@@ -21,149 +21,149 @@ export class TripService extends CoreService {
   selectedTripImage$ = this.selectedTripImageSource.asObservable();
   // Mock data for trip details
   private mockTrips: Trip[] = [
-    {
-      id: '1',
-      destination: 'New York City',
-      country: 'USA',
-      startDate: '2025-05-20T00:00:00.000Z', // Starting 3 days ago from today (May 23, 2025)
-      imageUrl: '/assets/images/travel.png',
-      flight: {
-        from: 'NYC',
-        to: 'Tbilisi',
-        departureTime: '2025-05-20T08:30:00.000Z',
-        duration: '12h 45m',
-      },
-      days: [
-        {
-          activities: ['Arrival', 'Hotel Check-in', 'Welcome Dinner'],
-        },
-        {
-          activities: [
-            'City Tour',
-            'Museum Visit',
-            'Lunch at Local Restaurant',
-          ],
-        },
-        {
-          activities: ['Shopping Tour', 'Broadway Show', 'Dinner Cruise'],
-        },
-        {
-          activities: [
-            'Ferry to Staten Island',
-            'Brooklyn Bridge Walk',
-            'Food Tour',
-          ],
-        },
-        {
-          activities: ['Central Park Tour', 'Biking', 'Rooftop Bar'],
-        },
-        {
-          activities: ['Art Gallery Visit', 'Shopping in SoHo', 'Jazz Club'],
-        },
-        {
-          activities: ['Checkout', 'Airport Transfer', 'Departure'],
-        },
-      ],
-    },
-    {
-      id: '2',
-      destination: 'Paris',
-      country: 'France',
-      startDate: '2025-05-27T00:00:00.000Z', // Starting next week
-      imageUrl: '/assets/images/travel.png',
-      flight: {
-        from: 'CDG',
-        to: 'JFK',
-        departureTime: '2025-05-27T14:15:00.000Z',
-        duration: '8h 30m',
-      },
-      days: [
-        {
-          activities: ['Arrival', 'Hotel Check-in', 'Dinner at Eiffel Tower'],
-        },
-        {
-          activities: ['Louvre Museum', 'Seine River Cruise', 'Notre-Dame'],
-        },
-        {
-          activities: ['Versailles Day Trip', 'Palace Tour', 'Gardens Visit'],
-        },
-        {
-          activities: [
-            'Montmartre Exploration',
-            'Sacré-Cœur Basilica',
-            'Moulin Rouge',
-          ],
-        },
-        {
-          activities: ['Shopping in Le Marais', 'Picnic at Luxembourg Gardens'],
-        },
-      ],
-    },
-    {
-      id: '3',
-      destination: 'Tokyo',
-      country: 'Japan',
-      startDate: '2025-05-10T00:00:00.000Z', // Already finished trip (ended May 19)
-      imageUrl: '/assets/images/japan.png',
-      flight: {
-        from: 'NRT',
-        to: 'LAX',
-        departureTime: '2025-05-10T23:45:00.000Z',
-        duration: '11h 15m',
-      },
-      days: [
-        {
-          activities: [
-            'Arrival',
-            'Hotel Check-in',
-            'Dinner at Robot Restaurant',
-          ],
-        },
-        {
-          activities: ['Shibuya Crossing', 'Harajuku Shopping', 'Meiji Shrine'],
-        },
-        {
-          activities: [
-            'Tsukiji Outer Market',
-            'Sumo Wrestling Practice',
-            'Asakusa Temple',
-          ],
-        },
-        {
-          activities: ['Akihabara Electric Town', 'Anime and Manga Shopping'],
-        },
-        {
-          activities: ['Ueno Park', 'Tokyo National Museum', 'Ameyoko Market'],
-        },
-        {
-          activities: [
-            'Odaiba Seaside Park',
-            'TeamLab Borderless',
-            'DiverCity Tokyo Plaza',
-          ],
-        },
-        {
-          activities: [
-            'Day Trip to Mount Fuji',
-            'Lake Kawaguchi',
-            'Onsen Experience',
-          ],
-        },
-        {
-          activities: ['Nara Day Trip', 'Todai-ji Temple', 'Nara Park'],
-        },
-        {
-          activities: [
-            'Kyoto Day Trip',
-            'Kinkaku-ji (Golden Pavilion)',
-            'Gion District',
-          ],
-        },
-        {
-          activities: ['Checkout', 'Airport Transfer', 'Departure'],
-        },
-      ],
-    },
+    // {
+    //   id: '1',
+    //   destination: 'New York City',
+    //   country: 'USA',
+    //   startDate: '2025-05-20T00:00:00.000Z', // Starting 3 days ago from today (May 23, 2025)
+    //   imageUrl: '/assets/images/travel.png',
+    //   flight: {
+    //     from: 'NYC',
+    //     to: 'Tbilisi',
+    //     departureTime: '2025-05-20T08:30:00.000Z',
+    //     duration: '12h 45m',
+    //   },
+    //   days: [
+    //     {
+    //       activities: ['Arrival', 'Hotel Check-in', 'Welcome Dinner'],
+    //     },
+    //     {
+    //       activities: [
+    //         'City Tour',
+    //         'Museum Visit',
+    //         'Lunch at Local Restaurant',
+    //       ],
+    //     },
+    //     {
+    //       activities: ['Shopping Tour', 'Broadway Show', 'Dinner Cruise'],
+    //     },
+    //     {
+    //       activities: [
+    //         'Ferry to Staten Island',
+    //         'Brooklyn Bridge Walk',
+    //         'Food Tour',
+    //       ],
+    //     },
+    //     {
+    //       activities: ['Central Park Tour', 'Biking', 'Rooftop Bar'],
+    //     },
+    //     {
+    //       activities: ['Art Gallery Visit', 'Shopping in SoHo', 'Jazz Club'],
+    //     },
+    //     {
+    //       activities: ['Checkout', 'Airport Transfer', 'Departure'],
+    //     },
+    //   ],
+    // },
+    // {
+    //   id: '2',
+    //   destination: 'Paris',
+    //   country: 'France',
+    //   startDate: '2025-05-27T00:00:00.000Z', // Starting next week
+    //   imageUrl: '/assets/images/travel.png',
+    //   flight: {
+    //     from: 'CDG',
+    //     to: 'JFK',
+    //     departureTime: '2025-05-27T14:15:00.000Z',
+    //     duration: '8h 30m',
+    //   },
+    //   days: [
+    //     {
+    //       activities: ['Arrival', 'Hotel Check-in', 'Dinner at Eiffel Tower'],
+    //     },
+    //     {
+    //       activities: ['Louvre Museum', 'Seine River Cruise', 'Notre-Dame'],
+    //     },
+    //     {
+    //       activities: ['Versailles Day Trip', 'Palace Tour', 'Gardens Visit'],
+    //     },
+    //     {
+    //       activities: [
+    //         'Montmartre Exploration',
+    //         'Sacré-Cœur Basilica',
+    //         'Moulin Rouge',
+    //       ],
+    //     },
+    //     {
+    //       activities: ['Shopping in Le Marais', 'Picnic at Luxembourg Gardens'],
+    //     },
+    //   ],
+    // },
+    // {
+    //   id: '3',
+    //   destination: 'Tokyo',
+    //   country: 'Japan',
+    //   startDate: '2025-05-10T00:00:00.000Z', // Already finished trip (ended May 19)
+    //   imageUrl: '/assets/images/japan.png',
+    //   flight: {
+    //     from: 'NRT',
+    //     to: 'LAX',
+    //     departureTime: '2025-05-10T23:45:00.000Z',
+    //     duration: '11h 15m',
+    //   },
+    //   days: [
+    //     {
+    //       activities: [
+    //         'Arrival',
+    //         'Hotel Check-in',
+    //         'Dinner at Robot Restaurant',
+    //       ],
+    //     },
+    //     {
+    //       activities: ['Shibuya Crossing', 'Harajuku Shopping', 'Meiji Shrine'],
+    //     },
+    //     {
+    //       activities: [
+    //         'Tsukiji Outer Market',
+    //         'Sumo Wrestling Practice',
+    //         'Asakusa Temple',
+    //       ],
+    //     },
+    //     {
+    //       activities: ['Akihabara Electric Town', 'Anime and Manga Shopping'],
+    //     },
+    //     {
+    //       activities: ['Ueno Park', 'Tokyo National Museum', 'Ameyoko Market'],
+    //     },
+    //     {
+    //       activities: [
+    //         'Odaiba Seaside Park',
+    //         'TeamLab Borderless',
+    //         'DiverCity Tokyo Plaza',
+    //       ],
+    //     },
+    //     {
+    //       activities: [
+    //         'Day Trip to Mount Fuji',
+    //         'Lake Kawaguchi',
+    //         'Onsen Experience',
+    //       ],
+    //     },
+    //     {
+    //       activities: ['Nara Day Trip', 'Todai-ji Temple', 'Nara Park'],
+    //     },
+    //     {
+    //       activities: [
+    //         'Kyoto Day Trip',
+    //         'Kinkaku-ji (Golden Pavilion)',
+    //         'Gion District',
+    //       ],
+    //     },
+    //     {
+    //       activities: ['Checkout', 'Airport Transfer', 'Departure'],
+    //     },
+    //   ],
+    // },
   ];
   constructor(
     http: HttpClient,

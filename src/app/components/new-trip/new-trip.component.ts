@@ -38,7 +38,7 @@ export class NewTripComponent {
       location: this.formBuilder.group({
         city: ['', [Validators.required, Validators.maxLength(255)]],
         country: ['', [Validators.required, Validators.maxLength(255)]],
-        state: [' ', [Validators.required, Validators.maxLength(255)]],
+        state: ['test', [Validators.required, Validators.maxLength(255)]],
       }),
       user: this.formBuilder.group({
         id: [userId, [Validators.required, Validators.maxLength(255)]],

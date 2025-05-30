@@ -10,7 +10,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { Trip } from '../../models/trip-details.model';
 import { TripService } from '../../services/trip.service';
-import { Location, isPlatformBrowser } from '@angular/common';
+import { Location } from '@angular/common';
 import moment from 'moment';
 
 @Component({
@@ -122,7 +122,6 @@ export class TripDetailsComponent implements OnInit {
     }
   }
 
-
   // Calculate duration based on input dates
   calculateDurationFromDates(): number {
     if (this.tripStartDate && this.tripEndDate) {
@@ -140,44 +139,12 @@ export class TripDetailsComponent implements OnInit {
     const userId = localStorage.getItem('userId');
     this.tripService.getOneById(`${userId}/${tripId}`).subscribe({
       next: (response) => {
-        console.log('Trip details loaded:', response);
-      },
-    });
-    this.tripService.getTripById(tripId).subscribe({
-      next: (trip) => {
-        this.trip = trip;
-
-        // Use input properties if available, otherwise fallback to localStorage
-        if (this.tripName) {
-          this.trip.destination = this.tripName;
-        } else if (isPlatformBrowser(this.platformId)) {
-          const storedTripName = localStorage.getItem('selectedTripName');
-          if (storedTripName) {
-            this.trip.destination = storedTripName;
-          }
+        if (response.success && response.data) {
+          this.populateTripDetails(response.data);
+        } else {
+          console.error('Failed to load trip details:', response.error);
+          this.error = 'Failed to load trip details';
         }
-
-        if (this.tripStartDate) {
-          this.trip.startDate = moment(this.tripStartDate).toISOString();
-        } else if (isPlatformBrowser(this.platformId)) {
-          const storedStartDate = localStorage.getItem('selectedTripStartDate');
-          if (storedStartDate) {
-            this.trip.startDate = moment(storedStartDate).toISOString();
-          }
-        }
-
-        // Update image from inputs, service or trip data
-        if (this.tripImageUrl) {
-          this.tripBackgroundImage = this.tripImageUrl;
-        } else if (
-          this.tripBackgroundImage === '/assets/images/travel.png' &&
-          trip.imageUrl
-        ) {
-          // Update both the local property and the stored value in the service
-          this.tripService.setSelectedTripImage(trip.imageUrl);
-          this.tripBackgroundImage = trip.imageUrl;
-        }
-
         this.loading = false;
       },
       error: (err) => {
@@ -186,6 +153,53 @@ export class TripDetailsComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  private populateTripDetails(tripData: any): void {
+    this.trip = {
+      id: tripData.id,
+      destination: tripData.destination,
+      country: tripData.country,
+      startDate: tripData.startDate,
+      endDate: tripData.endDate ?? null,
+      imageUrl: tripData.imageUrl ?? '/assets/images/travel.png',
+      flight: {
+        from: tripData.flight?.fromLocation ?? '',
+        to: tripData.flight?.toLocation ?? '',
+        departureTime: tripData.flight?.departureTime ?? '',
+        duration: tripData.flight?.duration ?? '',
+      },
+      days: tripData.days.map((day: any) => ({
+        date: day.date,
+        label: day.label,
+        activities: day.activities ?? [],
+      })),
+    };
+    this.calculateProgressAndDays();
+    this.groupActivitiesByDate();
+  }
+
+  private calculateProgressAndDays(): void {
+    if (this.trip?.startDate && this.trip?.endDate) {
+      const start = moment(this.trip.startDate);
+      const end = moment(this.trip.endDate);
+
+      if (start.isValid() && end.isValid() && end.isAfter(start)) {
+        this.totalDays = end.diff(start, 'days') + 1;
+
+        const today = moment();
+        if (today.isBefore(start)) {
+          this.progressPercentage = 0;
+        } else if (today.isAfter(end)) {
+          this.progressPercentage = 100;
+        } else {
+          const elapsed = today.diff(start, 'days');
+          this.progressPercentage = Math.floor(
+            (elapsed / this.totalDays) * 100
+          );
+        }
+      }
+    }
   }
 
   formatDate(isoDate: string): string {
@@ -224,7 +238,7 @@ export class TripDetailsComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/my-trips'])
+    this.router.navigate(['/my-trips']);
   }
 
   editTrip(): void {
@@ -279,4 +293,30 @@ export class TripDetailsComponent implements OnInit {
     return `Day ${dayIndex + 1} - ${date.format('MMM D, YYYY')}`;
   }
 
+  private groupActivitiesByDate(): void {
+    if (!this.trip?.days) return;
+
+    const groupedDays: { date: string; label: string; activities: string[] }[] =
+      [];
+
+    this.trip.days.forEach((day) => {
+      const existingDay = groupedDays.find((d) => d.date === day.date);
+      if (existingDay) {
+        existingDay.activities.push(day.label);
+      } else {
+        groupedDays.push({
+          date: day.date,
+          label: day.label,
+          activities: [day.label],
+        });
+      }
+    });
+
+    // Sort groupedDays by date in ascending order
+    groupedDays.sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
+
+    this.trip.days = groupedDays;
+  }
 }

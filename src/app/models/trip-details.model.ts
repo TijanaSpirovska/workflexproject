@@ -12,6 +12,8 @@ export interface Trip {
     duration: string;
   };
   days: {
+    date: string; // ISO format
+    label: string;
     activities?: string[];
   }[];
 }
