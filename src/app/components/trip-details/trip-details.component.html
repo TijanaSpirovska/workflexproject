@@ -45,6 +45,9 @@
       <div class="flight-header">
         <i class="fas fa-plane"></i>
         <span>Your flight</span>
+        <button class="edit-flight-button" (click)="openFlightModal()">
+          <i class="fas fa-pencil-alt"></i>
+        </button>
       </div>
       <div class="flight-content">
         <div class="route">
@@ -121,4 +124,76 @@
   <h2>Something went wrong</h2>
   <p>{{ error }}</p>
   <button (click)="goBack()">Go back</button>
+</div>
+
+<!-- Flight Modal -->
+<div class="modal-backdrop" *ngIf="isModalOpen">
+  <div class="form-modal">
+    <button class="close-btn" (click)="closeModal()">×</button>
+    <h3>Edit Flight Details</h3>
+    <form [formGroup]="flightForm" (ngSubmit)="saveFlight()">
+      <div class="group-container">
+        <div class="field">
+          <label for="from">From</label>
+          <input
+            id="from"
+            type="text"
+            formControlName="from"
+            placeholder="Departure location"
+          />
+        </div>
+        <div class="field">
+          <label for="to">To</label>
+          <input
+            id="to"
+            type="text"
+            formControlName="to"
+            placeholder="Arrival location"
+          />
+        </div>
+        <div class="field has-support-text">
+          <label class="field-name" for="departureTime">Departure Time</label>
+          <div class="form-group date-icon">
+            <div class="input-wrapper">
+              <input
+                id="departureTime"
+                type="text"
+                [matDatepicker]="departureDatePicker"
+                formControlName="departureTime"
+                [class.invalid]="flightForm.get('departureTime')?.invalid"
+                readonly
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="departureDatePicker"
+                class="calendar-toggle"
+              >
+                <i class="calendar-icon"></i>
+              </mat-datepicker-toggle>
+            </div>
+            <mat-datepicker #departureDatePicker></mat-datepicker>
+          </div>
+          <div
+            class="error-text"
+            *ngIf="flightForm.get('departureTime')?.invalid"
+          >
+            Departure time is required
+          </div>
+        </div>
+        <div class="field">
+          <label for="duration">Duration</label>
+          <input
+            id="duration"
+            type="text"
+            formControlName="duration"
+            placeholder="Flight duration"
+          />
+        </div>
+      </div>
+      <div class="actions">
+        <button type="submit">Save</button>
+        <button type="button" (click)="closeModal()">Cancel</button>
+      </div>
+    </form>
+  </div>
 </div>

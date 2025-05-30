@@ -12,6 +12,9 @@ import { Trip } from '../../models/trip-details.model';
 import { TripService } from '../../services/trip.service';
 import { Location } from '@angular/common';
 import moment from 'moment';
+import { FlightService } from '../../services/flight.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-trip-details',
@@ -38,11 +41,17 @@ export class TripDetailsComponent implements OnInit {
   totalDays: number = 0;
   progressPercentage: number = 0;
 
+  flightForm!: FormGroup;
+
+  isModalOpen: boolean = false; // Manage modal visibility
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private tripService: TripService,
     private location: Location,
+    private flightService: FlightService,
+    private  readonly fb: FormBuilder,
     @Inject(PLATFORM_ID) private readonly platformId: Object
   ) {
     // Get data from router state if available
@@ -98,6 +107,13 @@ export class TripDetailsComponent implements OnInit {
         this.tripBackgroundImage = imageUrl;
       }
     });
+
+    this.flightForm = this.fb.group({
+      from: ['', [Validators.required]],
+      to: ['', [Validators.required]],
+      departureTime: ['', [Validators.required]],
+      duration: ['', [Validators.required]],
+    });
   }
 
   ngOnInit(): void {
@@ -136,7 +152,18 @@ export class TripDetailsComponent implements OnInit {
 
   loadTripDetails(tripId: string): void {
     this.loading = true;
-    const userId = localStorage.getItem('userId');
+    let userId: string | null = null;
+
+    if (isPlatformBrowser(this.platformId)) {
+      userId = localStorage.getItem('userId');
+    }
+
+    if (!userId) {
+      this.error = 'User ID not found';
+      this.loading = false;
+      return;
+    }
+
     this.tripService.getOneById(`${userId}/${tripId}`).subscribe({
       next: (response) => {
         if (response.success && response.data) {
@@ -248,6 +275,66 @@ export class TripDetailsComponent implements OnInit {
     } else {
       // Fall back to alert if no parent is listening
       alert('Edit functionality would open here');
+    }
+  }
+
+  openFlightModal(): void {
+    if (this.trip?.flight.from && this.trip?.flight.to) {
+      this.flightForm.patchValue({
+        from: this.trip.flight.from,
+        to: this.trip.flight.to,
+        departureTime: this.formatDateTimeForInput(this.trip.flight.departureTime),
+        duration: this.trip.flight.duration,
+      });
+    } else {
+      this.flightForm.reset();
+    }
+
+    this.isModalOpen = true; // Open the modal
+    console.log('Flight modal opened with trip data:', this.isModalOpen);
+  }
+
+  private formatDateTimeForInput(dateTime: string): string {
+    const date = moment(dateTime);
+    return date.isValid() ? date.format('YYYY-MM-DDTHH:mm') : '';
+  }
+
+  closeModal(): void {
+    this.isModalOpen = false; // Close the modal
+  }
+
+  saveFlight(): void {
+    if (this.flightForm.invalid) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+
+    const flightData = this.flightForm.value;
+
+    if (this.trip?.flight.from && this.trip?.flight.to) {
+      // Edit existing flight
+      this.flightService.updateById(this.trip.id, flightData).subscribe({
+        next: (response) => {
+          console.log('Flight updated successfully:', response);
+          alert('Flight updated successfully!');
+        },
+        error: (err) => {
+          console.error('Error updating flight:', err);
+          alert('Failed to update flight.');
+        },
+      });
+    } else {
+      // Add new flight
+      this.flightService.create(flightData, 'json').subscribe({
+        next: (response) => {
+          console.log('Flight added successfully:', response);
+          alert('Flight added successfully!');
+        },
+        error: (err) => {
+          console.error('Error adding flight:', err);
+          alert('Failed to add flight.');
+        },
+      });
     }
   }
 
