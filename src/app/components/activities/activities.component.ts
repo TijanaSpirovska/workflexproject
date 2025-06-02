@@ -111,10 +111,10 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.userId = localStorage.getItem('userId') ?? '';
-    this.createFormGroup();
-    this.updateFormGroup();
     if (this.isBrowser) {
+      this.userId = localStorage.getItem('userId') ?? '';
+      this.createFormGroup();
+      this.updateFormGroup();
       this.getData();
       this.getActivityByLocation();
     }

@@ -21,6 +21,7 @@
 
   <!-- Activity Modal -->
   <app-activity-modal
+    *ngIf="isNewActivity && formGroup"
     [formGroup]="formGroup"
     [isOpen]="isNewActivity"
     [isEdit]="isEditActivity"

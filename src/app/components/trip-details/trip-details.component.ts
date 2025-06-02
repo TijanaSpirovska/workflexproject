@@ -51,7 +51,7 @@ export class TripDetailsComponent implements OnInit {
     private tripService: TripService,
     private location: Location,
     private flightService: FlightService,
-    private  readonly fb: FormBuilder,
+    private readonly fb: FormBuilder,
     @Inject(PLATFORM_ID) private readonly platformId: Object
   ) {
     // Get data from router state if available
@@ -117,22 +117,19 @@ export class TripDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
-      const tripId = params.get('id');
-      console.log(tripId);
-      if (tripId) {
-        this.loadTripDetails(tripId);
+    if (isPlatformBrowser(this.platformId)) {
+      let userId = localStorage.getItem('userId');
+      if (userId) {
+        this.loading = true;
+        this.loadTripDetails(userId);
       } else {
-        // If no ID in route, check service for stored trip ID
-        const storedTripId = this.tripService.getStoredTripId();
-        if (storedTripId) {
-          this.loadTripDetails(storedTripId);
-        } else {
-          this.error = 'Trip ID not found';
-          this.loading = false;
-        }
+        this.error = 'User ID not found';
+        this.loading = false;
       }
-    });
+    } else {
+      this.loading = false;
+    }
+
     if (this.tripImageUrl) {
       this.tripBackgroundImage = this.tripImageUrl;
     }
@@ -283,7 +280,9 @@ export class TripDetailsComponent implements OnInit {
       this.flightForm.patchValue({
         from: this.trip.flight.from,
         to: this.trip.flight.to,
-        departureTime: this.formatDateTimeForInput(this.trip.flight.departureTime),
+        departureTime: this.formatDateTimeForInput(
+          this.trip.flight.departureTime
+        ),
         duration: this.trip.flight.duration,
       });
     } else {

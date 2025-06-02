@@ -126,7 +126,7 @@
               />
             </div>
           </div>
-          <div formArrayName="rooms" class="rooms-section">
+          <div formArrayName="rooms" class="rooms-section" *ngIf="formGroup.get('rooms')">
             <div
               *ngFor="let room of rooms.controls; let i = index"
               [formGroupName]="i"

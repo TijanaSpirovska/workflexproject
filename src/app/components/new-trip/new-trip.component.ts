@@ -1,10 +1,9 @@
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { NewTripDto } from '../../models/new-trip.model';
 import { NewTripService } from '../../services/new-trip.service';
 import { DOCUMENT } from '@angular/common';
-import { Role } from '../../data/role';
 
 @Component({
   selector: 'app-new-trip',
@@ -26,12 +25,17 @@ export class NewTripComponent {
   ) {}
 
   ngOnInit(): void {
-    this.createFormGroup();
-    this.document.body.style.overflowY = 'visible';
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      this.createFormGroup();
+      this.document.body.style.overflowY = 'visible';
+    }
   }
 
   createFormGroup(): void {
-    const userId = localStorage.getItem('userId') ?? '';
+    let userId = '';
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      userId = localStorage.getItem('userId') ?? '';
+    }
     this.formGroup = this.formBuilder.group({
       tripName: ['', [Validators.required, Validators.maxLength(255)]],
       description: ['', [Validators.required, Validators.maxLength(255)]],
@@ -55,20 +59,14 @@ export class NewTripComponent {
     return !!(control && control.touched && control.hasError(errorType));
   }
 
-
   onCreateTrip(): void {
-    // if (this.formGroup.invalid) {
-    //   this.isFormGroupValid = true;
-    //   return;}
-
-
     this.newTripDto = this.formGroup.value;
 
     this.newTripService.create(this.newTripDto).subscribe({
       next: () => {
         this.toastr.success('Trip created successfully!', 'Success');
         this.formGroup.reset();
-        this.isFormGroupValid = false
+        this.isFormGroupValid = false;
       },
       error: (error) => {
         this.toastr.error(

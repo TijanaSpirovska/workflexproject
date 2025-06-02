@@ -24,7 +24,7 @@ export class MenuComponent implements OnInit {
   constructor(private router: Router, private eRef: ElementRef) {}
 
   ngOnInit(): void {
-    if (typeof localStorage !== 'undefined') {
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
       this.isLoggedIn = localStorage.getItem('authToken') != null;
     }
   }

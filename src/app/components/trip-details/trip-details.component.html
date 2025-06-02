@@ -45,7 +45,7 @@
       <div class="flight-header">
         <i class="fas fa-plane"></i>
         <span>Your flight</span>
-        <button class="edit-flight-button" (click)="openFlightModal()">
+        <button class="edit-button" (click)="openFlightModal()">
           <i class="fas fa-pencil-alt"></i>
         </button>
       </div>
@@ -127,7 +127,7 @@
 </div>
 
 <!-- Flight Modal -->
-<div class="modal-backdrop" *ngIf="isModalOpen">
+<div class="modal-backdrop" *ngIf="isModalOpen && flightForm">
   <div class="form-modal">
     <button class="close-btn" (click)="closeModal()">×</button>
     <h3>Edit Flight Details</h3>
@@ -166,18 +166,10 @@
               <mat-datepicker-toggle
                 matSuffix
                 [for]="departureDatePicker"
-                class="calendar-toggle"
-              >
-                <i class="calendar-icon"></i>
-              </mat-datepicker-toggle>
+                class="calendar-toggle reservation"
+              ></mat-datepicker-toggle>
             </div>
             <mat-datepicker #departureDatePicker></mat-datepicker>
-          </div>
-          <div
-            class="error-text"
-            *ngIf="flightForm.get('departureTime')?.invalid"
-          >
-            Departure time is required
           </div>
         </div>
         <div class="field">
@@ -191,8 +183,14 @@
         </div>
       </div>
       <div class="actions">
-        <button type="submit">Save</button>
-        <button type="button" (click)="closeModal()">Cancel</button>
+        <button type="submit" class="button">Save</button>
+        <button
+          type="button"
+          class="button remove-room-btn"
+          (click)="closeModal()"
+        >
+          Cancel
+        </button>
       </div>
     </form>
   </div>

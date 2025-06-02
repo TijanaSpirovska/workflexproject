@@ -47,8 +47,8 @@ export class MyTripsComponent implements OnInit {
     this.trips = [defaultTrip];
   }
   ngOnInit(): void {
-    // First check if we're in a browser environment before accessing localStorage
     if (isPlatformBrowser(this.platformId)) {
+      // First check if we're in a browser environment before accessing localStorage
       const userId = localStorage.getItem('userId');
       if (userId) {
         this.isLoading = true;
@@ -69,7 +69,6 @@ export class MyTripsComponent implements OnInit {
       }
     } else {
       // Not in browser environment, can't access localStorage
-      console.log('Not in browser environment, skipping localStorage access');
       this.isLoading = false;
     }
   }

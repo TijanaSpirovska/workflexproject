@@ -51,15 +51,15 @@ export class AccommodationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userId = localStorage.getItem('userId') ?? '';
     if (isPlatformBrowser(this.platformId)) {
+      this.userId = localStorage.getItem('userId') ?? '';
+      this.hasAdminRole = localStorage.getItem('userRole') !== 'ADMIN';
+      this.createFormGroup();
       this.getLocations();
       this.getAllAccommodations();
       this.loadReservedRooms();
-      this.hasAdminRole = localStorage.getItem('userRole') !== 'ADMIN';
+      this.createReservationFormGroup();
     }
-    this.createFormGroup();
-    this.createReservationFormGroup();
   }
 
   createFormGroup(): void {
@@ -224,8 +224,10 @@ export class AccommodationComponent implements OnInit {
 
   addNewAccommodation(id: any): void {
     this.isNewAccommodation = true;
-    this.createFormGroup();
-    this.formGroup.patchValue({ id: id });
+    if (isPlatformBrowser(this.platformId)) {
+      this.createFormGroup();
+      this.formGroup.patchValue({ id: id });
+    }
   }
 
   editAccommodationSetup(accommodation: AccommodationDto): void {
@@ -267,11 +269,6 @@ export class AccommodationComponent implements OnInit {
   }
 
   updateAccommodation(): void {
-    // if (this.formGroup.invalid) {
-    //   this.toastr.error('Please fill all required fields.', 'Error');
-    //   return;
-    // }
-
     const accommodationData = this.formGroup.value as AccommodationDto;
 
     this.accommodationService
@@ -286,7 +283,9 @@ export class AccommodationComponent implements OnInit {
             this.accommodations[index] = response.data;
           }
           this.filterAccommodations();
-          this.createFormGroup(); // Reset form to initial prefill
+          if (isPlatformBrowser(this.platformId)) {
+            this.createFormGroup(); // Reset form to initial prefill
+          }
           this.isNewAccommodation = false;
           this.isFormGroupValid = false;
         },
@@ -309,7 +308,9 @@ export class AccommodationComponent implements OnInit {
           this.toastr.success('Accommodation created successfully!', 'Success');
           this.accommodations.push(response.data);
           this.filterAccommodations();
-          this.createFormGroup(); // Reset form to initial prefill for a new accommodation
+          if (isPlatformBrowser(this.platformId)) {
+            this.createFormGroup(); // Reset form to initial prefill for a new accommodation
+          }
           this.isNewAccommodation = false;
           this.isFormGroupValid = false;
         },
