@@ -117,18 +117,21 @@ export class TripDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      let userId = localStorage.getItem('userId');
-      if (userId) {
-        this.loading = true;
-        this.loadTripDetails(userId);
+    this.route.paramMap.subscribe((params) => {
+      const tripId = params.get('id');
+      if (tripId) {
+        this.loadTripDetails(tripId);
       } else {
-        this.error = 'User ID not found';
-        this.loading = false;
+        // If no ID in route, check service for stored trip ID
+        const storedTripId = this.tripService.getStoredTripId();
+        if (storedTripId) {
+          this.loadTripDetails(storedTripId);
+        } else {
+          this.error = 'Trip ID not found';
+          this.loading = false;
+        }
       }
-    } else {
-      this.loading = false;
-    }
+    });
 
     if (this.tripImageUrl) {
       this.tripBackgroundImage = this.tripImageUrl;
@@ -163,12 +166,7 @@ export class TripDetailsComponent implements OnInit {
 
     this.tripService.getOneById(`${userId}/${tripId}`).subscribe({
       next: (response) => {
-        if (response.success && response.data) {
           this.populateTripDetails(response.data);
-        } else {
-          console.error('Failed to load trip details:', response.error);
-          this.error = 'Failed to load trip details';
-        }
         this.loading = false;
       },
       error: (err) => {
