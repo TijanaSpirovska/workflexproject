@@ -11,7 +11,6 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { Trip } from '../../models/trip-details.model';
 import { TripService } from '../../services/trip.service';
-import { Location } from '@angular/common';
 import moment from 'moment';
 import { FlightService } from '../../services/flight.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';

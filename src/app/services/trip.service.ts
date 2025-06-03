@@ -9,7 +9,6 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class TripService extends CoreService {
   private readonly STORAGE_KEY = 'selectedTripImage';
-  private readonly TRIP_ID_KEY = 'selectedTripId';
   private readonly DEFAULT_IMAGE = '/assets/images/travel.png';
 
   // For sharing trip data between components
