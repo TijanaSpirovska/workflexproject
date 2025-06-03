@@ -573,20 +573,45 @@ $primaryColor: #003584;
   border: 1px solid #ccc;
   border-radius: 8px;
 }
+.cancel-btn {
+  background-color: #eee !important;
+  color: #333 !important;
 
+  &:hover {
+    background-color: #ddd !important;
+  }
+}
 // Action button styles
-.actions button {
-  background-color: #007bff;
-  color: white;
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+.button,
+.submit-btn,
+.cancel-btn {
+  background-color: #eee;
+  color: #fff;
+  padding: 0.5rem 1.2rem;
   border: none;
-  padding: 0.5rem 1rem;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  width: auto;
+  min-width: 90px;
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 0;
+  transition: background 0.2s;
+  box-shadow: none;
+}
+.submit-btn {
+  background-color: #1ca698;
 }
 
-.actions button:hover {
-  background-color: #0056b3;
+.button:hover,
+.submit-btn:hover {
+  background: var(--green-button);
 }
 
 // Ensure the calendar overlay is properly positioned and appears above everything

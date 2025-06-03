@@ -6,6 +6,7 @@ import {
   EventEmitter,
   Inject,
   PLATFORM_ID,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Trip } from '../../models/trip-details.model';
@@ -15,6 +16,7 @@ import moment from 'moment';
 import { FlightService } from '../../services/flight.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { isPlatformBrowser } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-trip-details',
@@ -37,6 +39,7 @@ export class TripDetailsComponent implements OnInit {
   loading: boolean = true;
   error: string | null = null;
   tripBackgroundImage: string = '';
+  tripId: string = '';
 
   totalDays: number = 0;
   progressPercentage: number = 0;
@@ -49,10 +52,11 @@ export class TripDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private tripService: TripService,
-    private location: Location,
     private flightService: FlightService,
     private readonly fb: FormBuilder,
-    @Inject(PLATFORM_ID) private readonly platformId: Object
+    public toastr: ToastrService,
+    @Inject(PLATFORM_ID) private readonly platformId: Object,
+    private cdr: ChangeDetectorRef
   ) {
     // Get data from router state if available
     const navigation = this.router.getCurrentNavigation();
@@ -109,8 +113,8 @@ export class TripDetailsComponent implements OnInit {
     });
 
     this.flightForm = this.fb.group({
-      from: ['', [Validators.required]],
-      to: ['', [Validators.required]],
+      fromLocation: ['', [Validators.required]],
+      toLocation: ['', [Validators.required]],
       departureTime: ['', [Validators.required]],
       duration: ['', [Validators.required]],
     });
@@ -118,19 +122,14 @@ export class TripDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
-      const tripId = params.get('id');
-      if (tripId) {
-        this.loadTripDetails(tripId);
-      } else {
-        // If no ID in route, check service for stored trip ID
-        const storedTripId = this.tripService.getStoredTripId();
-        if (storedTripId) {
-          this.loadTripDetails(storedTripId);
-        } else {
+      this.tripId = params.get('id')!;
+      if (this.tripId) {
+        this.loadTripDetails(this.tripId);
+      }  else {
           this.error = 'Trip ID not found';
           this.loading = false;
         }
-      }
+      
     });
 
     if (this.tripImageUrl) {
@@ -166,7 +165,7 @@ export class TripDetailsComponent implements OnInit {
 
     this.tripService.getOneById(`${userId}/${tripId}`).subscribe({
       next: (response) => {
-          this.populateTripDetails(response.data);
+        this.populateTripDetails(response.data);
         this.loading = false;
       },
       error: (err) => {
@@ -186,8 +185,9 @@ export class TripDetailsComponent implements OnInit {
       endDate: tripData.endDate ?? null,
       imageUrl: tripData.imageUrl ?? '/assets/images/travel.png',
       flight: {
-        from: tripData.flight?.fromLocation ?? '',
-        to: tripData.flight?.toLocation ?? '',
+        id: tripData.flight?.id ?? '0',
+        fromLocation: tripData.flight?.fromLocation ?? '',
+        toLocation: tripData.flight?.toLocation ?? '',
         departureTime: tripData.flight?.departureTime ?? '',
         duration: tripData.flight?.duration ?? '',
       },
@@ -226,7 +226,12 @@ export class TripDetailsComponent implements OnInit {
 
   formatDate(isoDate: string): string {
     if (!isoDate) return 'N/A';
-    return this.tripService.formatDate(isoDate);
+    const date = new Date(isoDate);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      });
   }
 
   formatFlightDate(isoDate: string): string {
@@ -274,10 +279,10 @@ export class TripDetailsComponent implements OnInit {
   }
 
   openFlightModal(): void {
-    if (this.trip?.flight.from && this.trip?.flight.to) {
+    if (this.trip?.flight && this.trip.flight.id) {
       this.flightForm.patchValue({
-        from: this.trip.flight.from,
-        to: this.trip.flight.to,
+        fromLocation: this.trip.flight.fromLocation,
+        toLocation: this.trip.flight.toLocation,
         departureTime: this.formatDateTimeForInput(
           this.trip.flight.departureTime
         ),
@@ -286,9 +291,8 @@ export class TripDetailsComponent implements OnInit {
     } else {
       this.flightForm.reset();
     }
-
-    this.isModalOpen = true; // Open the modal
-    console.log('Flight modal opened with trip data:', this.isModalOpen);
+    this.isModalOpen = true;
+    this.cdr.detectChanges();
   }
 
   private formatDateTimeForInput(dateTime: string): string {
@@ -302,34 +306,35 @@ export class TripDetailsComponent implements OnInit {
 
   saveFlight(): void {
     if (this.flightForm.invalid) {
+      console.log('Flight Form Value:', this.flightForm.value);
+      console.log('Flight Form Status:', this.flightForm.status);
+      console.log('Controls:', this.flightForm.controls);
+
       alert('Please fill in all required fields.');
       return;
     }
 
     const flightData = this.flightForm.value;
+    
 
-    if (this.trip?.flight.from && this.trip?.flight.to) {
-      // Edit existing flight
-      this.flightService.updateById(this.trip.id, flightData).subscribe({
+    if (this.trip?.flight.id) {
+      this.flightService.updateById(this.trip.flight.id, flightData).subscribe({
         next: (response) => {
-          console.log('Flight updated successfully:', response);
-          alert('Flight updated successfully!');
+          this.toastr.success('Flight updated successfully!', 'Success');
+          this.isModalOpen=false;
+          this.loadTripDetails(this.tripId); // Reload trip details to reflect changes
         },
         error: (err) => {
-          console.error('Error updating flight:', err);
-          alert('Failed to update flight.');
+          this.toastr.error('Failed to update flight.', 'Error');
         },
       });
     } else {
-      // Add new flight
       this.flightService.create(flightData, 'json').subscribe({
         next: (response) => {
-          console.log('Flight added successfully:', response);
-          alert('Flight added successfully!');
+          this.toastr.success('Flight added successfully!', 'Success');
         },
         error: (err) => {
-          console.error('Error adding flight:', err);
-          alert('Failed to add flight.');
+          this.toastr.error('Failed to add flight.', 'Error');
         },
       });
     }

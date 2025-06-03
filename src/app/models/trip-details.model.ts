@@ -6,8 +6,9 @@ export interface Trip {
   endDate?: string; // ISO format
   imageUrl: string;
   flight: {
-    from: string;
-    to: string;
+    id: string;
+    fromLocation: string;
+    toLocation: string;
     departureTime: string; // ISO
     duration: string;
   };

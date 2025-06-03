@@ -51,9 +51,9 @@
       </div>
       <div class="flight-content">
         <div class="route">
-          <div class="airport from">{{ trip.flight.from }}</div>
+          <div class="airport from">{{ trip.flight.fromLocation }}</div>
           <div class="flight-icon">›</div>
-          <div class="airport to">{{ trip.flight.to }}</div>
+          <div class="airport to">{{ trip.flight.toLocation }}</div>
         </div>
 
         <div class="flight-details">
@@ -134,20 +134,20 @@
     <form [formGroup]="flightForm" (ngSubmit)="saveFlight()">
       <div class="group-container">
         <div class="field">
-          <label for="from">From</label>
+          <label for="fromLocation">From</label>
           <input
-            id="from"
+            id="fromLocation"
             type="text"
-            formControlName="from"
+            formControlName="fromLocation"
             placeholder="Departure location"
           />
         </div>
         <div class="field">
-          <label for="to">To</label>
+          <label for="toLocation">To</label>
           <input
-            id="to"
+            id="toLocation"
             type="text"
-            formControlName="to"
+            formControlName="toLocation"
             placeholder="Arrival location"
           />
         </div>
@@ -166,8 +166,16 @@
               <mat-datepicker-toggle
                 matSuffix
                 [for]="departureDatePicker"
-                class="calendar-toggle reservation"
-              ></mat-datepicker-toggle>
+                class="calendar-toggle"
+                style="
+                  position: absolute;
+                  right: 5px;
+                  top: 50%;
+                  transform: translateY(-50%);
+                "
+              >
+                <i class="calendar-icon"></i>
+              </mat-datepicker-toggle>
             </div>
             <mat-datepicker #departureDatePicker></mat-datepicker>
           </div>
@@ -183,12 +191,8 @@
         </div>
       </div>
       <div class="actions">
-        <button type="submit" class="button">Save</button>
-        <button
-          type="button"
-          class="button remove-room-btn"
-          (click)="closeModal()"
-        >
+        <button type="submit" class="button submit-btn">Save</button>
+        <button type="button" class="button cancel-btn" (click)="closeModal()">
           Cancel
         </button>
       </div>
