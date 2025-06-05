@@ -124,11 +124,10 @@ export class TripDetailsComponent implements OnInit {
       this.tripId = params.get('id')!;
       if (this.tripId) {
         this.loadTripDetails(this.tripId);
-      }  else {
-          this.error = 'Trip ID not found';
-          this.loading = false;
-        }
-      
+      } else {
+        this.error = 'Trip ID not found';
+        this.loading = false;
+      }
     });
 
     if (this.tripImageUrl) {
@@ -226,11 +225,11 @@ export class TripDetailsComponent implements OnInit {
   formatDate(isoDate: string): string {
     if (!isoDate) return 'N/A';
     const date = new Date(isoDate);
-      return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      });
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
   }
 
   formatFlightDate(isoDate: string): string {
@@ -278,7 +277,7 @@ export class TripDetailsComponent implements OnInit {
   }
 
   openFlightModal(): void {
-    if (this.trip?.flight && this.trip.flight.id) {
+    if (this.trip?.flight?.id) {
       this.flightForm.patchValue({
         fromLocation: this.trip.flight.fromLocation,
         toLocation: this.trip.flight.toLocation,
@@ -314,13 +313,12 @@ export class TripDetailsComponent implements OnInit {
     }
 
     const flightData = this.flightForm.value;
-    
 
     if (this.trip?.flight.id) {
       this.flightService.updateById(this.trip.flight.id, flightData).subscribe({
         next: (response) => {
           this.toastr.success('Flight updated successfully!', 'Success');
-          this.isModalOpen=false;
+          this.isModalOpen = false;
           this.loadTripDetails(this.tripId); // Reload trip details to reflect changes
         },
         error: (err) => {
@@ -406,5 +404,19 @@ export class TripDetailsComponent implements OnInit {
     );
 
     this.trip.days = groupedDays;
+  }
+
+  // Returns the activities for a given day index (or empty array if none)
+  getActivitiesForDay(dayIndex: number): string[] {
+    const dayDate = this.getDayDate(this.trip?.startDate ?? '', dayIndex);
+    const dayObj = this.trip?.days?.find((day) =>
+      moment(day.date).isSame(dayDate, 'day')
+    );
+    return dayObj?.activities ?? [];
+  }
+
+  // Stub for editDay (can be expanded later)
+  editDay(dayIndex: number): void {
+    this.toastr.info(`Edit Day ${dayIndex + 1} clicked.`);
   }
 }

@@ -68,45 +68,112 @@
     <!-- Day-by-Day Trip Cards -->
     <div class="itinerary-section">
       <h2 class="section-title">Your Day-by-Day Trip Plan</h2>
-
       <div class="days-list">
-        <div
-          *ngFor="let day of trip.days; let i = index"
-          class="day-card"
-          [class.day-current]="isToday(getDayDate(trip.startDate, i))"
+        <ng-container
+          *ngIf="trip.days && trip.days.length > 0; else allDaysRange"
         >
-          <div class="day-left">
-            <div class="calendar-icon">
-              <i class="fas fa-calendar-alt"></i>
-            </div>
-            <div class="day-date">
-              <div class="date-abbr">
-                {{ getDayAbbreviation(getDayDate(trip.startDate, i)) }}
-              </div>
-              <div class="date-num">
-                {{ getDayNumber(getDayDate(trip.startDate, i)) }}
-              </div>
-            </div>
-          </div>
-
-          <div class="day-right">
-            <div class="day-label">Day {{ i + 1 }}</div>
+          <ng-container
+            *ngFor="
+              let dayIndex of [].constructor(calculateDurationFromDates());
+              let i = index
+            "
+          >
             <div
-              *ngIf="isToday(getDayDate(trip.startDate, i))"
-              class="today-badge"
+              class="day-card"
+              [class.day-current]="isToday(getDayDate(trip.startDate, i))"
             >
-              Today
-            </div>
-            <div class="day-activities" *ngIf="day.activities?.length">
-              <div
-                class="activity-item"
-                *ngFor="let activity of day.activities"
-              >
-                <i class="fa-solid fa-location-dot"></i> {{ activity }}
+              <div class="day-left">
+                <div class="calendar-icon">
+                  <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="day-date">
+                  <div class="date-abbr">
+                    {{ getDayAbbreviation(getDayDate(trip.startDate, i)) }}
+                  </div>
+                  <div class="date-num">
+                    {{ getDayNumber(getDayDate(trip.startDate, i)) }}
+                  </div>
+                </div>
+              </div>
+              <div class="day-right">
+                <div class="day-label">Day {{ i + 1 }}</div>
+                <div
+                  *ngIf="isToday(getDayDate(trip.startDate, i))"
+                  class="today-badge"
+                >
+                  Today
+                </div>
+                <div class="day-activities">
+                  <div
+                    class="activity-item"
+                    *ngFor="let activity of getActivitiesForDay(i)"
+                  >
+                    <i class="fa-solid fa-location-dot"></i> {{ activity }}
+                  </div>
+                  <div
+                    *ngIf="getActivitiesForDay(i).length === 0"
+                    class="no-activities"
+                  >
+                    No activities planned.
+                  </div>
+                </div>
+                <button
+                  class="edit-button icon-only"
+                  (click)="editDay(i)"
+                  type="button"
+                >
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
               </div>
             </div>
-          </div>
-        </div>
+          </ng-container>
+        </ng-container>
+        <ng-template #allDaysRange>
+          <ng-container
+            *ngFor="
+              let dayIndex of [].constructor(calculateDurationFromDates());
+              let i = index
+            "
+          >
+            <div
+              class="day-card"
+              [class.day-current]="isToday(getDayDate(trip.startDate, i))"
+            >
+              <div class="day-left">
+                <div class="calendar-icon">
+                  <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="day-date">
+                  <div class="date-abbr">
+                    {{ getDayAbbreviation(getDayDate(trip.startDate, i)) }}
+                  </div>
+                  <div class="date-num">
+                    {{ getDayNumber(getDayDate(trip.startDate, i)) }}
+                  </div>
+                </div>
+              </div>
+              <div class="day-right">
+                <div class="day-label">Day {{ i + 1 }}</div>
+                <div
+                  *ngIf="isToday(getDayDate(trip.startDate, i))"
+                  class="today-badge"
+                >
+                  Today
+                </div>
+                <div class="day-activities">
+                  <div class="no-activities">No activities planned.</div>
+                </div>
+                <button
+                  class="edit-button icon-only"
+                  (click)="editDay(i)"
+                  type="button"
+                >
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+              </div>
+            </div>
+          </ng-container>
+        </ng-template>
       </div>
     </div>
   </div>

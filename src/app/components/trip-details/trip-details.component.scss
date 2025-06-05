@@ -183,6 +183,27 @@ $primaryColor: #003584;
       background-color: transparent; /* No hover background */
     }
   }
+
+  .edit-button.icon-only {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    padding: 0.25rem 0.5rem;
+    border-radius: 50%;
+    color: #003584;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+
+    &:hover {
+      background: rgba(0, 53, 132, 0.08);
+      border: none !important;
+    }
+  }
 }
 
 // Updated the flight edit button to be a plain pencil icon without borders
