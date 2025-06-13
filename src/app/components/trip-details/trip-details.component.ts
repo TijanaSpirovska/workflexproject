@@ -304,10 +304,6 @@ export class TripDetailsComponent implements OnInit {
 
   saveFlight(): void {
     if (this.flightForm.invalid) {
-      console.log('Flight Form Value:', this.flightForm.value);
-      console.log('Flight Form Status:', this.flightForm.status);
-      console.log('Controls:', this.flightForm.controls);
-
       alert('Please fill in all required fields.');
       return;
     }
@@ -319,7 +315,7 @@ export class TripDetailsComponent implements OnInit {
         next: (response) => {
           this.toastr.success('Flight updated successfully!', 'Success');
           this.isModalOpen = false;
-          this.loadTripDetails(this.tripId); // Reload trip details to reflect changes
+          this.loadTripDetails(this.tripId); 
         },
         error: (err) => {
           this.toastr.error('Failed to update flight.', 'Error');

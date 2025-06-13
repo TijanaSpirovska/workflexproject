@@ -69,18 +69,15 @@
     <div class="itinerary-section">
       <h2 class="section-title">Your Day-by-Day Trip Plan</h2>
       <div class="days-list">
-        <ng-container
-          *ngIf="trip.days && trip.days.length > 0; else allDaysRange"
-        >
+        <ng-container *ngIf="trip.days && trip.days.length > 0; else allDaysRange">
           <ng-container
-            *ngFor="
-              let dayIndex of [].constructor(calculateDurationFromDates());
-              let i = index
-            "
+            *ngFor="let dayIndex of [].constructor(calculateDurationFromDates()); let i = index"
           >
             <div
               class="day-card"
               [class.day-current]="isToday(getDayDate(trip.startDate, i))"
+              (click)="editDay(i)"
+              style="cursor: pointer;"
             >
               <div class="day-left">
                 <div class="calendar-icon">
@@ -97,48 +94,22 @@
               </div>
               <div class="day-right">
                 <div class="day-label">Day {{ i + 1 }}</div>
-                <div
-                  *ngIf="isToday(getDayDate(trip.startDate, i))"
-                  class="today-badge"
-                >
-                  Today
-                </div>
+                <div *ngIf="isToday(getDayDate(trip.startDate, i))" class="today-badge">Today</div>
                 <div class="day-activities">
-                  <div
-                    class="activity-item"
-                    *ngFor="let activity of getActivitiesForDay(i)"
-                  >
+                  <div class="activity-item" *ngFor="let activity of getActivitiesForDay(i)">
                     <i class="fa-solid fa-location-dot"></i> {{ activity }}
                   </div>
-                  <div
-                    *ngIf="getActivitiesForDay(i).length === 0"
-                    class="no-activities"
-                  >
+                  <div *ngIf="getActivitiesForDay(i).length === 0" class="no-activities">
                     No activities planned.
                   </div>
                 </div>
-                <button
-                  class="edit-button icon-only"
-                  (click)="editDay(i)"
-                  type="button"
-                >
-                  <i class="fas fa-pencil-alt"></i>
-                </button>
               </div>
             </div>
           </ng-container>
         </ng-container>
         <ng-template #allDaysRange>
-          <ng-container
-            *ngFor="
-              let dayIndex of [].constructor(calculateDurationFromDates());
-              let i = index
-            "
-          >
-            <div
-              class="day-card"
-              [class.day-current]="isToday(getDayDate(trip.startDate, i))"
-            >
+          <ng-container *ngFor="let dayIndex of [].constructor(calculateDurationFromDates()); let i = index">
+            <div class="day-card" [class.day-current]="isToday(getDayDate(trip.startDate, i))" (click)="editDay(i)" style="cursor: pointer;">
               <div class="day-left">
                 <div class="calendar-icon">
                   <i class="fas fa-calendar-alt"></i>
@@ -154,22 +125,10 @@
               </div>
               <div class="day-right">
                 <div class="day-label">Day {{ i + 1 }}</div>
-                <div
-                  *ngIf="isToday(getDayDate(trip.startDate, i))"
-                  class="today-badge"
-                >
-                  Today
-                </div>
+                <div *ngIf="isToday(getDayDate(trip.startDate, i))" class="today-badge">Today</div>
                 <div class="day-activities">
                   <div class="no-activities">No activities planned.</div>
                 </div>
-                <button
-                  class="edit-button icon-only"
-                  (click)="editDay(i)"
-                  type="button"
-                >
-                  <i class="fas fa-pencil-alt"></i>
-                </button>
               </div>
             </div>
           </ng-container>
