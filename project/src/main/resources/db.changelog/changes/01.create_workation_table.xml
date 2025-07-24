@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <!-- Create new workations table -->
+    <changeSet author="WORKATION" id="1">
+        <sql>
+            CREATE TABLE workations (
+                                        id UUID PRIMARY KEY,
+                                        employee_name VARCHAR(255) NOT NULL,
+                                        origin VARCHAR(255) NOT NULL,
+                                        destination VARCHAR(255) NOT NULL,
+                                        start DATE NOT NULL,
+                                        end_date DATE NOT NULL,
+                                        status VARCHAR(50) NOT NULL DEFAULT 'PENDING',
+                                        reason VARCHAR(500),
+                                        approver_name VARCHAR(255),
+                                        working_days INT,
+                                        created_at DATE DEFAULT CURRENT_DATE,
+                                        risk VARCHAR(50) NOT NULL
+            );
+        </sql>
+        <rollback>
+            <sql>DROP TABLE workations;</sql>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
