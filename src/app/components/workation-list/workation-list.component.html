@@ -1,0 +1,120 @@
+<app-menu [isVisible]="true"></app-menu>
+
+<div class="table-container">
+  <table class="workation-table">
+    <thead>
+      <tr>
+        <th (click)="sortTable('employeeName')">
+          Employee
+          <span class="sort-icons">
+            <i class="material-icons arrow-up active">arrow_drop_up</i>
+            <i class="material-icons arrow-down active">arrow_drop_down</i>
+          </span>
+        </th>
+
+        <th (click)="sortTable('origin')">
+          Origin
+          <span class="sort-icons">
+            <i class="material-icons arrow-up active">arrow_drop_up</i>
+            <i class="material-icons arrow-down active">arrow_drop_down</i>
+          </span>
+        </th>
+
+        <th (click)="sortTable('destination')">
+          Destination
+          <span class="sort-icons">
+            <i class="material-icons arrow-up active">arrow_drop_up</i>
+            <i class="material-icons arrow-down active">arrow_drop_down</i>
+          </span>
+        </th>
+
+        <th (click)="sortTable('start')">
+          Start
+          <span class="sort-icons">
+            <i class="material-icons arrow-up active">arrow_drop_up</i>
+            <i class="material-icons arrow-down active">arrow_drop_down</i>
+          </span>
+        </th>
+
+        <th (click)="sortTable('endDate')">
+          End
+          <span class="sort-icons">
+            <i class="material-icons arrow-up active">arrow_drop_up</i>
+            <i class="material-icons arrow-down active">arrow_drop_down</i>
+          </span>
+        </th>
+
+        <th (click)="sortTable('workingDays')">
+          Working days
+          <span class="sort-icons">
+            <i class="material-icons arrow-up active">arrow_drop_up</i>
+            <i class="material-icons arrow-down active">arrow_drop_down</i>
+          </span>
+        </th>
+
+        <th (click)="sortTable('risk')">
+          Risk
+          <span class="sort-icons">
+            <i class="material-icons arrow-up active">arrow_drop_up</i>
+            <i class="material-icons arrow-down active">arrow_drop_down</i>
+          </span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let workation of workations" class="row-hover">
+        <!-- Employee -->
+        <td>{{ workation.employeeName }}</td>
+
+        <!-- Origin -->
+        <td>
+          <img [src]="'https://flagcdn.com/16x12/' + getCountryCode(workation.origin) + '.png'" class="flag"/>
+{{ workation.origin }}
+
+        </td>
+
+        <!-- Destination -->
+        <td>
+          <img
+            [src]="'https://flagcdn.com/16x12/' + getCountryCode(workation.destination) + '.png'"
+            alt="{{ workation.destination }}"
+            class="flag"
+          />
+          {{ workation.destination }}
+        </td>
+
+        <!-- Dates -->
+        <td>{{ workation.start | date : "dd/MM/yyyy" }}</td>
+        <td>{{ workation.endDate | date : "dd/MM/yyyy" }}</td>
+
+        <!-- Working Days -->
+        <td>{{ workation.workingDays }}</td>
+
+        <!-- Risk -->
+        <td class="risk-cell">
+          <img
+            *ngIf="workation.risk === 'HIGH_RISK'"
+            src="assets/icons/red-risk.svg"
+            class="risk-icon"
+            alt="High risk"
+          />
+          <img
+            *ngIf="workation.risk === 'LOW_RISK'"
+            src="assets/icons/yellow-risk.svg"
+            class="risk-icon"
+            alt="Low risk"
+          />
+          <img
+            *ngIf="workation.risk === 'NO_RISK'"
+            src="assets/icons/green-risk.svg"
+            class="risk-icon"
+            alt="No risk"
+          />
+          <span class="risk-text">
+            {{ workation.risk === "HIGH_RISK" ? "High risk" : "No risk" }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

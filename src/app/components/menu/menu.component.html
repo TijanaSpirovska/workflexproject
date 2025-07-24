@@ -5,9 +5,9 @@
         isExpanded ? "chevron_left" : "grid_view"
       }}</span>
     </div>
-    <div [class.active]="isNewTripActive" class="new-trip" (click)="createNewTrip()">
+    <div [class.active]="isWorkationRequestActive" class="new-trip" (click)="createWorkationRequest()">
       <span class="material-symbols-outlined">add_circle</span>
-      <span class="label" *ngIf="isExpanded">Plan new trip</span>
+      <span class="label" *ngIf="isExpanded">Create new request</span>
     </div>
 
     <li 

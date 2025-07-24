@@ -1,12 +1,7 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { MenuItem } from '../../models/menu.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-menu',
@@ -18,39 +13,30 @@ export class MenuComponent implements OnInit {
   @Input() isVisible: boolean = false;
   isExpanded: boolean = false;
   @Output() onExpanded: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Input() isLoggedIn: boolean = false;
-  isNewTripActive: boolean = false;
+  isLoggedIn: boolean = false;
+  isWorkationRequestActive: boolean = false;
+  menuItems: MenuItem[] = [];
 
-  constructor(private router: Router, private eRef: ElementRef) {}
+  constructor(private router: Router, private toastr: ToastrService) {}
 
   ngOnInit(): void {
-    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
-      this.isLoggedIn = localStorage.getItem('authToken') != null;
-    }
+    this.menuItems = [
+      {
+        icon: 'your_trips',
+        label: 'Requests list',
+        route: 'workation-list',
+        active: false,
+      },
+      {
+        icon: 'upload_file',
+        label: 'Upload CSV',
+        route: 'upload-csv',
+        active: false,
+      },
+    ];
   }
-  menuItems = [
-    { icon: 'your_trips', label: 'My trips', route: 'my-trips', active: false },
-    {
-      icon: 'location_city',
-      label: 'Accommodation',
-      route: 'accommodation',
-      active: false,
-    },
-    // {
-    //   icon: 'map',
-    //   label: 'Destinations',
-    //   route: 'destinations',
-    //   active: false,
-    // },
-    {
-      icon: 'local_see',
-      label: 'Activity',
-      route: 'activities',
-      active: false,
-    },
-  ];
 
-  navigate(selectedItem: any) {
+  navigate(selectedItem: MenuItem): void {
     this.menuItems.forEach((item) => {
       item.active = item === selectedItem;
     });
@@ -58,9 +44,9 @@ export class MenuComponent implements OnInit {
     this.router.navigate([selectedItem.route]);
   }
 
-  createNewTrip() {
-    this.isNewTripActive = true;
-    this.router.navigate(['new-trip']);
+  createWorkationRequest(): void {
+    this.isWorkationRequestActive = true;
+    this.router.navigate(['workation-request']);
   }
 
   logout(): void {

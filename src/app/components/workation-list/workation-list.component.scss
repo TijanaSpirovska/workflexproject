@@ -1,0 +1,85 @@
+
+.table-container {
+  width: 100%;
+  max-width: 1050px;
+  margin: 20px auto;
+  background: white;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.workation-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Arial', sans-serif;
+
+  thead {
+    background-color: #eff0f5;
+    font-weight: bold;
+    font-size: 14px;
+
+    th {
+      padding: 12px;
+      cursor: pointer;
+      position: relative;
+      text-align: left;
+
+      &:hover {
+        background-color: #f0f9f8;
+      }
+    }
+  }
+
+  tbody {
+    tr:nth-child(odd) {
+      background-color: #ffffff;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9fcfc;
+    }
+
+    tr:hover {
+      background-color: #f0f9f8;
+    }
+
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      vertical-align: middle;
+    }
+  }
+}
+
+.flag {
+  width: 20px;
+  height: 14px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+
+.risk-cell {
+  gap: 6px;                 
+  height: 100%;              
+}
+.risk-icon {
+  width: px;
+  flex-shrink: 0;
+}
+
+.sort-icons {
+  display: inline-flex;
+  flex-direction: column;
+  margin-left: 4px;
+  font-size: 20px;
+  line-height: 1px;
+  vertical-align: middle;
+
+  .material-icons {
+    font-size: 20px;
+    color: #29326c; 
+    line-height: 10px;
+  }
+}
+

@@ -1,20 +1,7 @@
-// Custom Theming for Angular Material
+
 // For more information: https://material.angular.io/guide/theming
 @use "@angular/material" as mat;
 
-html {
-  @include mat.theme(
-    (
-      color: (
-        theme-type: light,
-        primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
-      ),
-      typography: Roboto,
-      density: 0,
-    )
-  );
-}
 $tablet: 1024px;
 $tablet-small: 970px;
 $mobile-large: 768px;
@@ -65,7 +52,7 @@ $mobile-small: 640px;
   --white-button-inactive: rgba(0, 0, 0, 0.12);
   --white-button-inactive-text: #9db8df;
 
-  --dialog-box-button-text​: #185ec6;
+  --dialog-box-button-text: #185ec6;
   --dialog-box-button-text-hover: #5e97ec;
   --dialog-box-button-text-inactive: #d6dde7;
 
@@ -158,8 +145,8 @@ body {
   }
   &:hover {
     background-color: var(--green-button-hover);
-    transform: translateY(-3px) scale(1); /* make it "jump" a bit */
-    box-shadow: 0 8px 16px rgba(0, 123, 255, 0.3); /* glow like sky/air feeling */
+    transform: translateY(-3px) scale(1);
+    box-shadow: 0 8px 16px rgba(0, 123, 255, 0.3); 
   }
 
   &.neutral {
@@ -200,7 +187,7 @@ textarea {
   outline: 0;
   border: 1px solid var(--non-selected-input-field-frame);
   &:focus {
-    border: 2px solid var(--selected-input-field-frame);
+    border: 1px solid var(--selected-input-field-frame);
   }
 }
 

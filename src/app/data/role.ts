@@ -1,4 +1,5 @@
-export enum Role {
-  Admin = 'ADMIN',
-  Guest = 'GUEST'
+export enum Status {
+  Pending = 'PENDING',
+  Approved = 'APPROVED',
+  Rejected = 'REJECTED',
 }

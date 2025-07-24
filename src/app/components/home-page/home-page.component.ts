@@ -15,7 +15,6 @@ export class HomePageComponent implements OnInit {
   }
 
   openPage(){
-    console.log("test")
-    this.router.navigate(['login']) //TO DO: for now login page
+    this.router.navigate(['workation-list']); 
   }
 }

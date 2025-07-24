@@ -1,0 +1,40 @@
+<app-menu [isVisible]="true"></app-menu>
+<div class="auth-container">
+  <div class="auth-header">
+    <p>Upload Workations CSV</p>
+  </div>
+
+  <form (ngSubmit)="onUpload()" class="form-wrapper">
+    <!-- Row 1: Browse + File name -->
+    <div class="group-container">
+      <button type="button" class="button browse-btn" (click)="fileInput.click()">
+        Browse
+      </button>
+      <input
+        class="input file-name"
+        type="text"
+        [value]="fileName"
+        placeholder="No file selected"
+        readonly
+      />
+      <input
+        type="file"
+        #fileInput
+        (change)="onFileSelected($event)"
+        accept=".csv"
+        hidden
+      />
+    </div>
+
+    <!-- Row 2: Upload button (aligned right) -->
+    <div class="button-container">
+      <button
+        type="submit"
+        class="button upload-btn"
+        [disabled]="!selectedFile"
+      >
+        Upload CSV
+      </button>
+    </div>
+  </form>
+</div>
